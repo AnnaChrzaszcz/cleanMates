@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "510663741050",
+    "firebase_url": "https://cleanmates-ea347-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "cleanmates-ea347",
+    "storage_bucket": "cleanmates-ea347.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510663741050:android:acf11f59104e13fe4f35c3",
+        "android_client_info": {
+          "package_name": "com.example.clean_mates_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510663741050-3sbaoqkm47f8dfq47qdh879m5t2ls90f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDs2E5yqo4f8ZqnvNCZRsy9naFExwZK5JM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510663741050-3sbaoqkm47f8dfq47qdh879m5t2ls90f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "510663741050-d2grmg4487aq5bfbevhanpn0f42doajt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.cleanMatesApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
