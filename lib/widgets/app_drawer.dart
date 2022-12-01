@@ -1,19 +1,48 @@
-import 'package:clean_mates_app/screens/dashbord_screen.dart';
+import '../screens/room_dashbord_screen.dart';
+import '../screens/user_dashboard_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
     return Drawer(
       width: 260,
       child: Column(
         children: [
           AppBar(
-            title: Text('Clean Mates'),
+            actions: [
+              Container(
+                margin: EdgeInsets.only(right: 5, bottom: 10),
+                child: CircleAvatar(
+                  backgroundColor: Color.fromRGBO(247, 219, 79, 1),
+                  radius: 30,
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        FirebaseAuth.instance.currentUser.photoURL),
+                  ),
+                ),
+              )
+            ],
+            title: Text(FirebaseAuth.instance.currentUser.displayName),
             automaticallyImplyLeading: false,
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.dashboard),
+            title: Text('Dashboard'),
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed(
+                  UserDashboardScreen.routeName,
+                  arguments: {
+                    'name': user.displayName,
+                    'imageUrl': user.photoURL,
+                    'points': 0,
+                  });
+            },
           ),
           Divider(),
           ListTile(
@@ -21,7 +50,7 @@ class AppDrawer extends StatelessWidget {
             title: Text('Home'),
             onTap: () {
               Navigator.of(context)
-                  .pushReplacementNamed(DashboardScreen.routeName);
+                  .pushReplacementNamed(RoomDashboardScreen.routeName);
             },
           ),
           Divider(),

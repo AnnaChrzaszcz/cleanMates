@@ -1,6 +1,7 @@
-import 'package:clean_mates_app/screens/add_new_room.dart';
+import 'package:clean_mates_app/screens/create_room_screen.dart';
+import 'package:clean_mates_app/screens/user_dashboard_screen.dart';
 
-import './screens/dashbord_screen.dart';
+import 'screens/room_dashbord_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,8 +28,16 @@ class MyApp extends StatelessWidget {
         iconTheme: IconThemeData(color: Color.fromRGBO(47, 149, 153, 1)),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(
-                Color.fromRGBO(47, 149, 153, 1),
+              // backgroundColor: MaterialStateProperty.all(
+              //   Color.fromRGBO(47, 149, 153, 1),
+              // ),
+              backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.disabled))
+                    return Colors.grey;
+                  return Color.fromRGBO(
+                      47, 149, 153, 1); // Use the component's default.
+                },
               ),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -47,14 +56,15 @@ class MyApp extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, userSnapshot) {
           if (userSnapshot.hasData) {
-            return DashboardScreen();
+            return RoomDashboardScreen();
           }
           return AuthScreen();
         },
       ),
       routes: {
-        DashboardScreen.routeName: (context) => DashboardScreen(),
-        AddNewRoom.routeName: (context) => AddNewRoom(),
+        RoomDashboardScreen.routeName: (context) => RoomDashboardScreen(),
+        CreateRoomScreen.routeName: (context) => CreateRoomScreen(),
+        UserDashboardScreen.routeName: (context) => UserDashboardScreen(),
       },
     );
   }

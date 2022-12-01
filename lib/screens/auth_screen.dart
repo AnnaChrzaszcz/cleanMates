@@ -45,6 +45,8 @@ class _AuthScreenState extends State<AuthScreen> {
             .child('${user.uid}.jpg')
             .getDownloadURL();
 
+        await user.updatePhotoURL(url);
+
         await FirebaseFirestore.instance
             .collection('users')
             .doc(userCredential.user.uid)

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import '../screens/user_dashboard_screen.dart';
 
 class RoomieItem extends StatelessWidget {
   final String name;
@@ -10,8 +9,8 @@ class RoomieItem extends StatelessWidget {
   RoomieItem(this.name, this.imageUrl, this.points);
 
   void selectUser(BuildContext ctx) {
-    // Navigator.of(ctx).pushNamed(UserDashboardScreen.routeName,
-    //     arguments: {'name': name, 'imageUrl': imageUrl, 'points': points});
+    Navigator.of(ctx).pushNamed(UserDashboardScreen.routeName,
+        arguments: {'name': name, 'imageUrl': imageUrl, 'points': points});
   }
 
   @override
