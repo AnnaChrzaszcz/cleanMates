@@ -15,7 +15,9 @@ class _UserImagePickerState extends State<UserImagePicker> {
   void _pickImage() async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(
-        source: ImageSource.gallery, imageQuality: 60, maxWidth: 150);
+      source: ImageSource.gallery,
+      imageQuality: 1,
+    ); //maxWidth: 150
     setState(() {
       pickedImageFile = File(pickedImage.path);
     });
@@ -33,8 +35,13 @@ class _UserImagePickerState extends State<UserImagePicker> {
       ),
       TextButton.icon(
         onPressed: _pickImage,
-        icon: Icon(Icons.image),
-        label: Text('Add image'),
+        icon: Icon(
+          Icons.image,
+        ),
+        label: Text(
+          'Add image',
+          style: TextStyle(color: Theme.of(context).accentColor),
+        ),
       ),
     ]);
   }

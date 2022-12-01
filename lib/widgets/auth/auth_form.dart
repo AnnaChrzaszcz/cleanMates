@@ -30,7 +30,10 @@ class _AuthFormState extends State<AuthForm> {
     if (_userImageFile == null && !_isLogin) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Please pick an image'),
+          content: Text(
+            'Please pick an image',
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
           backgroundColor: Theme.of(context).errorColor,
         ),
       );
@@ -112,10 +115,20 @@ class _AuthFormState extends State<AuthForm> {
                   if (!widget.isLoading)
                     ElevatedButton(
                       onPressed: _trySubmit,
-                      child: Text(_isLogin ? 'Login' : 'Signup'),
+                      child: Text(
+                        _isLogin ? 'Login' : 'Signup',
+                        style: TextStyle(fontSize: 15),
+                      ),
                     ),
                   if (!widget.isLoading)
                     TextButton(
+                      style: ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all(
+                            Color.fromRGBO(47, 149, 153, 1)
+                            // Color.fromRGBO(242, 107, 56, 1),
+                            //  Color.fromRGBO(236, 32, 73, 1),
+                            ),
+                      ),
                       onPressed: () {
                         setState(() {
                           _isLogin = !_isLogin;
