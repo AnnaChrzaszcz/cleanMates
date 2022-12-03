@@ -1,9 +1,12 @@
-import '../screens/room_dashbord_screen.dart';
+import 'package:clean_mates_app/screens/activities_screen.dart';
+
 import '../screens/user_dashboard_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../models/room.dart';
+import '../screens/user_room_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -49,8 +52,17 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.home),
             title: Text('Home'),
             onTap: () {
+              //   Navigator.of(context)
+              //       .pushReplacementNamed(UserRoomScreen.routeName);
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.clean_hands),
+            title: Text('Activities'),
+            onTap: () {
               Navigator.of(context)
-                  .pushReplacementNamed(RoomDashboardScreen.routeName);
+                  .pushReplacementNamed(ActivitiesScreen.routeName);
             },
           ),
           Divider(),
