@@ -1,74 +1,89 @@
-import 'package:clean_mates_app/widgets/app_drawer.dart';
-import 'package:clean_mates_app/widgets/user_has_no_room.dart';
+import '../screens/save_activity_screen.dart';
+import '../widgets/app_drawer.dart';
+import '../widgets/user_has_no_room.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../widgets/action_item.dart';
-import '../repositories/room_repository.dart';
 import '../models/room.dart';
 import '../screens/user_room_screen.dart';
 import '../providers/rooms_provider.dart';
 import 'package:provider/provider.dart';
+import '../models/roomie.dart';
 
 class UserDashboardScreen extends StatefulWidget {
   static const String routeName = '/userDashboard';
-  final user = FirebaseAuth.instance.currentUser;
 
   @override
   State<UserDashboardScreen> createState() => _UserDashboardScreenState();
 }
 
 class _UserDashboardScreenState extends State<UserDashboardScreen> {
-  final roomRepo = RoomRepository();
-
+  Roomie roomie;
+  final user = FirebaseAuth.instance.currentUser;
+  var _isInit = true;
   void _joinToRoom(Room selectedRoom) {
     Provider.of<RoomsProvider>(context, listen: false)
         .joinToRoom(selectedRoom)
-        .then((_) {
-      _tryGetYourRoom();
-      setState(() {});
-    });
+        .then((_) {});
   }
 
-  void _createdRoom() {
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    //_tryGetYourRoom();
-  }
+  void _createdRoom() {}
 
   Future<void> _tryGetYourRoom() async {
     await Provider.of<RoomsProvider>(context, listen: false)
-        .getYourRoom(widget.user);
+        .getYourRoom(roomie.id);
+  }
+
+  @override
+  void didChangeDependencies() {
+    print('didchangeDependencies');
+    if (_isInit) {
+      final routeArgs =
+          ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      if (routeArgs != null) {
+        final userId = routeArgs['userId'];
+        final name = routeArgs['name'];
+        final imageUrl = routeArgs['imageUrl'];
+        final points = routeArgs['points'];
+
+        roomie = Roomie(
+            id: userId, userName: name, points: points, imageUrl: imageUrl);
+      } else {
+        print('routeArgs null');
+        roomie = Roomie(
+            id: user.uid,
+            userName: user.displayName,
+            points: null,
+            imageUrl: user.photoURL);
+        // }
+      }
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    final name = widget.user.displayName;
-    final url = widget.user.photoURL;
-    final points = 0;
     Room room;
 
     final actions = [
       {
         'title': 'Save Activity',
-        'routeName': '/', //SaveActivityScreen.routeName
+        'routeName': SaveActivityScreen.routeName,
         'imagePath': 'assets/images/cleaning.png'
       },
       {
-        'title': 'Exchange To Prize',
+        'title': 'Money balance',
         'routeName': '/', //ExchangeToPrize.routeName,
-        'imagePath': 'assets/images/prize.png'
+        'imagePath': 'assets/images/money.png'
       },
       {
-        'title': 'Lista moich nagród',
+        'title': 'Prizes',
         'routeName': '/', //MyPrizesScreen.routeName,
         'imagePath': 'assets/images/myPrize.png'
       },
       {
-        'title': 'Statystyki',
+        'title': 'Stats',
         'routeName': '/', //StatsScreen.routeName,
         'imagePath': 'assets/images/stats.png'
       },
@@ -76,7 +91,8 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(name),
+        //title: Text(name),
+        title: Text(roomie.userName),
       ),
       drawer: AppDrawer(),
       body: FutureBuilder(
@@ -90,8 +106,16 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
             return Consumer<RoomsProvider>(
               builder: ((context, roomsdata, _) {
                 if (roomsdata.myRoom != null) {
+                  if (roomie.points == null) {
+                    roomie = roomsdata.myRoom.roomies
+                        .firstWhere((roomie) => roomie.id == user.uid);
+                  }
                   return userDashboardContainer(
-                      points, actions, roomsdata.myRoom);
+                      //points, actions, roomsdata.myRoom);
+                      roomie.points,
+                      actions,
+                      roomsdata.myRoom,
+                      roomie.id);
                 } else {
                   return UserHasNoRoom(_joinToRoom, _createdRoom);
                 }
@@ -105,7 +129,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   }
 
   Widget userDashboardContainer(
-      points, List<Map<String, String>> actions, Room room) {
+      points, List<Map<String, String>> actions, Room room, String userId) {
     return Container(
       decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
       padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -115,6 +139,8 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         children: [
           CircleAvatar(
             radius: 40,
+            backgroundColor: Theme.of(context).primaryColor,
+            foregroundColor: Colors.white,
             child: Text(
               '${points.toString()} pkt',
               style: TextStyle(fontSize: 20),
@@ -140,9 +166,11 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
               children: actions
                   .map(
                     (action) => ActionItem(
-                        action['title'] as String,
-                        action['routeName'] as String,
-                        action['imagePath'] as String),
+                      action['title'] as String,
+                      action['routeName'] as String,
+                      action['imagePath'] as String,
+                      userId,
+                    ),
                   )
                   .toList(),
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(

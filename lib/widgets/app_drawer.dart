@@ -1,4 +1,5 @@
 import 'package:clean_mates_app/screens/activities_screen.dart';
+import 'package:clean_mates_app/screens/gifts_screen.dart';
 
 import '../screens/user_dashboard_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/room.dart';
-import '../screens/user_room_screen.dart';
+import '../providers/rooms_provider.dart';
+import 'package:provider/provider.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -38,13 +40,8 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.dashboard),
             title: Text('Dashboard'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(
-                  UserDashboardScreen.routeName,
-                  arguments: {
-                    'name': user.displayName,
-                    'imageUrl': user.photoURL,
-                    'points': 0,
-                  });
+              Navigator.of(context)
+                  .pushReplacementNamed(UserDashboardScreen.routeName);
             },
           ),
           Divider(),
@@ -61,8 +58,17 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.clean_hands),
             title: Text('Activities'),
             onTap: () {
+              //TYLKO JESLI JEST ROOM
               Navigator.of(context)
                   .pushReplacementNamed(ActivitiesScreen.routeName);
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.card_giftcard_outlined),
+            title: Text('Gifts'), //TYLKO JESLI JEST ROOM
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed(GiftsScreen.routeName);
             },
           ),
           Divider(),

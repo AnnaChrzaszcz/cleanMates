@@ -4,14 +4,15 @@ class ActionItem extends StatelessWidget {
   final String title;
   final String routeName;
   final String imagePath;
+  final String userId;
 
-  ActionItem(this.title, this.routeName, this.imagePath);
+  ActionItem(this.title, this.routeName, this.imagePath, this.userId);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
-          Navigator.of(context).pushNamed(routeName);
+          Navigator.of(context).pushNamed(routeName, arguments: userId);
         },
         splashColor: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(15),
