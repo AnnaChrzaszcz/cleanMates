@@ -2,15 +2,20 @@ import 'package:flutter/material.dart';
 import '../screens/user_dashboard_screen.dart';
 
 class RoomieItem extends StatelessWidget {
+  final String userId;
   final String name;
   final String imageUrl;
   final int points;
 
-  RoomieItem(this.name, this.imageUrl, this.points);
+  RoomieItem(this.userId, this.name, this.imageUrl, this.points);
 
   void selectUser(BuildContext ctx) {
-    Navigator.of(ctx).pushNamed(UserDashboardScreen.routeName,
-        arguments: {'name': name, 'imageUrl': imageUrl, 'points': points});
+    Navigator.of(ctx).pushNamed(UserDashboardScreen.routeName, arguments: {
+      'userId': userId,
+      'name': name,
+      'imageUrl': imageUrl,
+      'points': points
+    });
   }
 
   @override

@@ -19,7 +19,6 @@ class JoinRoom extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
-              print('mam data');
               List<Room> rooms = snapshot.data;
               if (rooms.length == 0) {
                 return Center(child: Text('no available rooms'));

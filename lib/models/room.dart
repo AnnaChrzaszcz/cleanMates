@@ -7,7 +7,6 @@ class Room {
   final String creatorId;
   final List<Roomie> roomies;
   // final DateTime dateTime;
-  // final String creatorId;
 
   Room({
     @required this.id,
@@ -15,6 +14,5 @@ class Room {
     @required this.creatorId,
     @required this.roomies,
     // @required this.dateTime,
-    // @required this.creatorId
   });
 }
