@@ -43,6 +43,8 @@ class RoomsProvider extends ChangeNotifier {
           creatorId: roomData['creatorId'],
           roomies: roomies);
       userRoom = roomItem;
+      print(roomItem.roomies[0].points);
+      print(roomItem.roomies[1].points);
       notifyListeners();
     }
   }
@@ -91,7 +93,8 @@ class RoomsProvider extends ChangeNotifier {
         .doc(user.uid)
         .update({'roomRef': roomRoomieRef.reference});
 
-    notifyListeners();
+    getYourRoom(user.uid);
+    //notifyListeners();
   }
 
   Future<void> leaveRoom(Room room) async {
@@ -101,6 +104,17 @@ class RoomsProvider extends ChangeNotifier {
         .get();
     final newRoomRef =
         await FirebaseFirestore.instance.collection('rooms').doc(room.id);
+
+    var activitiesToDeleteCollection = await newRoomRef
+        .collection('roomies')
+        .doc(user.uid)
+        .collection('activities')
+        .get();
+
+    for (var doc in activitiesToDeleteCollection.docs) {
+      await doc.reference.delete();
+    }
+
     await newRoomRef.collection('roomies').doc(user.uid).delete();
 
     final roomRoomieRef = await newRoomRef.get();
@@ -113,6 +127,7 @@ class RoomsProvider extends ChangeNotifier {
   }
 
   Future<void> addRoom(Room room) async {
+    print('add new Room');
     final roomieData = await FirebaseFirestore.instance
         .collection('users')
         .doc(user.uid)
@@ -150,6 +165,7 @@ class RoomsProvider extends ChangeNotifier {
         roomies: await _createRoomies(roomiesData));
 
     _rooms.add(newRoom);
+    userRoom = newRoom;
     notifyListeners();
   }
 
