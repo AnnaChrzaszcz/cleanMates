@@ -13,32 +13,54 @@ class ActivitiesProvider extends ChangeNotifier {
     return [..._activities];
   }
 
-  Future<void> fetchAndSetData() async {
+  Future<void> fetchAndSetData([String filterByRoomId]) async {
     List<Activity> activities = [];
-    QuerySnapshot<Map<String, dynamic>> activitiesData =
-        await FirebaseFirestore.instance.collection('activities').get();
+    QuerySnapshot<Map<String, dynamic>> activitiesData;
+
+    if (filterByRoomId != null) {
+      activitiesData = await FirebaseFirestore.instance
+          .collection('activities')
+          .where('roomId', isEqualTo: filterByRoomId)
+          .get();
+    } else {
+      activitiesData = await FirebaseFirestore.instance
+          .collection('activities')
+          .where(true)
+          .get();
+    }
+
     activitiesData.docs.forEach((element) {
+      print(element['roomId']);
       Activity activity = Activity(
           id: element.id,
           activityName: element['activityName'],
-          points: element['points']);
+          points: element['points'],
+          roomId: element['roomId']);
       activities.add(activity);
     });
     _activities = activities;
     notifyListeners();
   }
 
-  Future<void> addActivity(Activity activity) async {
+  Future<void> addActivity(Activity activity, String idRoom) async {
     final newActivityRef =
         await FirebaseFirestore.instance.collection('activities').doc();
 
-    await newActivityRef.set(
-        {'activityName': activity.activityName, 'points': activity.points});
+    // final roomRef =
+    //     await FirebaseFirestore.instance.collection('rooms').doc(idRoom).get();
+
+    await newActivityRef.set({
+      'activityName': activity.activityName,
+      'points': activity.points,
+      'roomId': idRoom,
+      'creatorId': user.uid
+    });
 
     final newActivity = Activity(
         id: newActivityRef.id,
         activityName: activity.activityName,
-        points: activity.points);
+        points: activity.points,
+        roomId: activity.roomId);
 
     _activities.add(newActivity);
 
@@ -59,6 +81,25 @@ class ActivitiesProvider extends ChangeNotifier {
     } else {
       print('..');
     }
+  }
+
+  Future<void> deleteActivity(String id) async {
+    final activityIndex =
+        _activities.indexWhere((activity) => activity.id == id);
+    var existingActivity = _activities[activityIndex];
+    _activities.removeAt(activityIndex);
+    notifyListeners();
+    try {
+      await FirebaseFirestore.instance
+          .collection('activities')
+          .doc(id)
+          .delete();
+    } catch (error) {
+      _activities.insert(activityIndex, existingActivity);
+      notifyListeners();
+    }
+
+    existingActivity = null;
   }
 
   Activity findById(String id) {

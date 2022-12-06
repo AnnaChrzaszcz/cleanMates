@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/activity.dart';
+import '../models/room.dart';
 import '../providers/activities_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +18,7 @@ class _CreateNewActivityScreenState extends State<EditActivityScreen> {
   final _pointsFocusNode = FocusNode();
   var _isInit = true;
   var _isLoading = false;
+  String roomId;
   var _editedActivity = Activity(
     id: null,
     activityName: '',
@@ -36,7 +38,7 @@ class _CreateNewActivityScreenState extends State<EditActivityScreen> {
       } else {
         try {
           await Provider.of<ActivitiesProvider>(context, listen: false)
-              .addActivity(_editedActivity);
+              .addActivity(_editedActivity, roomId);
         } catch (err) {
           print(err);
         }
@@ -51,7 +53,10 @@ class _CreateNewActivityScreenState extends State<EditActivityScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final id = ModalRoute.of(context).settings.arguments as String;
+      final routeArgs =
+          ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+      final id = routeArgs['id'];
+      roomId = routeArgs['roomId'];
       if (id != null) {
         _editedActivity =
             Provider.of<ActivitiesProvider>(context, listen: false)
