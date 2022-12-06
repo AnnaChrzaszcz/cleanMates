@@ -1,6 +1,10 @@
+import 'package:clean_mates_app/providers/rooms_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/room.dart';
+import 'package:provider/provider.dart';
+import '../providers/activities_provider.dart';
 
 class CreateRoomScreen extends StatefulWidget {
   static const routeName = '/addNewRoom';
@@ -11,7 +15,29 @@ class CreateRoomScreen extends StatefulWidget {
 class _CreateRoomScreenState extends State<CreateRoomScreen> {
   final _form = GlobalKey<FormState>();
   var _isLoading = false;
-  var _roomName = '';
+  //var _roomName = '';
+  var _initValues = {'roomName': '', 'creatorId': ''};
+  var _isInit = true;
+
+  var _editedRoom = Room(id: null, creatorId: '', roomName: '', roomies: []);
+
+  void didChangeDependencies() {
+    if (_isInit) {
+      final id = ModalRoute.of(context).settings.arguments as String;
+      // if (id != null) {
+      //   _editedRoom = Provider.of<ActivitiesProvider>(context, listen: false)
+      //       .findById(id);
+      //   _initValues = {
+      //     'activityName': _editedActivity.activityName,
+      //     'points': _editedActivity.points.toString(),
+      //   };
+      //   print(_initValues);
+      // }
+    }
+    _isInit = false;
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
 
   Future<void> _createNewRoom() async {
     final formValid = _form.currentState.validate();
@@ -22,25 +48,8 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
         _isLoading = true;
       });
       try {
-        final user = await FirebaseAuth.instance.currentUser;
-        final roomieData = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
-        final newRoomRef =
-            await FirebaseFirestore.instance.collection('rooms').doc();
-        await newRoomRef.set({'roomName': _roomName, 'creatorId': user.uid});
-        await newRoomRef.collection('roomies').doc(user.uid).set({
-          'roomie': roomieData.reference,
-          'points': 0,
-        });
-
-        final roomRoomieRef = await newRoomRef.get();
-
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(FirebaseAuth.instance.currentUser.uid)
-            .update({'roomRef': roomRoomieRef.reference});
+        await Provider.of<RoomsProvider>(context, listen: false)
+            .addRoom(_editedRoom);
       } catch (err) {
         print(err);
       } finally {
@@ -73,7 +82,11 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                       decoration: InputDecoration(labelText: 'Room Name'),
                       textInputAction: TextInputAction.next,
                       onSaved: (value) {
-                        _roomName = value;
+                        _editedRoom = Room(
+                            id: _editedRoom.id,
+                            roomName: value,
+                            creatorId: _editedRoom.creatorId,
+                            roomies: _editedRoom.roomies);
                       },
                       validator: (value) {
                         if (value.isEmpty)

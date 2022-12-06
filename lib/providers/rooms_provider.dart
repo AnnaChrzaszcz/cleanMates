@@ -1,3 +1,4 @@
+import '../models/activity.dart';
 import 'package:flutter/material.dart';
 import '../models/room.dart';
 import '../models/roomie.dart';
@@ -19,9 +20,8 @@ class RoomsProvider extends ChangeNotifier {
     return userRoom;
   }
 
-  Future<void> getYourRoom(user) async {
-    final userRef =
-        FirebaseFirestore.instance.collection('users').doc(user.uid);
+  Future<void> getYourRoom(String userId) async {
+    final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
 
     final doc = await userRef.get();
     final room = doc.data() as Map<String, dynamic>;
@@ -110,5 +110,107 @@ class RoomsProvider extends ChangeNotifier {
         .update({'roomRef': FieldValue.delete()});
     userRoom = null;
     notifyListeners();
+  }
+
+  Future<void> addRoom(Room room) async {
+    final roomieData = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+
+    final newRoomRef =
+        await FirebaseFirestore.instance.collection('rooms').doc();
+
+    await newRoomRef.set({
+      'roomName': room.roomName,
+      'creatorId': user.uid,
+    });
+    await newRoomRef.collection('roomies').doc(user.uid).set({
+      'roomie': roomieData.reference,
+      'points': 0,
+    });
+
+    final roomRoomieRef = await newRoomRef.get();
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .update({'roomRef': roomRoomieRef.reference});
+
+    final roomiesData = await FirebaseFirestore.instance
+        .collection('rooms')
+        .doc(newRoomRef.id)
+        .collection('roomies')
+        .get();
+
+    final newRoom = Room(
+        id: newRoomRef.id,
+        roomName: room.roomName,
+        creatorId: user.uid,
+        roomies: await _createRoomies(roomiesData));
+
+    _rooms.add(newRoom);
+    notifyListeners();
+  }
+
+  Future<void> addActivitiesToRoomie(List<Activity> activities, String userId,
+      String roomId, int pointsEarned) async {
+    final activityData = FirebaseFirestore.instance
+        .collection('rooms')
+        .doc(roomId)
+        .collection('roomies')
+        .doc(userId)
+        .collection('activities');
+
+    FirebaseFirestore.instance
+        .collection('rooms')
+        .doc(roomId)
+        .collection('roomies')
+        .doc(userId)
+        .get()
+        .then((snapshot) {
+      Map<String, dynamic> roomieData = snapshot.data();
+      var points = roomieData['points'];
+      int pointsSum = points + pointsEarned;
+
+      FirebaseFirestore.instance
+          .collection('rooms')
+          .doc(roomId)
+          .collection('roomies')
+          .doc(userId)
+          .update({'points': pointsSum});
+    });
+
+    List<Map<String, dynamic>> values = [];
+
+    try {
+      for (var activity in activities) {
+        var value = {
+          'activityId': activity.id,
+          'dateTime': DateTime.now().toIso8601String(),
+        };
+        activityData.add(value).then((documentSnapshot) =>
+            print("Added Data with ID: ${documentSnapshot.id}"));
+      }
+      Roomie roomie =
+          userRoom.roomies.firstWhere((roomie) => roomie.id == userId);
+
+      var roomieIndex =
+          userRoom.roomies.indexWhere((roomie) => roomie.id == userId);
+
+      Roomie updatedRoomie = Roomie(
+          id: roomie.id,
+          userName: roomie.userName,
+          points: roomie.points + pointsEarned,
+          imageUrl: roomie.imageUrl);
+
+      myRoom.roomies[roomieIndex] = updatedRoomie;
+      myRoom.roomies.forEach(
+        (element) => print(element.points),
+      );
+      notifyListeners();
+    } catch (err) {
+      rethrow;
+    }
   }
 }
