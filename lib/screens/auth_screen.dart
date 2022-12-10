@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import '../widgets/auth/auth_form.dart';
+import 'package:rive/rive.dart';
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -74,10 +75,21 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var scaffold = Scaffold(
+    return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: AuthForm(_submitAuthForm, _isLoading),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 150,
+            height: 150,
+            child: RiveAnimation.asset(
+              'assets/animations/roomie.riv',
+            ),
+          ),
+          AuthForm(_submitAuthForm, _isLoading),
+        ],
+      ),
     );
-    return scaffold;
   }
 }
