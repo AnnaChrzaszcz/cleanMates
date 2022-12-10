@@ -1,12 +1,12 @@
+import 'package:animated_icon/animate_icon.dart';
+import 'package:animated_icon/animate_icons.dart';
 import 'package:clean_mates_app/screens/activities_screen.dart';
 import 'package:clean_mates_app/screens/gifts_screen.dart';
+import 'package:clean_mates_app/screens/user_room_screen.dart';
 
 import '../screens/user_dashboard_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import '../models/room.dart';
 import '../providers/rooms_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +14,7 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
+    final room = Provider.of<RoomsProvider>(context).myRoom;
     return Drawer(
       width: 260,
       child: Column(
@@ -35,7 +36,6 @@ class AppDrawer extends StatelessWidget {
             title: Text(FirebaseAuth.instance.currentUser.displayName),
             automaticallyImplyLeading: false,
           ),
-          Divider(),
           ListTile(
             leading: Icon(Icons.dashboard),
             title: Text('Dashboard'),
@@ -44,34 +44,47 @@ class AppDrawer extends StatelessWidget {
                   .pushReplacementNamed(UserDashboardScreen.routeName);
             },
           ),
-          Divider(),
-          ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Home'),
-            onTap: () {
-              //   Navigator.of(context)
-              //       .pushReplacementNamed(UserRoomScreen.routeName);
-            },
-          ),
-          Divider(),
-          ListTile(
-            leading: Icon(Icons.clean_hands),
-            title: Text('Activities'),
-            onTap: () {
-              //TYLKO JESLI JEST ROOM
-              Navigator.of(context)
-                  .pushReplacementNamed(ActivitiesScreen.routeName);
-            },
-          ),
-          Divider(),
-          ListTile(
-            leading: Icon(Icons.card_giftcard_outlined),
-            title: Text('Gifts'), //TYLKO JESLI JEST ROOM
-            onTap: () {
-              Navigator.of(context).pushReplacementNamed(GiftsScreen.routeName);
-            },
-          ),
-          Divider(),
+          const Divider(),
+          if (room != null)
+            ListTile(
+              leading: const Icon(Icons.home),
+              // leading: AnimateIcon(
+              //   key: UniqueKey(),
+              //   onTap: () {},
+              //   iconType: IconType.continueAnimation,
+              //   height: 35,
+              //   width: 35,
+              //   color: Colors.grey,
+              //   animateIcon: AnimateIcons.home,
+              // ),
+              title: Text('Home'),
+              onTap: () {
+                Navigator.of(context)
+                    .pushReplacementNamed(UserRoomScreen.routeName);
+              },
+            ),
+          if (room != null) const Divider(),
+          if (room != null)
+            ListTile(
+              leading: Icon(Icons.clean_hands),
+              title: Text('Activities'),
+              onTap: () {
+                //TYLKO JESLI JEST ROOM
+                Navigator.of(context)
+                    .pushReplacementNamed(ActivitiesScreen.routeName);
+              },
+            ),
+          if (room != null) Divider(),
+          if (room != null)
+            ListTile(
+              leading: Icon(Icons.card_giftcard_outlined),
+              title: Text('Gifts'), //TYLKO JESLI JEST ROOM
+              onTap: () {
+                Navigator.of(context)
+                    .pushReplacementNamed(GiftsScreen.routeName);
+              },
+            ),
+          if (room != null) const Divider(),
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),

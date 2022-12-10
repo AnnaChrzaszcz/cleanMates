@@ -45,6 +45,13 @@ class RoomieItem extends StatelessWidget {
               Text(
                 name,
                 style: TextStyle(color: Colors.white),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Text(
+                '${points.toString()} points',
+                style: TextStyle(color: Colors.white),
               )
             ]),
           ),

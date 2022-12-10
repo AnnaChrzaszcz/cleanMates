@@ -30,16 +30,15 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
       await Provider.of<RoomsProvider>(context, listen: false)
           .addActivitiesToRoomie(selectedActivities, widget.userId,
               widget.activities[0].roomId, activitesPointsSum);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(
-            SnackBar(
-              content: Text('You earned ${activitesPointsSum} points'),
-              duration: const Duration(seconds: 2),
-            ),
-          )
-          .closed
-          .then((value) {});
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('You earned ${activitesPointsSum} points'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
     } catch (err) {
+      print(err);
       await showDialog<Null>(
         context: context,
         builder: (ctx) => AlertDialog(
@@ -59,10 +58,8 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(); //JAK POCZEKAC ZEBY SNACK BAR ZNIKNAL?
     }
-
-    // POPRAWIC ZEBY PRZERKAZYWAC ROOM ID Z GORY
   }
 
   @override

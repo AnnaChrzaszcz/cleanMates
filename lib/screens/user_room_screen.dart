@@ -3,13 +3,12 @@ import 'package:clean_mates_app/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import '../models/room.dart';
 import '../widgets/roomie_item.dart';
-import '../repositories/room_repository.dart';
+
 import 'package:provider/provider.dart';
 import '../providers/rooms_provider.dart';
 
 class UserRoomScreen extends StatelessWidget {
   static const String routeName = '/userRoom';
-  final roomRepo = RoomRepository();
 
   void _leaveRoom(Room actualRoom, BuildContext ctx) {
     Provider.of<RoomsProvider>(ctx, listen: false)
@@ -21,11 +20,13 @@ class UserRoomScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final room = Provider.of<RoomsProvider>(context).myRoom;
 
+    print('user room screen mordo');
+
     return room == null
         ? UserDashboardScreen()
         : Scaffold(
             appBar: AppBar(title: Text('Your room')),
-            //drawer: AppDrawer(),
+            drawer: AppDrawer(), // jak to zastapic strzalka do tylu
             body: Container(
               width: double.infinity,
               height: 600,

@@ -24,7 +24,7 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+      //decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

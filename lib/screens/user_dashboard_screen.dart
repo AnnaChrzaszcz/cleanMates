@@ -1,3 +1,7 @@
+import 'dart:math';
+
+import 'package:clean_mates_app/screens/buy_gift_screen.dart';
+
 import '../screens/save_activity_screen.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/user_has_no_room.dart';
@@ -20,6 +24,8 @@ class UserDashboardScreen extends StatefulWidget {
 class _UserDashboardScreenState extends State<UserDashboardScreen> {
   Roomie roomie;
   final user = FirebaseAuth.instance.currentUser;
+  var routeArgs;
+
   var _isInit = true;
   void _joinToRoom(Room selectedRoom) {
     Provider.of<RoomsProvider>(context, listen: false)
@@ -36,9 +42,8 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
 
   @override
   void didChangeDependencies() {
-    print('didchangeDependencies');
     if (_isInit) {
-      final routeArgs =
+      routeArgs =
           ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
       if (routeArgs != null) {
         final userId = routeArgs['userId'];
@@ -64,8 +69,6 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Room room;
-
     final actions = [
       {
         'title': 'Save Activity',
@@ -78,8 +81,8 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         'imagePath': 'assets/images/money.png'
       },
       {
-        'title': 'Prizes',
-        'routeName': '/', //MyPrizesScreen.routeName,
+        'title': 'Buy gift',
+        'routeName': BuyGiftScreen.routeName,
         'imagePath': 'assets/images/myPrize.png'
       },
       {
@@ -106,16 +109,24 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
             return Consumer<RoomsProvider>(
               builder: ((context, roomsdata, _) {
                 if (roomsdata.myRoom != null) {
-                  if (roomie.points == null) {
+                  // print('jestem w consumer builder');
+                  // print(roomsdata.myRoom.roomies[0].userName);
+                  // print(roomsdata.myRoom.roomies[0].points);
+                  // print(roomsdata.myRoom.roomies[1].userName);
+                  // print(roomsdata.myRoom.roomies[1].points);
+                  if (routeArgs == null) {
+                    print('routeArgs == null');
                     roomie = roomsdata.myRoom.roomies
                         .firstWhere((roomie) => roomie.id == user.uid);
+                    print(roomie.points);
+                  } else {
+                    print('routeArgs != null');
+                    roomie = roomsdata.myRoom.roomies
+                        .firstWhere((roomie) => roomie.id != user.uid);
+                    print(roomie.points);
                   }
                   return userDashboardContainer(
-                      //points, actions, roomsdata.myRoom);
-                      roomie.points,
-                      actions,
-                      roomsdata.myRoom,
-                      roomie.id);
+                      roomie.points, actions, roomsdata.myRoom, roomie.id);
                 } else {
                   return UserHasNoRoom(_joinToRoom, _createdRoom);
                 }
@@ -130,6 +141,8 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
 
   Widget userDashboardContainer(
       points, List<Map<String, String>> actions, Room room, String userId) {
+    // print('userDashBoardScreen');
+    // print(points);
     return Container(
       decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
       padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -146,13 +159,20 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
               style: TextStyle(fontSize: 20),
             ),
           ),
+          // AnimateIcon(
+          //   key: UniqueKey(),
+          //   onTap: () {},
+          //   iconType: IconType.animatedOnTap,
+          //   height: 70,
+          //   width: 70,
+          //   color: Color.fromRGBO(47, 149, 153, 1),
+          //   animateIcon: AnimateIcons.home,
+          // ),
           IconButton(
               onPressed: () {
                 Navigator.of(context)
                     .pushNamed(UserRoomScreen.routeName)
-                    .then((_) {
-                  setState(() {});
-                });
+                    .then((_) {});
               },
               icon: Icon(Icons.home)),
           Text(
