@@ -28,10 +28,11 @@ class GiftsProvider extends ChangeNotifier {
 
     giftsData.docs.forEach((element) {
       Gift gift = Gift(
-          id: element.id,
-          giftName: element['giftName'],
-          points: element['points'],
-          roomId: element['roomId']);
+        id: element.id,
+        giftName: element['giftName'],
+        points: element['points'],
+        roomId: element['roomId'],
+      );
       gifts.add(gift);
     });
     _gifts = gifts;
