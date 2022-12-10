@@ -43,6 +43,8 @@ dependencies:
   firebase_ui_auth: ^1.1.0
   image_picker: ^0.8.6
   firebase_storage: ^11.0.6
+  rive: ^0.9.0
+  animated_icon: ^0.0.4
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +75,8 @@ flutter:
     - assets/images/cleaning.png
     - assets/images/myPrize.png
     - assets/images/money.png
+    - assets/animations/roomie.riv
+    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
