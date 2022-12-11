@@ -2,7 +2,7 @@ import 'package:clean_mates_app/models/gift.dart';
 import 'package:clean_mates_app/models/room.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/rooms_provider.dart';
+import '../../providers/rooms_provider.dart';
 
 class UserGiftContainer extends StatelessWidget {
   final String userId;

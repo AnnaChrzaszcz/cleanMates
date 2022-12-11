@@ -1,49 +1,69 @@
+import 'user_gift_container.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+
+import '../../models/exceptions/logistic_expection.dart';
+import 'package:clean_mates_app/models/gift.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../models/activity.dart';
-import '../providers/rooms_provider.dart';
+import '../../models/activity.dart';
+import '../../providers/rooms_provider.dart';
 import 'package:provider/provider.dart';
 
-class SaveActivityContainer extends StatefulWidget {
-  final List<Activity> activities;
+class BuyGiftContainer extends StatefulWidget {
+  final List<Gift> gifts;
   final String userId;
-  SaveActivityContainer(@required this.activities, @required this.userId);
+  BuyGiftContainer(@required this.gifts, @required this.userId);
 
   @override
-  _SaveActivityContainerState createState() => _SaveActivityContainerState();
+  _BuyGiftsContainerState createState() => _BuyGiftsContainerState();
 }
 
-class _SaveActivityContainerState extends State<SaveActivityContainer> {
+class _BuyGiftsContainerState extends State<BuyGiftContainer> {
   var selectedIndexes = [];
-  var activitesPointsSum = 0;
+  var giftsointsSum = 0;
   var _isLoading = false;
+  List<Gift> userGifts = [];
 
-  void _saveActivites() async {
+  @override
+  void initState() {
+    // userGifts =  Provider.of<RoomsProvider>(context, listen: false)
+    //     .getUserGifts(widget.userId);
+    super.initState();
+  }
+
+  void _buyGifts() async {
     setState(() {
       _isLoading = true;
     });
-    List<Activity> selectedActivities = [];
+    List<Gift> selectedGifts = [];
     selectedIndexes.forEach((index) {
-      selectedActivities.add(widget.activities[index]);
+      selectedGifts.add(widget.gifts[index]);
     });
     try {
-      await Provider.of<RoomsProvider>(context, listen: false)
-          .addActivitiesToRoomie(selectedActivities, widget.userId,
-              widget.activities[0].roomId, activitesPointsSum);
+      await Provider.of<RoomsProvider>(context, listen: false).addGiftsToRoomie(
+          selectedGifts, widget.userId, widget.gifts[0].roomId, giftsointsSum);
 
+      //Navigator.of(context).pop();
+
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text('You earned ${activitesPointsSum} points'),
+      //     duration: const Duration(seconds: 2),
+      //   ),
+      // );
+    } on LogisticExpection catch (err) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('You earned ${activitesPointsSum} points'),
+          content: Text(err.toString()),
           duration: const Duration(seconds: 2),
         ),
       );
     } catch (err) {
-      print(err);
-      await showDialog<Null>(
+      await showDialog<void>(
         context: context,
         builder: (ctx) => AlertDialog(
           title: Text('An error occured'),
-          content: Text('Sth went wrong'),
+          content: Text("You don't have enought points"),
           actions: [
             TextButton(
               onPressed: () {
@@ -54,11 +74,9 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
           ],
         ),
       );
-    } finally {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context).pop(); //JAK POCZEKAC ZEBY SNACK BAR ZNIKNAL?
     }
   }
 
@@ -74,21 +92,22 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
           backgroundColor: Theme.of(context).primaryColor,
           foregroundColor: Colors.white,
           child: Text(
-            '${activitesPointsSum}',
+            '${giftsointsSum}',
             style: TextStyle(fontSize: 15),
           ),
         ),
         Container(
-          height: 600,
+          height: 300,
           margin: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-          //decoration: BoxDecoration(border: Border.all(color: Colors.pink)),
+          decoration:
+              BoxDecoration(border: Border.all(color: Colors.grey[300])),
           child: ListView.builder(
-            itemCount: widget.activities.length,
+            itemCount: widget.gifts.length,
             itemBuilder: ((context, index) => Column(
                   children: [
                     CheckboxListTile(
                       title: Text(
-                        widget.activities[index].activityName,
+                        widget.gifts[index].giftName,
                         style: TextStyle(),
                       ),
                       secondary: CircleAvatar(
@@ -97,21 +116,19 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                             ? Theme.of(context).primaryColor
                             : Theme.of(context).dividerColor,
                         foregroundColor: Colors.white,
-                        child: Text('${widget.activities[index].points}'),
+                        child: Text('${widget.gifts[index].points}'),
                       ),
                       value: selectedIndexes.contains(index),
                       onChanged: (_) {
                         if (selectedIndexes.contains(index)) {
                           setState(() {
                             selectedIndexes.remove(index);
-                            activitesPointsSum -=
-                                widget.activities[index].points;
+                            giftsointsSum -= widget.gifts[index].points;
                           });
                         } else {
                           setState(() {
                             selectedIndexes.add(index);
-                            activitesPointsSum +=
-                                widget.activities[index].points;
+                            giftsointsSum += widget.gifts[index].points;
                           });
                         }
                       },
@@ -123,9 +140,8 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
           ),
         ),
         ElevatedButton(
-          onPressed:
-              selectedIndexes.length <= 0 ? null : () => _saveActivites(),
-          child: _isLoading ? CircularProgressIndicator() : Text('Save'),
+          onPressed: selectedIndexes.length <= 0 ? null : () => _buyGifts(),
+          child: _isLoading ? CircularProgressIndicator() : Text('Buy'),
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.resolveWith<Color>(
               (Set<MaterialState> states) {
@@ -135,7 +151,8 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
               },
             ),
           ),
-        )
+        ),
+        UserGiftContainer(widget.userId, userGifts),
       ],
     );
   }

@@ -1,4 +1,4 @@
-import 'package:clean_mates_app/widgets/save_activity_container.dart';
+import 'package:clean_mates_app/widgets/activity/save_activity_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/activities_provider.dart';

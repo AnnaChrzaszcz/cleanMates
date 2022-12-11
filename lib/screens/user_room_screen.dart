@@ -2,7 +2,7 @@ import 'package:clean_mates_app/screens/user_dashboard_screen.dart';
 import 'package:clean_mates_app/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import '../models/room.dart';
-import '../widgets/roomie_item.dart';
+import '../widgets/room/roomie_item.dart';
 
 import 'package:provider/provider.dart';
 import '../providers/rooms_provider.dart';

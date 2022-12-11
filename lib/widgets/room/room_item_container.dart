@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/room.dart';
-import '../widgets/room_item.dart';
-import '../repositories/room_repository.dart';
+import '../../models/room.dart';
+import 'room_item.dart';
+import '../../repositories/room_repository.dart';
 
 class RoomItemContainer extends StatefulWidget {
   final List<Room> rooms;

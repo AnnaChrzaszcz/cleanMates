@@ -1,9 +1,9 @@
 import 'package:clean_mates_app/screens/user_room_screen.dart';
 import 'package:flutter/material.dart';
-import '../screens/create_room_screen.dart';
-import '../repositories/room_repository.dart';
-import '../models/room.dart';
-import '../widgets/join_room.dart';
+import '../../screens/create_room_screen.dart';
+import '../../repositories/room_repository.dart';
+import '../../models/room.dart';
+import 'join_room.dart';
 
 class UserHasNoRoom extends StatefulWidget {
   final void Function(Room room) joinToRoom;

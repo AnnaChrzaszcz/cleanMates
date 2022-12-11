@@ -4,7 +4,7 @@ import 'package:clean_mates_app/screens/buy_gift_screen.dart';
 
 import '../screens/save_activity_screen.dart';
 import '../widgets/app_drawer.dart';
-import '../widgets/user_has_no_room.dart';
+import '../widgets/room/user_has_no_room.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../widgets/action_item.dart';

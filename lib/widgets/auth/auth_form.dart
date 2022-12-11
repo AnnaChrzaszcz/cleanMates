@@ -52,7 +52,7 @@ class _AuthFormState extends State<AuthForm> {
       child: Card(
         elevation: 15,
         //color: Colors.grey[200],
-        shadowColor: Color.fromRGBO(47, 149, 153, 1),
+        shadowColor: Color.fromARGB(255, 255, 247, 22),
         margin: EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Padding(

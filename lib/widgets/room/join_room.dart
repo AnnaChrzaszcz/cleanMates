@@ -1,7 +1,7 @@
-import 'package:clean_mates_app/widgets/room_item_container.dart';
+import 'package:clean_mates_app/widgets/room/room_item_container.dart';
 import 'package:flutter/material.dart';
-import '../repositories/room_repository.dart';
-import '../models/room.dart';
+import '../../repositories/room_repository.dart';
+import '../../models/room.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'room_item.dart';
 

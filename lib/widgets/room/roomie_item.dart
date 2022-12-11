@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../screens/user_dashboard_screen.dart';
+import '../../screens/user_dashboard_screen.dart';
 
 class RoomieItem extends StatelessWidget {
   final String userId;
