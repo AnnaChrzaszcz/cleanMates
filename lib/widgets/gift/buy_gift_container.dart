@@ -22,14 +22,6 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
   var selectedIndexes = [];
   var giftsointsSum = 0;
   var _isLoading = false;
-  List<Gift> userGifts = [];
-
-  @override
-  void initState() {
-    // userGifts =  Provider.of<RoomsProvider>(context, listen: false)
-    //     .getUserGifts(widget.userId);
-    super.initState();
-  }
 
   void _buyGifts() async {
     setState(() {
@@ -82,78 +74,71 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 10,
-        ),
-        CircleAvatar(
-          radius: 30,
-          backgroundColor: Theme.of(context).primaryColor,
-          foregroundColor: Colors.white,
-          child: Text(
-            '${giftsointsSum}',
-            style: TextStyle(fontSize: 15),
-          ),
-        ),
-        Container(
-          height: 300,
-          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-          decoration:
-              BoxDecoration(border: Border.all(color: Colors.grey[300])),
-          child: ListView.builder(
-            itemCount: widget.gifts.length,
-            itemBuilder: ((context, index) => Column(
-                  children: [
-                    CheckboxListTile(
-                      title: Text(
-                        widget.gifts[index].giftName,
-                        style: TextStyle(),
-                      ),
-                      secondary: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: selectedIndexes.contains(index)
-                            ? Theme.of(context).primaryColor
-                            : Theme.of(context).dividerColor,
-                        foregroundColor: Colors.white,
-                        child: Text('${widget.gifts[index].points}'),
-                      ),
-                      value: selectedIndexes.contains(index),
-                      onChanged: (_) {
-                        if (selectedIndexes.contains(index)) {
-                          setState(() {
-                            selectedIndexes.remove(index);
-                            giftsointsSum -= widget.gifts[index].points;
-                          });
-                        } else {
-                          setState(() {
-                            selectedIndexes.add(index);
-                            giftsointsSum += widget.gifts[index].points;
-                          });
-                        }
-                      },
-                      activeColor: Theme.of(context).primaryColor,
-                    ),
-                    Divider()
-                  ],
-                )),
-          ),
-        ),
-        ElevatedButton(
-          onPressed: selectedIndexes.length <= 0 ? null : () => _buyGifts(),
-          child: _isLoading ? CircularProgressIndicator() : Text('Buy'),
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-              (Set<MaterialState> states) {
-                if (states.contains(MaterialState.disabled)) return Colors.grey;
-                return Theme.of(context)
-                    .primaryColor; // Use the component's default.
-              },
+    return Expanded(
+      child: Column(
+        children: [
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                itemCount: widget.gifts.length,
+                itemBuilder: ((context, index) => Column(
+                      children: [
+                        CheckboxListTile(
+                          title: Text(
+                            widget.gifts[index].giftName,
+                            style: TextStyle(),
+                          ),
+                          secondary: CircleAvatar(
+                            radius: 20,
+                            backgroundColor: selectedIndexes.contains(index)
+                                ? Theme.of(context).primaryColor
+                                : Theme.of(context).dividerColor,
+                            foregroundColor: Colors.white,
+                            child: Text('${widget.gifts[index].points}'),
+                          ),
+                          value: selectedIndexes.contains(index),
+                          onChanged: (_) {
+                            if (selectedIndexes.contains(index)) {
+                              setState(() {
+                                selectedIndexes.remove(index);
+                                giftsointsSum -= widget.gifts[index].points;
+                              });
+                            } else {
+                              setState(() {
+                                selectedIndexes.add(index);
+                                giftsointsSum += widget.gifts[index].points;
+                              });
+                            }
+                          },
+                          activeColor: Theme.of(context).primaryColor,
+                        ),
+                        Divider()
+                      ],
+                    )),
+              ),
             ),
           ),
-        ),
-        UserGiftContainer(widget.userId, userGifts),
-      ],
+          if (selectedIndexes.length > 0)
+            ElevatedButton(
+              onPressed: selectedIndexes.length <= 0 ? null : () => _buyGifts(),
+              child: _isLoading
+                  ? CircularProgressIndicator()
+                  : Text('Buy (${giftsointsSum} points)'),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.disabled))
+                      return Colors.grey;
+                    return Theme.of(context)
+                        .primaryColor; // Use the component's default.
+                  },
+                ),
+              ),
+            ),
+          //UserGiftContainer(widget.userId, userGifts),
+        ],
+      ),
     );
   }
 }

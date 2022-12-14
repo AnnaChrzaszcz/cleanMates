@@ -1,3 +1,7 @@
+import 'package:clean_mates_app/models/gift.dart';
+import 'package:clean_mates_app/models/userGift.dart';
+import 'package:clean_mates_app/widgets/gift/user_gift_container.dart';
+
 import '../widgets/gift/buy_gift_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +20,11 @@ class BuyGiftScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var myRoom = Provider.of<RoomsProvider>(context).myRoom;
     final userId = ModalRoute.of(context).settings.arguments as String;
+    List<UserGift> userGifts =
+        Provider.of<RoomsProvider>(context, listen: false).getUserGifts(userId);
+    List<UserGift> roomieGifts =
+        Provider.of<RoomsProvider>(context, listen: false)
+            .getRoomieGifts(userId); //tu id roomie
 
     return Scaffold(
       appBar: AppBar(title: Text('Buy gifts')),
@@ -27,8 +36,12 @@ class BuyGiftScreen extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   )
                 : Consumer<GiftsProvider>(
-                    builder: ((ctx, gitsData, _) =>
-                        BuyGiftContainer(gitsData.gifts, userId)),
+                    builder: ((ctx, gitsData, _) => Column(
+                          children: [
+                            BuyGiftContainer(gitsData.gifts, userId),
+                            UserGiftContainer(userId, userGifts, roomieGifts)
+                          ],
+                        )),
                   )),
       ),
     );
