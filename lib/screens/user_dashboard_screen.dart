@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:clean_mates_app/screens/buy_gift_screen.dart';
+import 'package:clean_mates_app/screens/history_screen.dart';
 
 import '../screens/save_activity_screen.dart';
 import '../widgets/app_drawer.dart';
@@ -168,13 +169,26 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
           //   color: Color.fromRGBO(47, 149, 153, 1),
           //   animateIcon: AnimateIcons.home,
           // ),
-          IconButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .pushNamed(UserRoomScreen.routeName)
-                    .then((_) {});
-              },
-              icon: Icon(Icons.home)),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed(UserRoomScreen.routeName)
+                        .then((_) {});
+                  },
+                  icon: Icon(Icons.home)),
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed(HistoryScreen.routeName)
+                        .then((_) {});
+                  },
+                  icon: Icon(Icons.history)),
+            ],
+          ),
+
           Text(
             'Point summary',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

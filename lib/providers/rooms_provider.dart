@@ -1,3 +1,5 @@
+import 'package:clean_mates_app/models/userActivity.dart';
+import 'package:clean_mates_app/models/userGift.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 
 import '../models/exceptions/logistic_expection.dart';
@@ -9,6 +11,7 @@ import '../models/room.dart';
 import '../models/roomie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../temp_data/dummy_data.dart';
 
 class RoomsProvider extends ChangeNotifier {
   List<Room> _rooms;
@@ -294,11 +297,11 @@ class RoomsProvider extends ChangeNotifier {
           DocumentReference giftSnapshot = await giftsData.add(value);
 
           Gift newGift = Gift(
-              id: giftSnapshot.id,
-              giftName: gift.giftName,
-              points: gift.points,
-              roomId: roomId,
-              isRealized: false);
+            id: giftSnapshot.id,
+            giftName: gift.giftName,
+            points: gift.points,
+            roomId: roomId,
+          );
 
           gifts.add(newGift);
         }
@@ -325,23 +328,73 @@ class RoomsProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<Gift>> getUserGifts(
+  List<UserGift> getUserGifts(
+    //DO POPRAWY
     String userId,
-  ) async {
-    List<Gift> gifts = [];
-    QuerySnapshot<Map<String, dynamic>> giftsData = await FirebaseFirestore
-        .instance
-        .collection('rooms')
-        .doc(userRoom.id)
-        .collection('roomies')
-        .doc(userId)
-        .collection('gifts')
-        .get();
+  ) {
+    return DUMMY_USER_GIFTS.where((gift) => gift.userId == 'you').toList();
+  }
 
-    giftsData.docs.forEach((gift) {
-      print(gift['giftId']);
-    });
+  List<UserGift> getRoomieGifts(
+    // DO POPRAWY
+    String userId,
+  ) {
+    return DUMMY_USER_GIFTS.where((gift) => gift.userId == 'roomie').toList();
+  }
 
-    return gifts;
+  void markUserGiftAsRecived(
+    String userId,
+    String giftId,
+  ) {
+    int giftIndex = DUMMY_USER_GIFTS.indexWhere((gift) => gift.id == giftId);
+    UserGift editedGift = DUMMY_USER_GIFTS[giftIndex];
+    UserGift newGift = UserGift(
+        id: editedGift.id,
+        gift: editedGift.gift,
+        userId: editedGift.userId,
+        isRealized: true,
+        boughtDate: editedGift.boughtDate,
+        realizedDate: DateTime.now());
+    DUMMY_USER_GIFTS[giftIndex] = newGift;
+  }
+
+  List<UserActivity> getRoomActivitiesByDate(DateTime date) {
+    //logika pobrania listy activity dla danego pokoju, danego dnia
+    List<UserActivity> activities = [
+      UserActivity('1', 'activity1', 100, 'you', 'room1',
+          DateTime.now().subtract(Duration(days: 2))),
+      UserActivity('2', 'activity2', 200, 'roomie', 'room1', DateTime.now()),
+      UserActivity('3', 'activity3', 400, 'you', 'room1', DateTime.now()),
+      UserActivity('4', 'activity4', 100, 'you', 'room1',
+          DateTime.now().subtract(Duration(days: 2))),
+      UserActivity('5', 'activity2', 200, 'roomie', 'room1',
+          DateTime.now().subtract(Duration(days: 1, hours: 3))),
+      UserActivity('6', 'activity1', 100, 'you', 'room1',
+          DateTime.now().subtract(Duration(days: 1, hours: 6))),
+      UserActivity('7', 'activity2', 200, 'roomie', 'room1',
+          DateTime.now().subtract(Duration(days: 1, hours: 1))),
+      UserActivity('8', 'activity3', 400, 'you', 'room1',
+          DateTime.now().subtract(Duration(days: 1))),
+      UserActivity('9', 'activity4', 100, 'you', 'room1', DateTime.now()),
+      UserActivity('10', 'activity2', 200, 'roomie', 'room1', DateTime.now()),
+    ];
+
+    List<UserActivity> activitiesAtDay = activities
+        .where((activity) => _compareDates(activity.creationDate, date))
+        .toList();
+
+    activitiesAtDay.sort(((a, b) => b.creationDate.compareTo(a.creationDate)));
+
+    return activitiesAtDay;
+  }
+
+  bool _compareDates(DateTime date1, DateTime date2) {
+    if (date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

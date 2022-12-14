@@ -5,6 +5,7 @@ import 'package:clean_mates_app/screens/create_room_screen.dart';
 import 'package:clean_mates_app/screens/edit_activity_screen.dart';
 import 'package:clean_mates_app/screens/edit_gift_screen.dart';
 import 'package:clean_mates_app/screens/gifts_screen.dart';
+import 'package:clean_mates_app/screens/history_screen.dart';
 import 'package:clean_mates_app/screens/save_activity_screen.dart';
 import 'package:clean_mates_app/screens/user_dashboard_screen.dart';
 import 'package:clean_mates_app/screens/user_room_screen.dart';
@@ -58,7 +59,8 @@ class MyApp extends StatelessWidget {
           dividerColor: Color.fromRGBO(47, 149, 153, 1),
           snackBarTheme: SnackBarThemeData(
             backgroundColor: Color.fromRGBO(247, 219, 79, 1),
-            contentTextStyle: TextStyle(color: Color.fromRGBO(236, 32, 73, 1)),
+            // contentTextStyle: TextStyle(color: Color.fromRGBO(236, 32, 73, 1)),
+            contentTextStyle: TextStyle(color: Colors.black),
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
@@ -104,7 +106,8 @@ class MyApp extends StatelessWidget {
           GiftsScreen.routeName: (context) => GiftsScreen(),
           EditGiftScreen.routeName: (context) => EditGiftScreen(),
           SaveActivityScreen.routeName: (context) => SaveActivityScreen(),
-          BuyGiftScreen.routeName: (context) => BuyGiftScreen()
+          BuyGiftScreen.routeName: (context) => BuyGiftScreen(),
+          HistoryScreen.routeName: (context) => HistoryScreen(),
         },
       ),
     );
