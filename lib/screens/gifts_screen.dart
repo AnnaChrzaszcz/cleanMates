@@ -101,6 +101,7 @@ class GiftsScreen extends StatelessWidget {
                                     giftsData.gifts[index].giftName,
                                     style: TextStyle(),
                                   ),
+                                  subtitle: Text(myRoom.roomName),
                                 ),
                                 Divider()
                               ],
