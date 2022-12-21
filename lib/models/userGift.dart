@@ -3,17 +3,20 @@ import 'package:flutter/material.dart';
 
 class UserGift {
   final String id;
-  final Gift gift;
-  final String userId;
+  final String roomieId;
+  final String giftName;
+  final int points;
   final bool isRealized;
   final DateTime boughtDate;
   final DateTime realizedDate;
 
   UserGift(
       {@required this.id,
-      @required this.gift,
-      @required this.userId,
-      this.isRealized,
-      this.boughtDate,
-      this.realizedDate});
+      @required this.giftName,
+      @required this.points,
+      //@required this.gift,
+      @required this.roomieId,
+      @required this.isRealized,
+      @required this.boughtDate,
+      @required this.realizedDate});
 }
