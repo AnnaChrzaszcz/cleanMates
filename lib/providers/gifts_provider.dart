@@ -47,7 +47,6 @@ class GiftsProvider extends ChangeNotifier {
       'giftName': gift.giftName,
       'points': gift.points,
       'roomId': idRoom,
-      'creatorId': user.uid
     });
 
     final newGift = Gift(

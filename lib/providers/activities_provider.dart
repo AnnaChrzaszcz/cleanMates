@@ -53,7 +53,6 @@ class ActivitiesProvider extends ChangeNotifier {
       'activityName': activity.activityName,
       'points': activity.points,
       'roomId': idRoom,
-      'creatorId': user.uid
     });
 
     final newActivity = Activity(
