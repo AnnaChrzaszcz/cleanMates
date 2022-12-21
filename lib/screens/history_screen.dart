@@ -1,4 +1,6 @@
+import 'package:clean_mates_app/models/roomie.dart';
 import 'package:clean_mates_app/models/userActivity.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +19,10 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   var dateSelected = DateTime.now();
   List<UserActivity> roomActivities = [];
+  var userId;
+  var roomieId;
+  Roomie you;
+  Roomie roomie;
 
   void _dateChanged(DateTime val) {
     setState(() {
@@ -28,9 +34,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   void initState() {
+    var myRoom = Provider.of<RoomsProvider>(context, listen: false).myRoom;
     roomActivities = Provider.of<RoomsProvider>(context, listen: false)
         .getRoomActivitiesByDate(dateSelected);
     super.initState();
+    userId = FirebaseAuth.instance.currentUser.uid;
+    you = myRoom.roomies.firstWhere((roomie) => roomie.id == userId);
+    roomie = myRoom.roomies.firstWhere((roomie) => roomie.id != userId);
+    roomieId = roomie.id;
   }
 
   void _showIOS_DatePicker(ctx) {
@@ -89,7 +100,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             const SizedBox(
               height: 10,
             ),
-            if (roomActivities.length > 0)
+            if (roomActivities.isNotEmpty)
               Expanded(
                 flex: 10,
                 child: Container(
@@ -108,12 +119,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       oppositeContentsBuilder: (context, index) => Padding(
                         padding: const EdgeInsets.all(24.0),
                         child: index == 0
-                            ? const Text(
-                                'You',
+                            ? Text(
+                                you != null ? you.userName : "you",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 16),
                               )
-                            : roomActivities[index - 1].userId == 'you'
+                            : roomActivities[index - 1].roomieId == userId
                                 ? Text(
                                     '${DateFormat('HH:mm').format(roomActivities[index - 1].creationDate)}  ${roomActivities[index - 1].activityName}')
                                 : Text(''),
@@ -121,12 +132,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       contentsBuilder: (context, index) => Padding(
                         padding: const EdgeInsets.all(24.0),
                         child: index == 0
-                            ? const Text(
-                                'Roomie',
+                            ? Text(
+                                roomie != null ? roomie.userName : "roomie",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 16),
                               )
-                            : roomActivities[index - 1].userId == 'roomie'
+                            : roomActivities[index - 1].roomieId == roomieId
                                 ? Text(
                                     '${DateFormat('HH:mm').format(roomActivities[index - 1].creationDate)}  ${roomActivities[index - 1].activityName}')
                                 : Text(''),

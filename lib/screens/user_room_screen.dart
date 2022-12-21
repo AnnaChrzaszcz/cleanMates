@@ -12,7 +12,7 @@ class UserRoomScreen extends StatelessWidget {
 
   void _leaveRoom(Room actualRoom, BuildContext ctx) {
     Provider.of<RoomsProvider>(ctx, listen: false)
-        .leaveRoom(actualRoom)
+        .leaveRoom(actualRoom.id)
         .then((_) {});
   }
 

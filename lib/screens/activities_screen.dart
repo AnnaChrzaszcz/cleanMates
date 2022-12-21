@@ -94,12 +94,14 @@ class ActivitiesScreen extends StatelessWidget {
                                     ],
                                   ),
                                   leading: CircleAvatar(
-                                      radius: 20,
+                                      radius: 25,
                                       backgroundColor:
                                           Theme.of(context).dividerColor,
                                       foregroundColor: Colors.white,
-                                      child: Text(
-                                          '${activitiesData.activities[index].points}')),
+                                      child: FittedBox(
+                                        child: Text(
+                                            '${activitiesData.activities[index].points}'),
+                                      )),
                                   title: Text(
                                     activitiesData
                                         .activities[index].activityName,

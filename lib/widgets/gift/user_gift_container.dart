@@ -10,11 +10,12 @@ import '../../providers/rooms_provider.dart';
 
 class UserGiftContainer extends StatefulWidget {
   final String userId;
+  final String roomieId;
   List<UserGift> userGifts;
   List<UserGift> roomieGifts;
 
-  UserGiftContainer(@required this.userId, @required this.userGifts,
-      @required this.roomieGifts);
+  UserGiftContainer(@required this.userId, @required this.roomieId,
+      @required this.userGifts, @required this.roomieGifts);
 
   @override
   State<UserGiftContainer> createState() => _UserGiftContainerState();
@@ -40,19 +41,26 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
     super.initState();
   }
 
-  void _receive(String userId, selectedIndex) {
+  void _receive(String userId, selectedIndex) async {
     var giftId;
 
-    if (userId == 'you') {
+    if (userId == widget.userId) {
       //poprawic potem
-      print(yourBought[selectedIndex].gift.giftName);
+      print(yourBought[selectedIndex].giftName);
       giftId = yourBought[selectedIndex].id;
     } else {
-      print(roomieBought[selectedIndex].gift.giftName);
+      print(roomieBought[selectedIndex].giftName);
       giftId = roomieBought[selectedIndex].id;
     }
-    Provider.of<RoomsProvider>(context, listen: false)
+    await Provider.of<RoomsProvider>(context, listen: false)
         .markUserGiftAsRecived(userId, giftId);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Gift received!'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+    Navigator.of(context).pop();
   }
 
   @override
@@ -81,9 +89,9 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
                   child: TabBarView(
                     children: <Widget>[
                       TabBarViewContainer(
-                          yourBought, yourRecived, _receive, 'you'),
-                      TabBarViewContainer(
-                          roomieBought, roomieRecived, _receive, 'roomie'),
+                          yourBought, yourRecived, _receive, widget.userId),
+                      TabBarViewContainer(roomieBought, roomieRecived, _receive,
+                          widget.roomieId),
                     ],
                   ),
                 ),

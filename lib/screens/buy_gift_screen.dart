@@ -18,13 +18,18 @@ class BuyGiftScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var myRoom = Provider.of<RoomsProvider>(context).myRoom;
+    //POPRAWIC JAK JEST JEDEN USER GLOWNY TYLKO!!!!!
+    var myRoom = Provider.of<RoomsProvider>(context, listen: false).myRoom;
     final userId = ModalRoute.of(context).settings.arguments as String;
+    final roomieId =
+        myRoom.roomies.firstWhere((roomie) => roomie.id != userId).id;
+
     List<UserGift> userGifts =
-        Provider.of<RoomsProvider>(context, listen: false).getUserGifts(userId);
+        Provider.of<RoomsProvider>(context, listen: false)
+            .getUserGifts(userId); //tu id usera
     List<UserGift> roomieGifts =
         Provider.of<RoomsProvider>(context, listen: false)
-            .getRoomieGifts(userId); //tu id roomie
+            .getUserGifts(roomieId); //tu id roomie
 
     return Scaffold(
       appBar: AppBar(title: Text('Buy gifts')),
@@ -39,7 +44,8 @@ class BuyGiftScreen extends StatelessWidget {
                     builder: ((ctx, gitsData, _) => Column(
                           children: [
                             BuyGiftContainer(gitsData.gifts, userId),
-                            UserGiftContainer(userId, userGifts, roomieGifts)
+                            UserGiftContainer(
+                                userId, roomieId, userGifts, roomieGifts)
                           ],
                         )),
                   )),

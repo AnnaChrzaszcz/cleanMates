@@ -26,11 +26,12 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   Roomie roomie;
   final user = FirebaseAuth.instance.currentUser;
   var routeArgs;
+  var isRoomie = false;
 
   var _isInit = true;
   void _joinToRoom(Room selectedRoom) {
     Provider.of<RoomsProvider>(context, listen: false)
-        .joinToRoom(selectedRoom)
+        .joinToRoom(selectedRoom.id)
         .then((_) {});
   }
 
@@ -38,7 +39,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
 
   Future<void> _tryGetYourRoom() async {
     await Provider.of<RoomsProvider>(context, listen: false)
-        .getYourRoom(roomie.id);
+        .getUserRoom(roomie.id);
   }
 
   @override
@@ -54,8 +55,11 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
 
         roomie = Roomie(
             id: userId, userName: name, points: points, imageUrl: imageUrl);
+        if (userId != user.uid) {
+          isRoomie = true;
+        }
       } else {
-        print('routeArgs null');
+        isRoomie = false;
         roomie = Roomie(
             id: user.uid,
             userName: user.displayName,
@@ -78,7 +82,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       },
       {
         'title': 'Money balance',
-        'routeName': '/', //ExchangeToPrize.routeName,
+        'routeName': '', //ExchangeToPrize.routeName,
         'imagePath': 'assets/images/money.png'
       },
       {
@@ -88,15 +92,16 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       },
       {
         'title': 'Stats',
-        'routeName': '/', //StatsScreen.routeName,
+        'routeName': '', //StatsScreen.routeName,
         'imagePath': 'assets/images/stats.png'
       },
     ];
 
     return Scaffold(
+      //PRZY PIERWSZYM LOGOWANIU COS NIE DZIALA
       appBar: AppBar(
         //title: Text(name),
-        title: Text(roomie.userName),
+        title: Text(roomie.userName ?? ''),
       ),
       drawer: AppDrawer(),
       body: FutureBuilder(
@@ -110,24 +115,15 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
             return Consumer<RoomsProvider>(
               builder: ((context, roomsdata, _) {
                 if (roomsdata.myRoom != null) {
-                  // print('jestem w consumer builder');
-                  // print(roomsdata.myRoom.roomies[0].userName);
-                  // print(roomsdata.myRoom.roomies[0].points);
-                  // print(roomsdata.myRoom.roomies[1].userName);
-                  // print(roomsdata.myRoom.roomies[1].points);
-                  if (routeArgs == null) {
-                    print('routeArgs == null');
+                  if (!isRoomie) {
                     roomie = roomsdata.myRoom.roomies
                         .firstWhere((roomie) => roomie.id == user.uid);
-                    print(roomie.points);
                   } else {
-                    print('routeArgs != null');
                     roomie = roomsdata.myRoom.roomies
                         .firstWhere((roomie) => roomie.id != user.uid);
-                    print(roomie.points);
                   }
-                  return userDashboardContainer(
-                      roomie.points, actions, roomsdata.myRoom, roomie.id);
+                  return userDashboardContainer(roomie.points, actions,
+                      roomsdata.myRoom, roomie.id, isRoomie);
                 } else {
                   return UserHasNoRoom(_joinToRoom, _createdRoom);
                 }
@@ -140,24 +136,30 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     );
   }
 
-  Widget userDashboardContainer(
-      points, List<Map<String, String>> actions, Room room, String userId) {
-    // print('userDashBoardScreen');
-    // print(points);
+  Widget userDashboardContainer(points, List<Map<String, String>> actions,
+      Room room, String userId, bool isRoomie) {
     return Container(
       decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
       padding: const EdgeInsets.symmetric(horizontal: 2),
       margin: EdgeInsets.all(8),
+      width: double.infinity,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          CircleAvatar(
-            radius: 40,
-            backgroundColor: Theme.of(context).primaryColor,
-            foregroundColor: Colors.white,
-            child: Text(
-              '${points.toString()} pkt',
-              style: TextStyle(fontSize: 20),
+          Expanded(
+            child: CircleAvatar(
+              radius: 45,
+              backgroundColor: Theme.of(context).primaryColor,
+              foregroundColor: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: FittedBox(
+                  child: Text(
+                    '${points.toString()} pkt',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ),
             ),
           ),
           // AnimateIcon(
@@ -169,52 +171,85 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
           //   color: Color.fromRGBO(47, 149, 153, 1),
           //   animateIcon: AnimateIcons.home,
           // ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
+          Expanded(
+            flex: 1,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
                   onPressed: () {
                     Navigator.of(context)
                         .pushNamed(UserRoomScreen.routeName)
                         .then((_) {});
                   },
-                  icon: Icon(Icons.home)),
-              IconButton(
+                  icon: const Icon(Icons.home),
+                  iconSize: 40,
+                ),
+                IconButton(
                   onPressed: () {
                     Navigator.of(context)
                         .pushNamed(HistoryScreen.routeName)
                         .then((_) {});
                   },
-                  icon: Icon(Icons.history)),
-            ],
-          ),
-
-          Text(
-            'Point summary',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          Container(
-            height: 460,
-            child: GridView(
-              padding: const EdgeInsets.all(10),
-              children: actions
-                  .map(
-                    (action) => ActionItem(
-                      action['title'] as String,
-                      action['routeName'] as String,
-                      action['imagePath'] as String,
-                      userId,
-                    ),
-                  )
-                  .toList(),
-              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 200,
-                childAspectRatio: 3 / 3,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
-              ),
+                  icon: const Icon(Icons.history),
+                  iconSize: 40,
+                ),
+              ],
             ),
           ),
+
+          if (isRoomie)
+            Expanded(
+              flex: 3,
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(8),
+                margin: const EdgeInsets.only(bottom: 30),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 30),
+                      child: Text(
+                        'Save your roomie activity',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ),
+                    ActionItem(
+                      'Save Activity',
+                      SaveActivityScreen.routeName,
+                      'assets/images/cleaning.png',
+                      userId,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+          if (!isRoomie)
+            Container(
+              height: 460,
+              child: GridView(
+                padding: const EdgeInsets.all(10),
+                children: actions
+                    .map(
+                      (action) => ActionItem(
+                        action['title'] as String,
+                        action['routeName'] as String,
+                        action['imagePath'] as String,
+                        userId,
+                      ),
+                    )
+                    .toList(),
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 200,
+                  childAspectRatio: 3 / 3,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                ),
+              ),
+            ),
         ],
       ),
     );

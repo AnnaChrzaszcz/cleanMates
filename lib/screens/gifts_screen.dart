@@ -91,12 +91,14 @@ class GiftsScreen extends StatelessWidget {
                                     ],
                                   ),
                                   leading: CircleAvatar(
-                                      radius: 20,
+                                      radius: 25,
                                       backgroundColor:
                                           Theme.of(context).dividerColor,
                                       foregroundColor: Colors.white,
-                                      child: Text(
-                                          '${giftsData.gifts[index].points}')),
+                                      child: FittedBox(
+                                        child: Text(
+                                            '${giftsData.gifts[index].points}'),
+                                      )),
                                   title: Text(
                                     giftsData.gifts[index].giftName,
                                     style: TextStyle(),

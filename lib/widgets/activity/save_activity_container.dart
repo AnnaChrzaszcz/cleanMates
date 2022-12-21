@@ -1,3 +1,4 @@
+import 'package:clean_mates_app/models/userActivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../models/activity.dart';
@@ -22,14 +23,21 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
     setState(() {
       _isLoading = true;
     });
-    List<Activity> selectedActivities = [];
+    List<UserActivity> selectedUserActivities = [];
     selectedIndexes.forEach((index) {
-      selectedActivities.add(widget.activities[index]);
+      Activity selActivity = widget.activities[index];
+      UserActivity newUserActivity = UserActivity(
+          id: null,
+          activityName: selActivity.activityName,
+          points: selActivity.points,
+          roomieId: widget.userId,
+          creationDate: null);
+      selectedUserActivities.add(newUserActivity);
     });
     try {
       await Provider.of<RoomsProvider>(context, listen: false)
-          .addActivitiesToRoomie(selectedActivities, widget.userId,
-              widget.activities[0].roomId, activitesPointsSum);
+          .addActivitiesToRoomie(
+              selectedUserActivities, widget.userId, activitesPointsSum);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

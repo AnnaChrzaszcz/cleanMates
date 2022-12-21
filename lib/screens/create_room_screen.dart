@@ -49,7 +49,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
       });
       try {
         await Provider.of<RoomsProvider>(context, listen: false)
-            .addRoom(_editedRoom);
+            .addNewRoom(_editedRoom);
       } catch (err) {
         print(err);
       } finally {

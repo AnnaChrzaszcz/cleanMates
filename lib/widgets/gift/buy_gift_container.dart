@@ -34,15 +34,18 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
     try {
       await Provider.of<RoomsProvider>(context, listen: false).addGiftsToRoomie(
           selectedGifts, widget.userId, widget.gifts[0].roomId, giftsointsSum);
+      setState(() {
+        _isLoading = false;
+      });
 
-      //Navigator.of(context).pop();
+      Navigator.of(context).pop();
 
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: Text('You earned ${activitesPointsSum} points'),
-      //     duration: const Duration(seconds: 2),
-      //   ),
-      // );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('You bought ${selectedGifts.length} gifts'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
     } on LogisticExpection catch (err) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -50,6 +53,9 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
           duration: const Duration(seconds: 2),
         ),
       );
+      setState(() {
+        _isLoading = false;
+      });
     } catch (err) {
       await showDialog<void>(
         context: context,
@@ -136,7 +142,6 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                 ),
               ),
             ),
-          //UserGiftContainer(widget.userId, userGifts),
         ],
       ),
     );

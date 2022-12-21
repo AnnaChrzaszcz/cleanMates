@@ -54,7 +54,7 @@ class _TabBarViewContainerState extends State<TabBarViewContainer> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          widget.yourBought[index].gift.giftName,
+                          widget.yourBought[index].giftName,
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
@@ -119,7 +119,7 @@ class _TabBarViewContainerState extends State<TabBarViewContainer> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          widget.yourRecived[index].gift.giftName,
+                          widget.yourRecived[index].giftName,
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
