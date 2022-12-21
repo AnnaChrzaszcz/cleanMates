@@ -11,9 +11,11 @@ class ActionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () {
-          Navigator.of(context).pushNamed(routeName, arguments: userId);
-        },
+        onTap: routeName == ''
+            ? null
+            : () {
+                Navigator.of(context).pushNamed(routeName, arguments: userId);
+              },
         splashColor: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(15),
         child: Card(
@@ -24,8 +26,15 @@ class ActionItem extends StatelessWidget {
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(15),
-              child: Image.asset(imagePath,
-                  height: 60, width: 60, fit: BoxFit.cover),
+              child: routeName == ''
+                  ? ColorFiltered(
+                      colorFilter:
+                          ColorFilter.mode(Colors.grey, BlendMode.saturation),
+                      child: Image.asset(imagePath,
+                          height: 60, width: 60, fit: BoxFit.cover),
+                    )
+                  : Image.asset(imagePath,
+                      height: 60, width: 60, fit: BoxFit.cover),
             ),
             SizedBox(
               height: 2,
