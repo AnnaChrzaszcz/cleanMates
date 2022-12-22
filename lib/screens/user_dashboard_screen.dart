@@ -139,7 +139,6 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   Widget userDashboardContainer(points, List<Map<String, String>> actions,
       Room room, String userId, bool isRoomie) {
     return Container(
-      decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
       padding: const EdgeInsets.symmetric(horizontal: 2),
       margin: EdgeInsets.all(8),
       width: double.infinity,

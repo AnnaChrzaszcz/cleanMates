@@ -30,7 +30,7 @@ class _RoomItemConState extends State<RoomItemContainer> {
     return Column(
       children: [
         Container(
-          height: 500,
+          height: 400,
           //decoration: BoxDecoration(border: Border.all(color: Colors.yellow)),
           child: ListView.builder(
             itemCount: widget.rooms.length,

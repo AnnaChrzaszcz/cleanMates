@@ -5,7 +5,9 @@ import 'package:clean_mates_app/screens/edit_gift_screen.dart';
 import 'package:clean_mates_app/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rive/rive.dart';
 import '../providers/rooms_provider.dart';
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 
 class GiftsScreen extends StatelessWidget {
   static const routeName = '/gifts';
@@ -70,54 +72,70 @@ class GiftsScreen extends StatelessWidget {
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : Consumer<GiftsProvider>(
-                builder: ((ctx, giftsData, _) => Container(
-                      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                      child: ListView.builder(
-                        itemCount: giftsData.gifts.length,
-                        itemBuilder: ((context, index) => Column(
-                              children: [
-                                ListTile(
-                                  trailing: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      IconButton(
-                                        icon: Icon(Icons.edit),
-                                        onPressed: () {
-                                          Navigator.of(context).pushNamed(
-                                              EditGiftScreen.routeName,
-                                              arguments: {
-                                                'id': giftsData.gifts[index].id,
-                                              });
-                                        },
-                                      ),
-                                      IconButton(
-                                        icon: Icon(Icons.delete),
-                                        onPressed: () => _deleteGift(
-                                            context, giftsData.gifts[index].id),
-                                      ),
-                                    ],
-                                  ),
-                                  leading: CircleAvatar(
-                                      radius: 25,
-                                      backgroundColor:
-                                          Theme.of(context).dividerColor,
-                                      foregroundColor: Colors.white,
-                                      child: FittedBox(
-                                        child: Text(
-                                            '${giftsData.gifts[index].points}'),
-                                      )),
-                                  title: Text(
-                                    giftsData.gifts[index].giftName,
-                                    style: TextStyle(),
-                                  ),
-                                  subtitle: Text(myRoom.roomName),
-                                ),
-                                Divider()
-                              ],
-                            )),
+            : CustomRefreshIndicator(
+                onRefresh: () => _refreshGifts(context, myRoom.id),
+                builder: MaterialIndicatorDelegate(
+                  builder: (context, controller) {
+                    return const CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Color.fromRGBO(247, 219, 79, 1),
+                      child: RiveAnimation.asset(
+                        'assets/animations/indicator.riv',
                       ),
-                    )),
+                    );
+                  },
+                ),
+                child: Consumer<GiftsProvider>(
+                  builder: ((ctx, giftsData, _) => Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                        child: ListView.builder(
+                          itemCount: giftsData.gifts.length,
+                          itemBuilder: ((context, index) => Column(
+                                children: [
+                                  ListTile(
+                                    trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
+                                          icon: Icon(Icons.edit),
+                                          onPressed: () {
+                                            Navigator.of(context).pushNamed(
+                                                EditGiftScreen.routeName,
+                                                arguments: {
+                                                  'id':
+                                                      giftsData.gifts[index].id,
+                                                });
+                                          },
+                                        ),
+                                        IconButton(
+                                          icon: Icon(Icons.delete),
+                                          onPressed: () => _deleteGift(context,
+                                              giftsData.gifts[index].id),
+                                        ),
+                                      ],
+                                    ),
+                                    leading: CircleAvatar(
+                                        radius: 25,
+                                        backgroundColor:
+                                            Theme.of(context).dividerColor,
+                                        foregroundColor: Colors.white,
+                                        child: FittedBox(
+                                          child: Text(
+                                              '${giftsData.gifts[index].points}'),
+                                        )),
+                                    title: Text(
+                                      giftsData.gifts[index].giftName,
+                                      style: TextStyle(),
+                                    ),
+                                    subtitle: Text(myRoom.roomName),
+                                  ),
+                                  Divider()
+                                ],
+                              )),
+                        ),
+                      )),
+                ),
               )),
       ),
     );
