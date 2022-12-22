@@ -65,7 +65,6 @@ class _AuthScreenState extends State<AuthScreen> {
       }
       ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
         content: Text(message),
-        backgroundColor: Theme.of(ctx).errorColor,
       ));
       setState(() {
         _isLoading = false;
@@ -74,7 +73,9 @@ class _AuthScreenState extends State<AuthScreen> {
       setState(() {
         _isLoading = false;
       });
-      print(err);
+      ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
+        content: Text(err.toString()),
+      ));
     }
   }
 
@@ -86,8 +87,8 @@ class _AuthScreenState extends State<AuthScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 150,
-            height: 150,
+            width: 200,
+            height: 200,
             child: RiveAnimation.asset(
               'assets/animations/roomie.riv',
             ),

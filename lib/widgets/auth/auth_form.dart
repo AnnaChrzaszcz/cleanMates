@@ -32,9 +32,7 @@ class _AuthFormState extends State<AuthForm> {
         SnackBar(
           content: Text(
             'Please pick an image',
-            style: TextStyle(color: Theme.of(context).primaryColor),
           ),
-          backgroundColor: Theme.of(context).errorColor,
         ),
       );
       return;
