@@ -83,62 +83,77 @@ class _CreateNewActivityScreenState extends State<EditActivityScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Activity'),
+        title: Text('New activity'),
         actions: [IconButton(onPressed: _saveForm, icon: Icon(Icons.save))],
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
-          : Form(
-              key: _form,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: ListView(
-                  children: [
-                    TextFormField(
-                      initialValue: _initValues['activityName'],
-                      decoration: InputDecoration(labelText: 'Activity name'),
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) =>
-                          FocusScope.of(context).requestFocus(_pointsFocusNode),
-                      onSaved: (value) {
-                        _editedActivity = Activity(
-                          id: _editedActivity.id,
-                          activityName: value,
-                          points: _editedActivity.points,
-                        );
-                      },
-                      validator: (value) {
-                        if (value.isEmpty)
-                          return 'enter a name';
-                        else
-                          return null;
-                      },
+          : Column(
+              children: [
+                Expanded(
+                  child: Form(
+                    key: _form,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: ListView(
+                        children: [
+                          TextFormField(
+                            initialValue: _initValues['activityName'],
+                            decoration:
+                                InputDecoration(labelText: 'Activity name'),
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (_) => FocusScope.of(context)
+                                .requestFocus(_pointsFocusNode),
+                            onSaved: (value) {
+                              _editedActivity = Activity(
+                                id: _editedActivity.id,
+                                activityName: value,
+                                points: _editedActivity.points,
+                              );
+                            },
+                            validator: (value) {
+                              if (value.isEmpty)
+                                return 'enter a name';
+                              else
+                                return null;
+                            },
+                          ),
+                          TextFormField(
+                              initialValue: _initValues['points'],
+                              decoration: InputDecoration(labelText: 'Points'),
+                              textInputAction: TextInputAction.done,
+                              onFieldSubmitted: ((_) => _saveForm()),
+                              keyboardType: TextInputType.number,
+                              focusNode: _pointsFocusNode,
+                              validator: (value) {
+                                if (value.isEmpty) return 'enter a price';
+                                if (int.parse(value) == null)
+                                  return 'enter a int value';
+                                else if (int.parse(value) <= 0) {
+                                  return 'price must be grater than 0';
+                                } else
+                                  return null;
+                              },
+                              onSaved: (value) {
+                                _editedActivity = Activity(
+                                    id: _editedActivity.id,
+                                    activityName: _editedActivity.activityName,
+                                    points: int.parse(value));
+                              }),
+                        ],
+                      ),
                     ),
-                    TextFormField(
-                        initialValue: _initValues['points'],
-                        decoration: InputDecoration(labelText: 'Points'),
-                        textInputAction: TextInputAction.done,
-                        onFieldSubmitted: ((_) => _saveForm()),
-                        keyboardType: TextInputType.number,
-                        focusNode: _pointsFocusNode,
-                        validator: (value) {
-                          if (value.isEmpty) return 'enter a price';
-                          if (int.parse(value) == null)
-                            return 'enter a int value';
-                          else if (int.parse(value) <= 0) {
-                            return 'price must be grater than 0';
-                          } else
-                            return null;
-                        },
-                        onSaved: (value) {
-                          _editedActivity = Activity(
-                              id: _editedActivity.id,
-                              activityName: _editedActivity.activityName,
-                              points: int.parse(value));
-                        }),
-                  ],
+                  ),
                 ),
-              )),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 30),
+                  child: ElevatedButton(
+                    onPressed: _saveForm,
+                    child: Text('Save'),
+                  ),
+                )
+              ],
+            ),
     );
   }
 }

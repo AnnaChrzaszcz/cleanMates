@@ -1,3 +1,4 @@
+import 'package:clean_mates_app/models/room.dart';
 import 'package:clean_mates_app/screens/edit_activity_screen.dart';
 import 'package:clean_mates_app/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
@@ -38,21 +39,28 @@ class ActivitiesScreen extends StatelessWidget {
     }
   }
 
+  void _goToEditActivity(BuildContext context, Room myRoom) {
+    Navigator.of(context).pushNamed(EditActivityScreen.routeName,
+        arguments: {'roomId': myRoom.id});
+  }
+
   @override
   Widget build(BuildContext context) {
-    var myRoom = Provider.of<RoomsProvider>(context).myRoom;
+    Room myRoom = Provider.of<RoomsProvider>(context).myRoom;
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Activities'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(EditActivityScreen.routeName,
-                    arguments: {'roomId': myRoom.id});
-              },
-              icon: Icon(Icons.add))
-        ],
+        // actions: [
+        //   IconButton(
+        //       onPressed: () => _goToEditActivity(context, myRoom),
+        //       icon: Icon(Icons.add))
+        // ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _goToEditActivity(context, myRoom),
+        child: Icon(Icons.add),
       ),
       drawer: AppDrawer(),
       body: FutureBuilder(

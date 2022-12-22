@@ -1,3 +1,5 @@
+import 'package:clean_mates_app/screens/activities_screen.dart';
+import 'package:clean_mates_app/screens/edit_activity_screen.dart';
 import 'package:clean_mates_app/widgets/activity/save_activity_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +20,17 @@ class SaveActivityScreen extends StatelessWidget {
     final userId = ModalRoute.of(context).settings.arguments as String;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Save activity')),
+      appBar: AppBar(
+        title: Text('Save activity'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(EditActivityScreen.routeName,
+                    arguments: {'roomId': myRoom.id});
+              },
+              icon: Icon(Icons.add))
+        ],
+      ),
       body: FutureBuilder(
         future: _refreshActivities(context, myRoom.id),
         builder: ((context, snapshot) => snapshot.connectionState ==
@@ -27,8 +39,31 @@ class SaveActivityScreen extends StatelessWidget {
                 child: CircularProgressIndicator(),
               )
             : Consumer<ActivitiesProvider>(
-                builder: ((ctx, activitiesData, _) =>
-                    SaveActivityContainer(activitiesData.activities, userId)),
+                builder: ((ctx, activitiesData, _) => activitiesData
+                            .activities.length ==
+                        0
+                    ? Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'You need at least one activity in your dictionary',
+                              style: Theme.of(context).textTheme.headline6,
+                              textAlign: TextAlign.center,
+                            ),
+                            TextButton(
+                                onPressed: () => Navigator.of(context)
+                                    .pushReplacementNamed(
+                                        ActivitiesScreen.routeName),
+                                child: Text('Go to dictionary'))
+                          ],
+                        ),
+                      )
+                    : SaveActivityContainer(activitiesData.activities, userId)),
               )),
       ),
     );

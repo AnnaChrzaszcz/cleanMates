@@ -59,6 +59,7 @@ class _TabBarViewContainerState extends State<TabBarViewContainer> {
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         Checkbox(
+                            activeColor: Theme.of(context).primaryColor,
                             value: yourSelectedIndex == index,
                             onChanged: (value) {
                               setState(() {

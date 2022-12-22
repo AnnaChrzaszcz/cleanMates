@@ -1,9 +1,5 @@
-import 'dart:math';
 import 'package:clean_mates_app/models/userGift.dart';
 import 'package:clean_mates_app/widgets/gift/tab_bar_view_container.dart';
-import 'package:intl/intl.dart';
-import 'package:clean_mates_app/models/gift.dart';
-import 'package:clean_mates_app/models/room.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/rooms_provider.dart';
@@ -11,11 +7,18 @@ import '../../providers/rooms_provider.dart';
 class UserGiftContainer extends StatefulWidget {
   final String userId;
   final String roomieId;
+  final String yourUsername;
+  final String roomieUsername;
   List<UserGift> userGifts;
   List<UserGift> roomieGifts;
 
-  UserGiftContainer(@required this.userId, @required this.roomieId,
-      @required this.userGifts, @required this.roomieGifts);
+  UserGiftContainer(
+      @required this.userId,
+      @required this.roomieId,
+      @required this.yourUsername,
+      @required this.roomieUsername,
+      @required this.userGifts,
+      @required this.roomieGifts);
 
   @override
   State<UserGiftContainer> createState() => _UserGiftContainerState();
@@ -80,8 +83,8 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
                     labelColor: Theme.of(context).primaryColor,
                     unselectedLabelColor: Colors.black,
                     tabs: [
-                      Tab(text: 'You'),
-                      Tab(text: 'Roomie'),
+                      Tab(text: widget.yourUsername),
+                      Tab(text: widget.roomieUsername),
                     ],
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:clean_mates_app/models/room.dart';
 import 'package:clean_mates_app/providers/gifts_provider.dart';
 import 'package:clean_mates_app/screens/edit_activity_screen.dart';
 import 'package:clean_mates_app/screens/edit_gift_screen.dart';
@@ -38,21 +39,28 @@ class GiftsScreen extends StatelessWidget {
     }
   }
 
+  void _goToNewGift(BuildContext context, Room myRoom) {
+    Navigator.of(context)
+        .pushNamed(EditGiftScreen.routeName, arguments: {'roomId': myRoom.id});
+  }
+
   @override
   Widget build(BuildContext context) {
-    var myRoom = Provider.of<RoomsProvider>(context).myRoom;
+    Room myRoom = Provider.of<RoomsProvider>(context).myRoom;
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Gifts'),
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(EditGiftScreen.routeName,
-                    arguments: {'roomId': myRoom.id});
-              },
+              onPressed: () => _goToNewGift(context, myRoom),
               icon: Icon(Icons.add))
         ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _goToNewGift(context, myRoom),
+        child: Icon(Icons.add),
       ),
       drawer: AppDrawer(),
       body: FutureBuilder(
