@@ -2,6 +2,7 @@ import 'package:clean_mates_app/models/userGift.dart';
 import 'package:clean_mates_app/screens/edit_gift_screen.dart';
 import 'package:clean_mates_app/screens/gifts_screen.dart';
 import 'package:clean_mates_app/widgets/gift/user_gift_container.dart';
+import 'package:lottie/lottie.dart';
 
 import '../widgets/gift/buy_gift_container.dart';
 import 'package:flutter/material.dart';
@@ -40,34 +41,63 @@ class BuyGiftScreen extends StatelessWidget {
           myRoom.roomies.firstWhere((roomie) => roomie.id == userId).userName;
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Buy gifts'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(EditGiftScreen.routeName,
-                    arguments: {'roomId': myRoom.id});
-              },
-              icon: Icon(Icons.add))
-        ],
-      ),
-      body: myRoom.roomies.length == 1
-          ? Center(
-              child: Text(
-                'You need to add a roomie to your room',
-                style: Theme.of(context).textTheme.headline6,
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     title: Text('Buy gifts'),
+    //     actions: [
+    //       IconButton(
+    //         onPressed: () {
+    //           Navigator.of(context).pushNamed(EditGiftScreen.routeName,
+    //               arguments: {'roomId': myRoom.id});
+    //         },
+    //         icon: Lottie.asset('assets/animations/lottie/add2.json'),
+    //       )
+    //     ],
+    //   ),
+    return myRoom.roomies.length == 1
+        ? Scaffold(
+            appBar: AppBar(
+              title: Text('Buy gifts'),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Text(
+                  'You need to add a roomie to your room',
+                  style: Theme.of(context).textTheme.headline6,
+                  textAlign: TextAlign.center,
+                ),
               ),
-            )
-          : FutureBuilder(
-              future: _refreshGifts(context, myRoom.id),
-              builder: ((context, snapshot) => snapshot.connectionState ==
-                      ConnectionState.waiting
-                  ? Center(
+            ),
+          )
+        : FutureBuilder(
+            future: _refreshGifts(context, myRoom.id),
+            builder: ((context, snapshot) => snapshot.connectionState ==
+                    ConnectionState.waiting
+                ? Scaffold(
+                    body: Center(
                       child: CircularProgressIndicator(),
-                    )
-                  : Consumer<GiftsProvider>(
-                      builder: ((ctx, gitsData, _) => Column(
+                    ),
+                  )
+                : Consumer<GiftsProvider>(
+                    builder: ((ctx, gitsData, _) => Scaffold(
+                          appBar: AppBar(
+                            title: Text('Buy gifts'),
+                            actions: [
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).pushNamed(
+                                      EditGiftScreen.routeName,
+                                      arguments: {'roomId': myRoom.id});
+                                },
+                                icon: gitsData.gifts.length == 0
+                                    ? Lottie.asset(
+                                        'assets/animations/lottie/add2.json')
+                                    : Icon(Icons.add),
+                              )
+                            ],
+                          ),
+                          body: Column(
                             children: [
                               gitsData.gifts.length == 0
                                   ? Expanded(
@@ -102,9 +132,8 @@ class BuyGiftScreen extends StatelessWidget {
                               UserGiftContainer(userId, roomieId, yourUsername,
                                   roomieUsername, userGifts, roomieGifts)
                             ],
-                          )),
-                    )),
-            ),
-    );
+                          ),
+                        )),
+                  )));
   }
 }
