@@ -87,8 +87,8 @@ class _AuthScreenState extends State<AuthScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 200,
-            height: 200,
+            width: 100,
+            height: 100,
             child: RiveAnimation.asset(
               'assets/animations/roomie.riv',
             ),

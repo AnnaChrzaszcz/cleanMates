@@ -53,11 +53,6 @@ class ActivitiesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Activities'),
-        // actions: [
-        //   IconButton(
-        //       onPressed: () => _goToEditActivity(context, myRoom),
-        //       icon: Icon(Icons.add))
-        // ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(

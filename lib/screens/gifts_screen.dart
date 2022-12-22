@@ -53,11 +53,6 @@ class GiftsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Gifts'),
-        actions: [
-          IconButton(
-              onPressed: () => _goToNewGift(context, myRoom),
-              icon: Icon(Icons.add))
-        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
