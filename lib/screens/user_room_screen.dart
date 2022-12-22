@@ -1,8 +1,10 @@
 import 'package:clean_mates_app/models/roomie.dart';
 import 'package:clean_mates_app/screens/user_dashboard_screen.dart';
 import 'package:clean_mates_app/widgets/app_drawer.dart';
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:rive/rive.dart';
 import '../models/room.dart';
 import '../widgets/room/roomie_item.dart';
 
@@ -21,7 +23,7 @@ class UserRoomScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var userId = FirebaseAuth.instance.currentUser.uid;
-    final room = Provider.of<RoomsProvider>(context).myRoom;
+    Room room = Provider.of<RoomsProvider>(context).myRoom;
     List<Roomie> roomies = [];
     if (room != null) {
       roomies = [
@@ -30,6 +32,14 @@ class UserRoomScreen extends StatelessWidget {
       if (room.roomies.length == 2) {
         roomies.add(room.roomies.firstWhere((roomie) => roomie.id != userId));
       }
+    }
+
+    Future<void> _refreshRoom() async {
+      Provider.of<RoomsProvider>(context, listen: false)
+          .getUserRoom(userId)
+          .then((value) {
+        room = Provider.of<RoomsProvider>(context).myRoom;
+      });
     }
 
     return room == null
@@ -48,13 +58,27 @@ class UserRoomScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: roomies.length,
-                      itemBuilder: ((context, index) => RoomieItem(
-                          roomies[index].id,
-                          roomies[index].userName,
-                          roomies[index].imageUrl,
-                          roomies[index].points)),
+                    child: CustomRefreshIndicator(
+                      builder: MaterialIndicatorDelegate(
+                        builder: (context, controller) {
+                          return const CircleAvatar(
+                            radius: 55,
+                            backgroundColor: Color.fromRGBO(247, 219, 79, 1),
+                            child: RiveAnimation.asset(
+                              'assets/animations/indicator.riv',
+                            ),
+                          );
+                        },
+                      ),
+                      onRefresh: _refreshRoom,
+                      child: ListView.builder(
+                        itemCount: roomies.length,
+                        itemBuilder: ((context, index) => RoomieItem(
+                            roomies[index].id,
+                            roomies[index].userName,
+                            roomies[index].imageUrl,
+                            roomies[index].points)),
+                      ),
                     ),
                   ),
                   ElevatedButton(

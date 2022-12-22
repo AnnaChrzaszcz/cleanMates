@@ -1,10 +1,12 @@
 import 'package:clean_mates_app/models/room.dart';
 import 'package:clean_mates_app/models/roomie.dart';
 import 'package:clean_mates_app/models/userActivity.dart';
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:rive/rive.dart';
 import 'package:timelines/timelines.dart';
 import 'package:provider/provider.dart';
 import '../providers/rooms_provider.dart';
@@ -32,6 +34,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
       roomActivities = Provider.of<RoomsProvider>(context, listen: false)
           .getRoomActivitiesByDate(val);
     });
+  }
+
+  Future<void> _refreshData() async {
+    Provider.of<RoomsProvider>(context, listen: false)
+        .getUserRoom(userId)
+        .then((value) => _dateChanged(dateSelected));
   }
 
   @override
@@ -85,13 +93,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 children: [
                   Expanded(
                     child: Card(
-                      margin: const EdgeInsets.all(8),
-                      elevation: 8,
+                      elevation: 3,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 5),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
@@ -114,52 +121,67 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   if (roomActivities.isNotEmpty)
                     Expanded(
                       flex: 10,
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Timeline.tileBuilder(
-                          theme: TimelineThemeData(
-                            color: const Color.fromRGBO(242, 107, 56,
-                                1), //Theme.of(context).dividerColor
-                            connectorTheme: ConnectorThemeData(
-                              color: Color.fromRGBO(242, 107, 56, 1),
+                      child: CustomRefreshIndicator(
+                        builder: MaterialIndicatorDelegate(
+                          builder: (context, controller) {
+                            return const CircleAvatar(
+                              radius: 55,
+                              backgroundColor: Color.fromRGBO(247, 219, 79, 1),
+                              child: RiveAnimation.asset(
+                                'assets/animations/indicator.riv',
+                              ),
+                            );
+                          },
+                        ),
+                        onRefresh: () => _refreshData(),
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: Timeline.tileBuilder(
+                            theme: TimelineThemeData(
+                              color: const Color.fromRGBO(242, 107, 56,
+                                  1), //Theme.of(context).dividerColor
+                              connectorTheme: ConnectorThemeData(
+                                color: Color.fromRGBO(242, 107, 56, 1),
+                              ),
                             ),
-                          ),
-                          builder: TimelineTileBuilder.fromStyle(
-                            contentsAlign: ContentsAlign.basic,
-                            indicatorStyle: IndicatorStyle.outlined,
-                            oppositeContentsBuilder: (context, index) =>
-                                Padding(
-                              padding: const EdgeInsets.all(24.0),
-                              child: index == 0
-                                  ? Text(
-                                      you != null ? you.userName : "you",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
-                                    )
-                                  : roomActivities[index - 1].roomieId == userId
-                                      ? Text(
-                                          '${DateFormat('HH:mm').format(roomActivities[index - 1].creationDate)}  ${roomActivities[index - 1].activityName}')
-                                      : Text(''),
+                            builder: TimelineTileBuilder.fromStyle(
+                              contentsAlign: ContentsAlign.basic,
+                              indicatorStyle: IndicatorStyle.outlined,
+                              oppositeContentsBuilder: (context, index) =>
+                                  Padding(
+                                padding: const EdgeInsets.all(24.0),
+                                child: index == 0
+                                    ? Text(
+                                        you != null ? you.userName : "you",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
+                                      )
+                                    : roomActivities[index - 1].roomieId ==
+                                            userId
+                                        ? Text(
+                                            '${DateFormat('HH:mm').format(roomActivities[index - 1].creationDate)}  ${roomActivities[index - 1].activityName}')
+                                        : Text(''),
+                              ),
+                              contentsBuilder: (context, index) => Padding(
+                                padding: const EdgeInsets.all(24.0),
+                                child: index == 0
+                                    ? Text(
+                                        roomie != null
+                                            ? roomie.userName
+                                            : "roomie",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
+                                      )
+                                    : roomActivities[index - 1].roomieId ==
+                                            roomieId
+                                        ? Text(
+                                            '${DateFormat('HH:mm').format(roomActivities[index - 1].creationDate)}  ${roomActivities[index - 1].activityName}')
+                                        : Text(''),
+                              ),
+                              itemCount: roomActivities.length + 1,
                             ),
-                            contentsBuilder: (context, index) => Padding(
-                              padding: const EdgeInsets.all(24.0),
-                              child: index == 0
-                                  ? Text(
-                                      roomie != null
-                                          ? roomie.userName
-                                          : "roomie",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
-                                    )
-                                  : roomActivities[index - 1].roomieId ==
-                                          roomieId
-                                      ? Text(
-                                          '${DateFormat('HH:mm').format(roomActivities[index - 1].creationDate)}  ${roomActivities[index - 1].activityName}')
-                                      : Text(''),
-                            ),
-                            itemCount: roomActivities.length + 1,
                           ),
                         ),
                       ),
