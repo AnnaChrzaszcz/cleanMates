@@ -109,12 +109,37 @@ class ActivitiesScreen extends StatelessWidget {
                                           },
                                         ),
                                         IconButton(
-                                          icon: Icon(Icons.delete),
-                                          onPressed: () => _deleteActivity(
-                                              context,
-                                              activitiesData
-                                                  .activities[index].id),
-                                        ),
+                                            icon: Icon(Icons.delete),
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (ctx) => AlertDialog(
+                                                  title: Text('Are you sure?'),
+                                                  content: Text(
+                                                      'Do you want to remove the item from the cart?'),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(ctx)
+                                                              .pop();
+                                                        },
+                                                        child: Text('NO')),
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(ctx)
+                                                              .pop();
+                                                          _deleteActivity(
+                                                              context,
+                                                              activitiesData
+                                                                  .activities[
+                                                                      index]
+                                                                  .id);
+                                                        },
+                                                        child: Text('YES')),
+                                                  ],
+                                                ),
+                                              );
+                                            }),
                                       ],
                                     ),
                                     leading: CircleAvatar(

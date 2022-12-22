@@ -109,10 +109,34 @@ class GiftsScreen extends StatelessWidget {
                                           },
                                         ),
                                         IconButton(
-                                          icon: Icon(Icons.delete),
-                                          onPressed: () => _deleteGift(context,
-                                              giftsData.gifts[index].id),
-                                        ),
+                                            icon: Icon(Icons.delete),
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (ctx) => AlertDialog(
+                                                  title: Text('Are you sure?'),
+                                                  content: Text(
+                                                      'Do you want to remove the item from the cart?'),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(ctx)
+                                                              .pop();
+                                                        },
+                                                        child: Text('NO')),
+                                                    TextButton(
+                                                        onPressed: () =>
+                                                            _deleteGift(
+                                                                context,
+                                                                giftsData
+                                                                    .gifts[
+                                                                        index]
+                                                                    .id),
+                                                        child: Text('YES')),
+                                                  ],
+                                                ),
+                                              );
+                                            }),
                                       ],
                                     ),
                                     leading: CircleAvatar(
