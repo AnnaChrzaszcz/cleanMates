@@ -1,5 +1,7 @@
+import 'package:clean_mates_app/models/roomie.dart';
 import 'package:clean_mates_app/screens/user_dashboard_screen.dart';
 import 'package:clean_mates_app/widgets/app_drawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../models/room.dart';
 import '../widgets/room/roomie_item.dart';
@@ -18,9 +20,17 @@ class UserRoomScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var userId = FirebaseAuth.instance.currentUser.uid;
     final room = Provider.of<RoomsProvider>(context).myRoom;
-
-    print('user room screen mordo');
+    List<Roomie> roomies = [];
+    if (room != null) {
+      roomies = [
+        room.roomies.firstWhere((roomie) => roomie.id == userId),
+      ];
+      if (room.roomies.length == 2) {
+        roomies.add(room.roomies.firstWhere((roomie) => roomie.id != userId));
+      }
+    }
 
     return room == null
         ? UserDashboardScreen()
@@ -39,12 +49,12 @@ class UserRoomScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: room.roomies.length,
+                      itemCount: roomies.length,
                       itemBuilder: ((context, index) => RoomieItem(
-                          room.roomies[index].id,
-                          room.roomies[index].userName,
-                          room.roomies[index].imageUrl,
-                          room.roomies[index].points)),
+                          roomies[index].id,
+                          roomies[index].userName,
+                          roomies[index].imageUrl,
+                          roomies[index].points)),
                     ),
                   ),
                   ElevatedButton(

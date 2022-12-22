@@ -27,7 +27,7 @@ class RoomItem extends StatelessWidget {
                 : Theme.of(context).iconTheme.color,
             size: 40,
           ),
-          subtitle: Text('roomies: ${room.roomies.length}'),
+          subtitle: Text('owner: ${room.creatorId}'),
           trailing: const Icon(
             Icons.check_rounded,
             size: 30,

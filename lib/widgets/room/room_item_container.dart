@@ -1,4 +1,6 @@
+import 'package:clean_mates_app/providers/rooms_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/room.dart';
 import 'room_item.dart';
 import '../../repositories/room_repository.dart';
@@ -14,7 +16,6 @@ class RoomItemContainer extends StatefulWidget {
 
 class _RoomItemConState extends State<RoomItemContainer> {
   int _selectedIndex = -1;
-  final roomRepo = RoomRepository();
   Room selectedRoom;
 
   void _selectRoom(index) {
@@ -33,12 +34,14 @@ class _RoomItemConState extends State<RoomItemContainer> {
           //decoration: BoxDecoration(border: Border.all(color: Colors.yellow)),
           child: ListView.builder(
             itemCount: widget.rooms.length,
-            itemBuilder: ((context, index) => RoomItem(
-                  room: widget.rooms[index],
-                  index: index,
-                  isSelected: _selectedIndex == index ? true : false,
-                  select: _selectRoom,
-                )),
+            itemBuilder: ((context, index) {
+              return RoomItem(
+                room: widget.rooms[index],
+                index: index,
+                isSelected: _selectedIndex == index ? true : false,
+                select: _selectRoom,
+              );
+            }),
           ),
         ),
         ElevatedButton(

@@ -74,30 +74,43 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
         padding: const EdgeInsets.all(15),
         child: _isLoading
             ? Center(child: CircularProgressIndicator())
-            : Form(
-                key: _form,
-                child: ListView(
-                  children: [
-                    TextFormField(
-                      decoration: InputDecoration(labelText: 'Room Name'),
-                      textInputAction: TextInputAction.next,
-                      onSaved: (value) {
-                        _editedRoom = Room(
-                            id: _editedRoom.id,
-                            roomName: value,
-                            creatorId: _editedRoom.creatorId,
-                            roomies: _editedRoom.roomies);
-                      },
-                      validator: (value) {
-                        if (value.isEmpty)
-                          return 'you have to enter a room name';
-                        else
-                          return null;
-                      },
+            : Column(
+                children: [
+                  Expanded(
+                    child: Form(
+                      key: _form,
+                      child: ListView(
+                        children: [
+                          TextFormField(
+                            decoration: InputDecoration(labelText: 'Room Name'),
+                            textInputAction: TextInputAction.next,
+                            onSaved: (value) {
+                              _editedRoom = Room(
+                                  id: _editedRoom.id,
+                                  roomName: value,
+                                  creatorId: _editedRoom.creatorId,
+                                  roomies: _editedRoom.roomies);
+                            },
+                            validator: (value) {
+                              if (value.isEmpty)
+                                return 'you have to enter a room name';
+                              else
+                                return null;
+                            },
+                          ),
+                          Text('tu bedzie lista mozliwych osob do dodania?'),
+                        ],
+                      ),
                     ),
-                    Text('tu bedzie lista mozliwych osob do dodania?'),
-                  ],
-                ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 30),
+                    child: ElevatedButton(
+                      onPressed: _createNewRoom,
+                      child: Text('Save'),
+                    ),
+                  )
+                ],
               ),
       ),
     );

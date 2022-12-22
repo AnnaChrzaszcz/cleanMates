@@ -1,5 +1,7 @@
+import 'package:clean_mates_app/providers/rooms_provider.dart';
 import 'package:clean_mates_app/screens/user_room_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../screens/create_room_screen.dart';
 import '../../repositories/room_repository.dart';
 import '../../models/room.dart';
@@ -18,6 +20,16 @@ class UserHasNoRoom extends StatefulWidget {
 class _UserHasNoRoomState extends State<UserHasNoRoom> {
   final roomRepo = RoomRepository();
   var _joinRoom = false;
+  List<Room> rooms = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<RoomsProvider>(context, listen: false)
+        .getAvailableRooms()
+        .then((availableRooms) => rooms = availableRooms);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +75,7 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
               ],
             ),
           ),
-          if (_joinRoom) JoinRoom(widget.joinToRoom)
+          if (_joinRoom) JoinRoom(widget.joinToRoom, rooms)
         ],
       ),
     );
