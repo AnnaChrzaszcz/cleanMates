@@ -1,3 +1,4 @@
+import 'package:clean_mates_app/models/room.dart';
 import 'package:clean_mates_app/models/roomie.dart';
 import 'package:clean_mates_app/models/userActivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,6 +24,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   var roomieId;
   Roomie you;
   Roomie roomie;
+  Room myRoom;
 
   void _dateChanged(DateTime val) {
     setState(() {
@@ -34,14 +36,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   void initState() {
-    var myRoom = Provider.of<RoomsProvider>(context, listen: false).myRoom;
+    myRoom = Provider.of<RoomsProvider>(context, listen: false).myRoom;
     roomActivities = Provider.of<RoomsProvider>(context, listen: false)
         .getRoomActivitiesByDate(dateSelected);
     super.initState();
     userId = FirebaseAuth.instance.currentUser.uid;
     you = myRoom.roomies.firstWhere((roomie) => roomie.id == userId);
-    roomie = myRoom.roomies.firstWhere((roomie) => roomie.id != userId);
-    roomieId = roomie.id;
+    if (myRoom.roomies.length > 1) {
+      roomie = myRoom.roomies.firstWhere((roomie) => roomie.id != userId);
+      roomieId = roomie.id;
+    }
   }
 
   void _showIOS_DatePicker(ctx) {
@@ -67,96 +71,109 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('History')),
-      body: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: [
-            Expanded(
-              child: Card(
-                margin: const EdgeInsets.all(8),
-                elevation: 8,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.date_range),
-                        iconSize: 28,
-                        onPressed: () => _showIOS_DatePicker(context),
-                      ),
-                      Text(
-                        DateFormat('dd/MM').format(dateSelected),
-                        style: TextStyle(fontSize: 19),
-                      ),
-                    ],
-                  ),
-                ),
+      body: myRoom.roomies.length == 1
+          ? Center(
+              child: Text(
+                'You need to add a roomie to your room',
+                style: Theme.of(context).textTheme.headline6,
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            if (roomActivities.isNotEmpty)
-              Expanded(
-                flex: 10,
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Timeline.tileBuilder(
-                    theme: TimelineThemeData(
-                      color: const Color.fromRGBO(
-                          242, 107, 56, 1), //Theme.of(context).dividerColor
-                      connectorTheme: ConnectorThemeData(
-                        color: Color.fromRGBO(242, 107, 56, 1),
+            )
+          : Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Card(
+                      margin: const EdgeInsets.all(8),
+                      elevation: 8,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.date_range),
+                              iconSize: 28,
+                              onPressed: () => _showIOS_DatePicker(context),
+                            ),
+                            Text(
+                              DateFormat('dd/MM').format(dateSelected),
+                              style: TextStyle(fontSize: 19),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    builder: TimelineTileBuilder.fromStyle(
-                      contentsAlign: ContentsAlign.basic,
-                      indicatorStyle: IndicatorStyle.outlined,
-                      oppositeContentsBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.all(24.0),
-                        child: index == 0
-                            ? Text(
-                                you != null ? you.userName : "you",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
-                              )
-                            : roomActivities[index - 1].roomieId == userId
-                                ? Text(
-                                    '${DateFormat('HH:mm').format(roomActivities[index - 1].creationDate)}  ${roomActivities[index - 1].activityName}')
-                                : Text(''),
-                      ),
-                      contentsBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.all(24.0),
-                        child: index == 0
-                            ? Text(
-                                roomie != null ? roomie.userName : "roomie",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
-                              )
-                            : roomActivities[index - 1].roomieId == roomieId
-                                ? Text(
-                                    '${DateFormat('HH:mm').format(roomActivities[index - 1].creationDate)}  ${roomActivities[index - 1].activityName}')
-                                : Text(''),
-                      ),
-                      itemCount: roomActivities.length + 1,
-                    ),
                   ),
-                ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  if (roomActivities.isNotEmpty)
+                    Expanded(
+                      flex: 10,
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Timeline.tileBuilder(
+                          theme: TimelineThemeData(
+                            color: const Color.fromRGBO(242, 107, 56,
+                                1), //Theme.of(context).dividerColor
+                            connectorTheme: ConnectorThemeData(
+                              color: Color.fromRGBO(242, 107, 56, 1),
+                            ),
+                          ),
+                          builder: TimelineTileBuilder.fromStyle(
+                            contentsAlign: ContentsAlign.basic,
+                            indicatorStyle: IndicatorStyle.outlined,
+                            oppositeContentsBuilder: (context, index) =>
+                                Padding(
+                              padding: const EdgeInsets.all(24.0),
+                              child: index == 0
+                                  ? Text(
+                                      you != null ? you.userName : "you",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    )
+                                  : roomActivities[index - 1].roomieId == userId
+                                      ? Text(
+                                          '${DateFormat('HH:mm').format(roomActivities[index - 1].creationDate)}  ${roomActivities[index - 1].activityName}')
+                                      : Text(''),
+                            ),
+                            contentsBuilder: (context, index) => Padding(
+                              padding: const EdgeInsets.all(24.0),
+                              child: index == 0
+                                  ? Text(
+                                      roomie != null
+                                          ? roomie.userName
+                                          : "roomie",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    )
+                                  : roomActivities[index - 1].roomieId ==
+                                          roomieId
+                                      ? Text(
+                                          '${DateFormat('HH:mm').format(roomActivities[index - 1].creationDate)}  ${roomActivities[index - 1].activityName}')
+                                      : Text(''),
+                            ),
+                            itemCount: roomActivities.length + 1,
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (roomActivities.length == 0)
+                    const Expanded(
+                      flex: 9,
+                      child: Center(
+                        child: Text('No activities during selected day'),
+                      ),
+                    )
+                ],
               ),
-            if (roomActivities.length == 0)
-              const Expanded(
-                flex: 9,
-                child: Center(
-                  child: Text('No activities during selected day'),
-                ),
-              )
-          ],
-        ),
-      ),
+            ),
     );
   }
 }

@@ -1,5 +1,3 @@
-import 'package:animated_icon/animate_icon.dart';
-import 'package:animated_icon/animate_icons.dart';
 import 'package:clean_mates_app/screens/activities_screen.dart';
 import 'package:clean_mates_app/screens/gifts_screen.dart';
 import 'package:clean_mates_app/screens/user_room_screen.dart';
@@ -14,7 +12,7 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    final room = Provider.of<RoomsProvider>(context).myRoom;
+    final room = Provider.of<RoomsProvider>(context, listen: false).myRoom;
     return Drawer(
       width: 260,
       child: Column(
@@ -27,8 +25,10 @@ class AppDrawer extends StatelessWidget {
                   backgroundColor: Color.fromRGBO(247, 219, 79, 1),
                   radius: 30,
                   child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        FirebaseAuth.instance.currentUser.photoURL),
+                    backgroundImage: FirebaseAuth.instance.currentUser != null
+                        ? NetworkImage(
+                            FirebaseAuth.instance.currentUser.photoURL)
+                        : Icons.error,
                   ),
                 ),
               )
