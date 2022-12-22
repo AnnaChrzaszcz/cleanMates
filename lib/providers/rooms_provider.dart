@@ -23,22 +23,31 @@ class RoomsProvider extends ChangeNotifier {
     return userRoom;
   }
 
-  // Future<List<Room>> getAllRooms() async {
-  //   QuerySnapshot<Map<String, dynamic>> roomsQuerySnapshot =
-  //       await FirebaseFirestore.instance.collection('rooms').get();
+  Future<List<Room>> getAvailableRooms() async {
+    List<Room> availableRooms = [];
+    QuerySnapshot<Map<String, dynamic>> roomsQuerySnapshot =
+        await FirebaseFirestore.instance.collection('rooms').get();
 
-  //   roomsQuerySnapshot.docs.forEach((element) {
-
-  //   });
-
-  //   rooms = await _createRooms(value);
-  //   return rooms;
-  // }
+    roomsQuerySnapshot.docs.forEach((room) async {
+      CollectionReference<Map<String, dynamic>> a =
+          room.reference.collection('roomies');
+      QuerySnapshot<Map<String, dynamic>> b = await a.get();
+      if (b.docs.length == 1) {
+        availableRooms.add(Room(
+            id: room.id,
+            roomName: room['roomName'],
+            creatorId: await _getUsernameFromId(room['creatorId']),
+            roomies: [],
+            roomiesActivites: [],
+            roomiesGift: []));
+      }
+    });
+    return availableRooms;
+  }
 
   Future<void> getUserRoom(String userId) async {
-    print('jestem w rooms provider getUserRoom');
     //DO POPRAWY MORDO
-
+    print('jestew w rooms provider getUserRoom');
     List<Roomie> roomies = [];
     List<UserActivity> roomiesActivities = [];
     List<UserGift> roomiesGifts = [];
@@ -62,7 +71,6 @@ class RoomsProvider extends ChangeNotifier {
           var roomieData = element.data();
           var roomieId = roomieData['roomieId'];
           roomies.add(await _getRoomieFromId(roomieId));
-          print('ilosc roomies: ${roomies.length}');
         });
       });
 
@@ -88,7 +96,6 @@ class RoomsProvider extends ChangeNotifier {
           .collection('roomiesGifts')
           .get()
           .then((value) {
-        print('ilosc gifts:  ${value.docs.length}');
         value.docs.forEach((element) async {
           var roomieGiftData = element.data();
           roomiesGifts.add(
@@ -113,9 +120,6 @@ class RoomsProvider extends ChangeNotifier {
           roomies: roomies,
           roomiesActivites: roomiesActivities,
           roomiesGift: roomiesGifts);
-
-      print('elkoooooo');
-      print(userRoom.roomies.length);
       notifyListeners();
     }
   }
@@ -143,7 +147,10 @@ class RoomsProvider extends ChangeNotifier {
     DocumentReference<Map<String, dynamic>> newRoomRef =
         FirebaseFirestore.instance.collection('rooms').doc(roomId);
 
-    await newRoomRef.collection('roomies').add({'roomieId': user.uid});
+    await newRoomRef
+        .collection('roomies')
+        .doc(user.uid)
+        .set({'roomieId': user.uid});
 
     getUserRoom(user.uid); // moze jakos inaczej?
     //notifyListeners();
@@ -154,7 +161,7 @@ class RoomsProvider extends ChangeNotifier {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(user.uid)
-        .update({'roomId': FieldValue.delete()});
+        .update({'roomId': FieldValue.delete(), 'points': 0});
 
     await FirebaseFirestore.instance
         .collection('rooms')
@@ -223,9 +230,6 @@ class RoomsProvider extends ChangeNotifier {
         .doc(user.uid)
         .update({'roomId': newRoomRef.id});
 
-    // List<Roomie> roomies = [];
-    // roomies.add(await _getRoomieFromId(user.uid));
-
     final newRoom = Room(
         id: newRoomRef.id,
         roomName: room.roomName,
@@ -234,7 +238,7 @@ class RoomsProvider extends ChangeNotifier {
         roomiesActivites: [],
         roomiesGift: []);
 
-    _rooms.add(newRoom);
+    //_rooms.add(newRoom);
     userRoom = newRoom;
     notifyListeners();
   }
@@ -297,8 +301,6 @@ class RoomsProvider extends ChangeNotifier {
 
   Future<void> addGiftsToRoomie(List<Gift> newGifts, String userId,
       String roomId, int pointsSpent) async {
-    print('ilosc gift ${newGifts.length}');
-    print('pointsSpent ${pointsSpent}');
     final giftData = FirebaseFirestore.instance
         .collection('rooms')
         .doc(userRoom.id)
@@ -312,7 +314,6 @@ class RoomsProvider extends ChangeNotifier {
     var points = roomieData['points'];
     int pointsActual = points - pointsSpent;
 
-    print(points);
     if (pointsActual < 0) {
       notifyListeners();
       throw LogisticExpection('Not enough points. You have $points points');
@@ -403,6 +404,9 @@ class RoomsProvider extends ChangeNotifier {
   }
 
   bool _compareDates(DateTime date1, DateTime date2) {
+    if (date1 == null || date2 == null) {
+      return false;
+    }
     if (date1.year == date2.year &&
         date1.month == date2.month &&
         date1.day == date2.day) {
@@ -410,5 +414,12 @@ class RoomsProvider extends ChangeNotifier {
     } else {
       return false;
     }
+  }
+
+  Future<String> _getUsernameFromId(String userId) async {
+    DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    Map<String, dynamic> userData = userSnapshot.data();
+    return userData['username'];
   }
 }
