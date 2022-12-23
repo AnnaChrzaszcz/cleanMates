@@ -1,6 +1,7 @@
 import 'dart:io'; // at beginning of file
 import 'package:flutter/material.dart';
 import '../../widgets/pickers/user_image_picker.dart';
+import 'package:password_strength_checker/password_strength_checker.dart';
 
 class AuthForm extends StatefulWidget {
   AuthForm(this.submitFn, this.isLoading);
@@ -46,6 +47,8 @@ class _AuthFormState extends State<AuthForm> {
 
   @override
   Widget build(BuildContext context) {
+    final passNotifier = ValueNotifier<PasswordStrength>(null);
+
     return Center(
       child: Card(
         elevation: 15,
@@ -108,7 +111,24 @@ class _AuthFormState extends State<AuthForm> {
                     onSaved: (value) {
                       _userPassword = value;
                     },
+                    onChanged: (value) {
+                      if (!_isLogin) {
+                        passNotifier.value =
+                            PasswordStrength.calculate(text: value);
+                      }
+                    },
                   ),
+                  if (!_isLogin)
+                    SizedBox(
+                      height: 12,
+                    ),
+                  if (!_isLogin)
+                    PasswordStrengthChecker(
+                      strength: passNotifier,
+                      configuration: PasswordStrengthCheckerConfiguration(
+                        borderColor: Colors.grey[100],
+                      ),
+                    ),
                   SizedBox(
                     height: 12,
                   ),
