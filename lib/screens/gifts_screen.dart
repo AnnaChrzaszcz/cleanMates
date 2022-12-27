@@ -73,7 +73,7 @@ class GiftsScreen extends StatelessWidget {
                   builder: (context, controller) {
                     return const CircleAvatar(
                       radius: 50,
-                      backgroundColor: Color.fromRGBO(247, 219, 79, 1),
+                      backgroundColor: Color.fromRGBO(47, 149, 153, 1),
                       child: RiveAnimation.asset(
                         'assets/animations/indicator.riv',
                       ),
@@ -120,13 +120,15 @@ class GiftsScreen extends StatelessWidget {
                                                         },
                                                         child: Text('NO')),
                                                     TextButton(
-                                                        onPressed: () =>
-                                                            _deleteGift(
-                                                                context,
-                                                                giftsData
-                                                                    .gifts[
-                                                                        index]
-                                                                    .id),
+                                                        onPressed: () {
+                                                          Navigator.of(ctx)
+                                                              .pop();
+                                                          _deleteGift(
+                                                              context,
+                                                              giftsData
+                                                                  .gifts[index]
+                                                                  .id);
+                                                        },
                                                         child: Text('YES')),
                                                   ],
                                                 ),

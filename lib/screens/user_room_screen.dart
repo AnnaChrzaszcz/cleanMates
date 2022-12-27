@@ -38,7 +38,7 @@ class UserRoomScreen extends StatelessWidget {
       Provider.of<RoomsProvider>(context, listen: false)
           .getUserRoom(userId)
           .then((value) {
-        room = Provider.of<RoomsProvider>(context).myRoom;
+        room = Provider.of<RoomsProvider>(context, listen: false).myRoom;
       });
     }
 
@@ -48,9 +48,8 @@ class UserRoomScreen extends StatelessWidget {
             appBar: AppBar(title: Text('Your room')),
             drawer: AppDrawer(), // jak to zastapic strzalka do tylu
             body: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 18),
               width: double.infinity,
-              height: 600,
-              decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
               child: Column(
                 children: [
                   Text(
@@ -62,8 +61,8 @@ class UserRoomScreen extends StatelessWidget {
                       builder: MaterialIndicatorDelegate(
                         builder: (context, controller) {
                           return const CircleAvatar(
-                            radius: 55,
-                            backgroundColor: Color.fromRGBO(247, 219, 79, 1),
+                            radius: 60,
+                            backgroundColor: Color.fromRGBO(47, 149, 153, 1),
                             child: RiveAnimation.asset(
                               'assets/animations/indicator.riv',
                             ),
