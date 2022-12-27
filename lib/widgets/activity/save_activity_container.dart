@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:clean_mates_app/models/userActivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +48,6 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
         ),
       );
     } catch (err) {
-      print(err);
       await showDialog<Null>(
         context: context,
         builder: (ctx) => AlertDialog(
@@ -73,25 +74,30 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20),
+      padding: const EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           CircleAvatar(
             radius: 30,
             backgroundColor: Theme.of(context).primaryColor,
             foregroundColor: Colors.white,
-            child: Text(
-              '${activitesPointsSum}',
-              style: TextStyle(fontSize: 15),
+            child: AnimatedSwitcher(
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return ScaleTransition(scale: animation, child: child);
+              },
+              duration: const Duration(milliseconds: 600),
+              child: Text(
+                '${activitesPointsSum}',
+                key: ValueKey<int>(activitesPointsSum),
+              ),
             ),
           ),
           Expanded(
             child: Container(
-              margin: EdgeInsets.symmetric(vertical: 15, horizontal: 8),
-              //decoration: BoxDecoration(border: Border.all(color: Colors.pink)),
+              margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 8),
               child: ListView.builder(
                 itemCount: widget.activities.length,
                 itemBuilder: ((context, index) => Column(
