@@ -2,6 +2,7 @@ import 'package:clean_mates_app/screens/activities_screen.dart';
 import 'package:clean_mates_app/screens/edit_activity_screen.dart';
 import 'package:clean_mates_app/widgets/activity/save_activity_container.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../providers/activities_provider.dart';
 import '../providers/rooms_provider.dart';
@@ -18,56 +19,61 @@ class SaveActivityScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var myRoom = Provider.of<RoomsProvider>(context).myRoom;
     final userId = ModalRoute.of(context).settings.arguments as String;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Save activity'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(EditActivityScreen.routeName,
-                    arguments: {'roomId': myRoom.id});
-              },
-              icon: Icon(Icons.add))
-        ],
-      ),
-      body: FutureBuilder(
-        future: _refreshActivities(context, myRoom.id),
-        builder: ((context, snapshot) => snapshot.connectionState ==
-                ConnectionState.waiting
-            ? Center(
+    return FutureBuilder(
+      future: _refreshActivities(context, myRoom.id),
+      builder: ((context, snapshot) => snapshot.connectionState ==
+              ConnectionState.waiting
+          ? Scaffold(
+              appBar: AppBar(title: const Text('Save activity')),
+              body: const Center(
                 child: CircularProgressIndicator(),
-              )
-            : Consumer<ActivitiesProvider>(
-                builder: ((ctx, activitiesData, _) => activitiesData
-                            .activities.length ==
-                        0
-                    ? Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-                        margin:
-                            EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-                        width: double.infinity,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'You need at least one activity in your dictionary',
-                              style: Theme.of(context).textTheme.headline6,
-                              textAlign: TextAlign.center,
+              ),
+            )
+          : Consumer<ActivitiesProvider>(
+              builder: ((ctx, activitiesData, _) => Scaffold(
+                    appBar: AppBar(
+                      title: const Text('Save activity'),
+                      actions: [
+                        IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(
+                                  EditActivityScreen.routeName,
+                                  arguments: {'roomId': myRoom.id});
+                            },
+                            icon: activitiesData.activities.isEmpty
+                                ? Lottie.asset(
+                                    'assets/animations/lottie/add2.json')
+                                : const Icon(Icons.add))
+                      ],
+                    ),
+                    body: activitiesData.activities.isEmpty
+                        ? Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 30, horizontal: 10),
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 30, horizontal: 30),
+                            width: double.infinity,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'You need at least one activity in your dictionary',
+                                  style: Theme.of(context).textTheme.headline6,
+                                  textAlign: TextAlign.center,
+                                ),
+                                TextButton(
+                                    onPressed: () => Navigator.of(context)
+                                        .pushReplacementNamed(
+                                            ActivitiesScreen.routeName),
+                                    child: const Text('Go to dictionary'))
+                              ],
                             ),
-                            TextButton(
-                                onPressed: () => Navigator.of(context)
-                                    .pushReplacementNamed(
-                                        ActivitiesScreen.routeName),
-                                child: Text('Go to dictionary'))
-                          ],
-                        ),
-                      )
-                    : SaveActivityContainer(activitiesData.activities, userId)),
-              )),
-      ),
+                          )
+                        : SaveActivityContainer(
+                            activitiesData.activities, userId),
+                  )),
+            )),
     );
   }
 }
