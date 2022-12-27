@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:clean_mates_app/screens/buy_gift_screen.dart';
 import 'package:clean_mates_app/screens/history_screen.dart';
+import 'package:clean_mates_app/widgets/fab/action_button.dart';
+import 'package:clean_mates_app/widgets/fab/expandable_fab.dart';
 
 import '../screens/save_activity_screen.dart';
 import '../widgets/app_drawer.dart';
@@ -104,6 +106,27 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         title: Text(roomie.userName ?? ''),
       ),
       drawer: AppDrawer(),
+      floatingActionButton: ExpandableFab(
+        distance: 76.0,
+        children: [
+          ActionButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pushNamed(UserRoomScreen.routeName)
+                  .then((_) {});
+            },
+            icon: const Icon(Icons.home),
+          ),
+          ActionButton(
+            onPressed: () => {
+              Navigator.of(context)
+                  .pushNamed(HistoryScreen.routeName)
+                  .then((_) {})
+            },
+            icon: const Icon(Icons.history),
+          ),
+        ],
+      ),
       body: FutureBuilder(
         future: _tryGetYourRoom(),
         builder: (context, snapshot) {
@@ -151,7 +174,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
               backgroundColor: Theme.of(context).primaryColor,
               foregroundColor: Colors.white,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8),
                 child: FittedBox(
                   child: Text(
                     '${points.toString()} pkt',
@@ -161,42 +184,6 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
               ),
             ),
           ),
-          // AnimateIcon(
-          //   key: UniqueKey(),
-          //   onTap: () {},
-          //   iconType: IconType.animatedOnTap,
-          //   height: 70,
-          //   width: 70,
-          //   color: Color.fromRGBO(47, 149, 153, 1),
-          //   animateIcon: AnimateIcons.home,
-          // ),
-          Expanded(
-            flex: 1,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(UserRoomScreen.routeName)
-                        .then((_) {});
-                  },
-                  icon: const Icon(Icons.home),
-                  iconSize: 40,
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(HistoryScreen.routeName)
-                        .then((_) {});
-                  },
-                  icon: const Icon(Icons.history),
-                  iconSize: 40,
-                ),
-              ],
-            ),
-          ),
-
           if (isRoomie)
             Expanded(
               flex: 3,
@@ -225,10 +212,10 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                 ),
               ),
             ),
-
           if (!isRoomie)
-            Container(
-              height: 460,
+            Expanded(
+              flex: 3,
+              //height: 460,
               child: GridView(
                 padding: const EdgeInsets.all(10),
                 children: actions
