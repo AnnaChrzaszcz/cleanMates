@@ -72,7 +72,7 @@ class GiftsScreen extends StatelessWidget {
                 builder: MaterialIndicatorDelegate(
                   builder: (context, controller) {
                     return const CircleAvatar(
-                      radius: 50,
+                      radius: 60,
                       backgroundColor: Color.fromRGBO(47, 149, 153, 1),
                       child: RiveAnimation.asset(
                         'assets/animations/indicator.riv',
