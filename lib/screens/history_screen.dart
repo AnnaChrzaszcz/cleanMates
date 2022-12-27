@@ -1,14 +1,18 @@
+import 'dart:async';
+
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_date_picker_timeline/flutter_date_picker_timeline.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:rive/rive.dart';
+import 'package:timelines/timelines.dart';
+
 import 'package:clean_mates_app/models/room.dart';
 import 'package:clean_mates_app/models/roomie.dart';
 import 'package:clean_mates_app/models/userActivity.dart';
-import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:rive/rive.dart';
-import 'package:timelines/timelines.dart';
-import 'package:provider/provider.dart';
+
 import '../providers/rooms_provider.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -20,33 +24,27 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-  var dateSelected = DateTime.now();
-  List<UserActivity> roomActivities = [];
+  ValueNotifier<DateTime> timelineDate;
+  ValueNotifier<List<UserActivity>> roomActivitiesNotifier;
   var userId;
   var roomieId;
   Roomie you;
   Roomie roomie;
   Room myRoom;
 
-  void _dateChanged(DateTime val) {
-    setState(() {
-      dateSelected = val;
-      roomActivities = Provider.of<RoomsProvider>(context, listen: false)
-          .getRoomActivitiesByDate(val);
-    });
-  }
-
   Future<void> _refreshData() async {
     Provider.of<RoomsProvider>(context, listen: false)
         .getUserRoom(userId)
-        .then((value) => _dateChanged(dateSelected));
+        .then((value) {
+      roomActivitiesNotifier.value =
+          Provider.of<RoomsProvider>(context, listen: false)
+              .getRoomActivitiesByDate(timelineDate.value);
+    });
   }
 
   @override
   void initState() {
     myRoom = Provider.of<RoomsProvider>(context, listen: false).myRoom;
-    roomActivities = Provider.of<RoomsProvider>(context, listen: false)
-        .getRoomActivitiesByDate(dateSelected);
     super.initState();
     userId = FirebaseAuth.instance.currentUser.uid;
     you = myRoom.roomies.firstWhere((roomie) => roomie.id == userId);
@@ -54,31 +52,23 @@ class _HistoryScreenState extends State<HistoryScreen> {
       roomie = myRoom.roomies.firstWhere((roomie) => roomie.id != userId);
       roomieId = roomie.id;
     }
+    timelineDate = ValueNotifier<DateTime>(DateTime.now());
+    roomActivitiesNotifier = ValueNotifier<List<UserActivity>>(
+        Provider.of<RoomsProvider>(context, listen: false)
+            .getRoomActivitiesByDate(DateTime.now()));
   }
 
-  void _showIOS_DatePicker(ctx) {
-    showCupertinoModalPopup(
-        context: ctx,
-        builder: (_) => Container(
-              height: 190,
-              color: Color.fromARGB(255, 255, 255, 255),
-              child: Column(
-                children: [
-                  Container(
-                    height: 180,
-                    child: CupertinoDatePicker(
-                        initialDateTime: dateSelected,
-                        onDateTimeChanged: (val) => _dateChanged(val)),
-                  ),
-                ],
-              ),
-            ));
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    timelineDate.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('History')),
+      appBar: AppBar(title: const Text('History')),
       body: myRoom.roomies.length == 1
           ? Center(
               child: Text(
@@ -91,108 +81,114 @@ class _HistoryScreenState extends State<HistoryScreen> {
               padding: const EdgeInsets.all(8),
               child: Column(
                 children: [
-                  Expanded(
-                    child: Card(
-                      elevation: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.date_range),
-                              iconSize: 28,
-                              onPressed: () => _showIOS_DatePicker(context),
-                            ),
-                            Text(
-                              DateFormat('dd/MM').format(dateSelected),
-                              style: TextStyle(fontSize: 19),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  FlutterDatePickerTimeline(
+                    startDate: DateTime.now().subtract(const Duration(days: 7)),
+                    selectedItemWidth: 140,
+                    endDate: DateTime.now().add(const Duration(days: 1)),
+                    itemHeight: 60.0,
+                    selectedItemBackgroundColor:
+                        Theme.of(context).iconTheme.color,
+                    initialSelectedDate: DateTime.now(),
+                    onSelectedDateChange: (DateTime dateTime) {
+                      timelineDate.value = dateTime;
+                      roomActivitiesNotifier.value =
+                          Provider.of<RoomsProvider>(context, listen: false)
+                              .getRoomActivitiesByDate(dateTime);
+                    },
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  if (roomActivities.isNotEmpty)
-                    Expanded(
-                      flex: 10,
-                      child: CustomRefreshIndicator(
-                        builder: MaterialIndicatorDelegate(
-                          builder: (context, controller) {
-                            return const CircleAvatar(
-                              radius: 55,
-                              backgroundColor: Color.fromRGBO(247, 219, 79, 1),
-                              child: RiveAnimation.asset(
-                                'assets/animations/indicator.riv',
+                  ValueListenableBuilder(
+                    valueListenable: roomActivitiesNotifier,
+                    builder: (context, value, child) {
+                      return Expanded(
+                        flex:
+                            MediaQuery.of(context).size.height < 680.0 ? 2 : 3,
+                        child: roomActivitiesNotifier.value.isNotEmpty
+                            ? CustomRefreshIndicator(
+                                builder: MaterialIndicatorDelegate(
+                                  builder: (context, controller) {
+                                    return const CircleAvatar(
+                                      radius: 55,
+                                      backgroundColor:
+                                          Color.fromRGBO(47, 149, 153, 1),
+                                      child: RiveAnimation.asset(
+                                        'assets/animations/indicator.riv',
+                                      ),
+                                    );
+                                  },
+                                ),
+                                onRefresh: () => _refreshData(),
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Timeline.tileBuilder(
+                                    theme: TimelineThemeData(
+                                      color: const Color.fromRGBO(242, 107, 56,
+                                          1), //Theme.of(context).dividerColor
+                                      connectorTheme: const ConnectorThemeData(
+                                        color: Color.fromRGBO(242, 107, 56, 1),
+                                      ),
+                                    ),
+                                    builder: TimelineTileBuilder.fromStyle(
+                                      contentsAlign: ContentsAlign.basic,
+                                      indicatorStyle: IndicatorStyle.outlined,
+                                      oppositeContentsBuilder:
+                                          (context, index) => Padding(
+                                        padding: const EdgeInsets.all(24.0),
+                                        child: index == 0
+                                            ? Text(
+                                                you != null
+                                                    ? you.userName
+                                                    : "you",
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16),
+                                              )
+                                            : roomActivitiesNotifier
+                                                        .value[index - 1]
+                                                        .roomieId ==
+                                                    userId
+                                                ? Text(
+                                                    '${DateFormat('HH:mm').format(roomActivitiesNotifier.value[index - 1].creationDate)}  ${roomActivitiesNotifier.value[index - 1].activityName}',
+                                                    textAlign: TextAlign.end,
+                                                  )
+                                                : const Text(''),
+                                      ),
+                                      contentsBuilder: (context, index) =>
+                                          Padding(
+                                        padding: const EdgeInsets.all(24.0),
+                                        child: index == 0
+                                            ? Text(
+                                                roomie != null
+                                                    ? roomie.userName
+                                                    : "roomie",
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16),
+                                              )
+                                            : roomActivitiesNotifier
+                                                        .value[index - 1]
+                                                        .roomieId ==
+                                                    roomieId
+                                                ? Text(
+                                                    '${DateFormat('HH:mm').format(roomActivitiesNotifier.value[index - 1].creationDate)}  ${roomActivitiesNotifier.value[index - 1].activityName}')
+                                                : const Text(''),
+                                      ),
+                                      itemCount:
+                                          roomActivitiesNotifier.value.length +
+                                              1,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Center(
+                                child: const Text(
+                                    'No activities during selected day'),
                               ),
-                            );
-                          },
-                        ),
-                        onRefresh: () => _refreshData(),
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          child: Timeline.tileBuilder(
-                            theme: TimelineThemeData(
-                              color: const Color.fromRGBO(242, 107, 56,
-                                  1), //Theme.of(context).dividerColor
-                              connectorTheme: ConnectorThemeData(
-                                color: Color.fromRGBO(242, 107, 56, 1),
-                              ),
-                            ),
-                            builder: TimelineTileBuilder.fromStyle(
-                              contentsAlign: ContentsAlign.basic,
-                              indicatorStyle: IndicatorStyle.outlined,
-                              oppositeContentsBuilder: (context, index) =>
-                                  Padding(
-                                padding: const EdgeInsets.all(24.0),
-                                child: index == 0
-                                    ? Text(
-                                        you != null ? you.userName : "you",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
-                                      )
-                                    : roomActivities[index - 1].roomieId ==
-                                            userId
-                                        ? Text(
-                                            '${DateFormat('HH:mm').format(roomActivities[index - 1].creationDate)}  ${roomActivities[index - 1].activityName}')
-                                        : Text(''),
-                              ),
-                              contentsBuilder: (context, index) => Padding(
-                                padding: const EdgeInsets.all(24.0),
-                                child: index == 0
-                                    ? Text(
-                                        roomie != null
-                                            ? roomie.userName
-                                            : "roomie",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
-                                      )
-                                    : roomActivities[index - 1].roomieId ==
-                                            roomieId
-                                        ? Text(
-                                            '${DateFormat('HH:mm').format(roomActivities[index - 1].creationDate)}  ${roomActivities[index - 1].activityName}')
-                                        : Text(''),
-                              ),
-                              itemCount: roomActivities.length + 1,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  if (roomActivities.length == 0)
-                    const Expanded(
-                      flex: 9,
-                      child: Center(
-                        child: Text('No activities during selected day'),
-                      ),
-                    )
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
