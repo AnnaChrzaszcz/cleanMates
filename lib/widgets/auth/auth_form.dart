@@ -1,4 +1,5 @@
 import 'dart:io'; // at beginning of file
+import 'dart:isolate';
 import 'package:flutter/material.dart';
 import '../../widgets/pickers/user_image_picker.dart';
 import 'package:password_strength_checker/password_strength_checker.dart';
@@ -13,13 +14,36 @@ class AuthForm extends StatefulWidget {
   _AuthFormState createState() => _AuthFormState();
 }
 
-class _AuthFormState extends State<AuthForm> {
+class _AuthFormState extends State<AuthForm>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   var _isLogin = true;
   String _userEmail = '';
   String _userName = '';
   String _userPassword = '';
   File _userImageFile;
+  AnimationController _animationController;
+  Animation<double> _opacityAnimation;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 400));
+    _opacityAnimation = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeIn,
+      ),
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _animationController.dispose();
+    super.dispose();
+  }
 
   void _pickedImage(File image) {
     _userImageFile = image;
@@ -39,6 +63,7 @@ class _AuthFormState extends State<AuthForm> {
       return;
     }
     if (isValid) {
+      print('isValid');
       _formKey.currentState.save();
       widget.submitFn(_userEmail.trim(), _userName.trim(), _userPassword.trim(),
           _userImageFile, _isLogin, context);
@@ -47,9 +72,15 @@ class _AuthFormState extends State<AuthForm> {
 
   @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
     final passNotifier = ValueNotifier<PasswordStrength>(null);
 
-    return Center(
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeIn,
+      height: _isLogin
+          ? deviceSize.height * (deviceSize.height < 680 ? 0.45 : 0.35)
+          : deviceSize.height * (deviceSize.height < 680 ? 0.8 : 0.60),
       child: Card(
         elevation: 15,
         //color: Colors.grey[200],
@@ -62,8 +93,21 @@ class _AuthFormState extends State<AuthForm> {
               key: _formKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                //mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  if (!_isLogin) UserImagePicker(_pickedImage),
+                  //if (!_isLogin)
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                    constraints: BoxConstraints(
+                      minHeight: !_isLogin ? 60 : 0,
+                      maxHeight: !_isLogin ? 140 : 0,
+                    ),
+                    child: FadeTransition(
+                      opacity: _opacityAnimation,
+                      child: UserImagePicker(_pickedImage),
+                    ),
+                  ),
                   TextFormField(
                     key: ValueKey('email'),
                     validator: (value) {
@@ -80,22 +124,34 @@ class _AuthFormState extends State<AuthForm> {
                       _userEmail = value;
                     },
                   ),
-                  if (!_isLogin)
-                    TextFormField(
-                      key: ValueKey('Username'),
-                      validator: (value) {
-                        if (value.isEmpty || value.length < 4) {
-                          return 'Please enter at least 4 characters';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Username',
-                      ),
-                      onSaved: (value) {
-                        _userName = value;
-                      },
+                  //if (!_isLogin)
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                    constraints: BoxConstraints(
+                      minHeight: !_isLogin ? 50 : 0,
+                      maxHeight: !_isLogin ? 90 : 0,
                     ),
+                    child: FadeTransition(
+                      opacity: _opacityAnimation,
+                      child: TextFormField(
+                        key: ValueKey('Username'),
+                        validator: (value) {
+                          if (!_isLogin &&
+                              (value.isEmpty || value.length < 4)) {
+                            return 'Please enter at least 4 characters';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Username',
+                        ),
+                        onSaved: (value) {
+                          _userName = value;
+                        },
+                      ),
+                    ),
+                  ),
                   TextFormField(
                     key: ValueKey('Password'),
                     validator: (value) {
@@ -132,7 +188,7 @@ class _AuthFormState extends State<AuthForm> {
                   SizedBox(
                     height: 12,
                   ),
-                  if (widget.isLoading) CircularProgressIndicator(),
+                  if (widget.isLoading) const CircularProgressIndicator(),
                   if (!widget.isLoading)
                     ElevatedButton(
                       onPressed: _trySubmit,
@@ -153,6 +209,9 @@ class _AuthFormState extends State<AuthForm> {
                       onPressed: () {
                         setState(() {
                           _isLogin = !_isLogin;
+                          _isLogin
+                              ? _animationController.reverse()
+                              : _animationController.forward();
                         });
                       },
                       child: Text(_isLogin
