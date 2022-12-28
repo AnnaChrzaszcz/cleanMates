@@ -27,20 +27,24 @@ class _UserImagePickerState extends State<UserImagePicker> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      CircleAvatar(
-        radius: 40,
-        backgroundColor: Colors.grey,
-        backgroundImage:
-            pickedImageFile != null ? FileImage(pickedImageFile) : null,
-      ),
-      TextButton.icon(
-        onPressed: _pickImage,
-        icon: Icon(
-          Icons.image,
+      Expanded(
+        child: CircleAvatar(
+          radius: 40,
+          backgroundColor: Colors.grey,
+          backgroundImage:
+              pickedImageFile != null ? FileImage(pickedImageFile) : null,
         ),
-        label: Text(
-          'Add image',
-          style: TextStyle(color: Theme.of(context).accentColor),
+      ),
+      Expanded(
+        child: TextButton.icon(
+          onPressed: _pickImage,
+          icon: Icon(
+            Icons.image,
+          ),
+          label: Text(
+            'Add image',
+            style: TextStyle(color: Theme.of(context).accentColor),
+          ),
         ),
       ),
     ]);
