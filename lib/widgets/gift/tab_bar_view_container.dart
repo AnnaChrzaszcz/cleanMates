@@ -17,10 +17,33 @@ class TabBarViewContainer extends StatefulWidget {
   State<TabBarViewContainer> createState() => _TabBarViewContainerState();
 }
 
-class _TabBarViewContainerState extends State<TabBarViewContainer> {
+class _TabBarViewContainerState extends State<TabBarViewContainer>
+    with SingleTickerProviderStateMixin {
   var _boughtExpanded = false;
   var _recivedExpanded = false;
   var yourSelectedIndex = -1;
+  AnimationController _animationController;
+  Animation<double> _opacityAnimation;
+
+  @override
+  void initState() {
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 400));
+    _opacityAnimation = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeIn,
+      ),
+    );
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +60,23 @@ class _TabBarViewContainerState extends State<TabBarViewContainer> {
             onPressed: () {
               setState(() {
                 _boughtExpanded = !_boughtExpanded;
+                _boughtExpanded
+                    ? _animationController.forward()
+                    : _animationController.reverse();
               });
             },
           ),
         ),
-        if (_boughtExpanded)
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-            height: min(widget.yourBought.length * 30.0 + 50, 120),
+
+        AnimatedContainer(
+          duration: Duration(milliseconds: 300),
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+          height: _boughtExpanded
+              ? min(widget.yourBought.length * 30.0 + 50,
+                  MediaQuery.of(context).size.height < 680.0 ? 100 : 140)
+              : 0,
+          child: FadeTransition(
+            opacity: _opacityAnimation,
             child: ListView.builder(
               itemCount: widget.yourBought.length,
               itemBuilder: ((context, index) => Padding(
@@ -71,6 +103,7 @@ class _TabBarViewContainerState extends State<TabBarViewContainer> {
                   )),
             ),
           ),
+        ),
         if (_boughtExpanded)
           ElevatedButton(
             onPressed: yourSelectedIndex >= 0
@@ -107,32 +140,36 @@ class _TabBarViewContainerState extends State<TabBarViewContainer> {
             },
           ),
         ),
-        if (_recivedExpanded)
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-            height: min(widget.yourRecived.length * 30.0 + 50, 120),
-            child: ListView.builder(
-              itemCount: widget.yourRecived.length,
-              itemBuilder: ((context, index) => Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          widget.yourRecived[index].giftName,
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          DateFormat('dd/MM hh:mm')
-                              .format(widget.yourRecived[index].boughtDate),
-                        ),
-                      ],
-                    ),
-                  )),
-            ),
+        //if (_recivedExpanded)
+        AnimatedContainer(
+          duration: Duration(milliseconds: 300),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+          height: _recivedExpanded
+              ? min(widget.yourRecived.length * 30.0 + 50,
+                  MediaQuery.of(context).size.height < 680.0 ? 100 : 140)
+              : 0,
+          child: ListView.builder(
+            itemCount: widget.yourRecived.length,
+            itemBuilder: ((context, index) => Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        widget.yourRecived[index].giftName,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        DateFormat('dd/MM hh:mm')
+                            .format(widget.yourRecived[index].boughtDate),
+                      ),
+                    ],
+                  ),
+                )),
           ),
+        ),
       ],
     );
   }
