@@ -80,7 +80,7 @@ class _AuthFormState extends State<AuthForm>
       curve: Curves.easeIn,
       height: _isLogin
           ? deviceSize.height * (deviceSize.height < 680 ? 0.45 : 0.35)
-          : deviceSize.height * (deviceSize.height < 680 ? 0.8 : 0.60),
+          : deviceSize.height * (deviceSize.height < 680 ? 0.8 : 0.62),
       child: Card(
         elevation: 15,
         //color: Colors.grey[200],
@@ -116,15 +116,17 @@ class _AuthFormState extends State<AuthForm>
                       }
                       return null;
                     },
+                    cursorColor: Theme.of(context).accentColor,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      labelText: 'Email address',
-                    ),
+                        labelText: 'Email address',
+                        fillColor: Colors.pink,
+                        hoverColor: Colors.pink,
+                        focusColor: Colors.pink),
                     onSaved: (value) {
                       _userEmail = value;
                     },
                   ),
-                  //if (!_isLogin)
                   AnimatedContainer(
                     duration: Duration(milliseconds: 300),
                     curve: Curves.easeIn,
