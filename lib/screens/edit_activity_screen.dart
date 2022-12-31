@@ -7,6 +7,10 @@ import 'package:provider/provider.dart';
 class EditActivityScreen extends StatefulWidget {
   static const routeName = '/editActivity';
 
+  final String roomId;
+
+  EditActivityScreen({this.roomId});
+
   @override
   _CreateNewActivityScreenState createState() =>
       _CreateNewActivityScreenState();
@@ -55,17 +59,20 @@ class _CreateNewActivityScreenState extends State<EditActivityScreen> {
     if (_isInit) {
       final routeArgs =
           ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      final id = routeArgs['id'];
-      roomId = routeArgs['roomId'];
-      if (id != null) {
-        _editedActivity =
-            Provider.of<ActivitiesProvider>(context, listen: false)
-                .findById(id);
-        _initValues = {
-          'activityName': _editedActivity.activityName,
-          'points': _editedActivity.points.toString(),
-        };
-        print(_initValues);
+      if (routeArgs == null) {
+        roomId = widget.roomId;
+      } else {
+        final id = routeArgs['id'];
+        roomId = routeArgs['roomId'];
+        if (id != null) {
+          _editedActivity =
+              Provider.of<ActivitiesProvider>(context, listen: false)
+                  .findById(id);
+          _initValues = {
+            'activityName': _editedActivity.activityName,
+            'points': _editedActivity.points.toString(),
+          };
+        }
       }
     }
     _isInit = false;

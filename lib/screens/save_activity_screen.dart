@@ -32,7 +32,7 @@ class SaveActivityScreen extends StatelessWidget {
           : Consumer<ActivitiesProvider>(
               builder: ((ctx, activitiesData, _) => Scaffold(
                     appBar: AppBar(
-                      title: const Text('Save activity'),
+                      title: Text('Save activity'),
                       actions: [
                         IconButton(
                             onPressed: () {
@@ -66,7 +66,7 @@ class SaveActivityScreen extends StatelessWidget {
                                     onPressed: () => Navigator.of(context)
                                         .pushReplacementNamed(
                                             ActivitiesScreen.routeName),
-                                    child: const Text('Go to dictionary'))
+                                    child: Text('Go to dictionary'))
                               ],
                             ),
                           )

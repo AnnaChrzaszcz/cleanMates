@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/auth/auth_form.dart';
 import 'package:rive/rive.dart';
 
@@ -18,6 +19,9 @@ class _AuthScreenState extends State<AuthScreen> {
 
   void _submitAuthForm(String email, String username, String password,
       File image, bool isLogin, BuildContext ctx) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('visited', true);
+
     UserCredential userCredential;
     try {
       setState(() {
@@ -87,11 +91,9 @@ class _AuthScreenState extends State<AuthScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 100,
-            height: 100,
-            child: RiveAnimation.asset(
-              'assets/animations/roomie.riv',
-            ),
+            width: 110,
+            height: 110,
+            child: Image.asset('assets/images/logo.png'),
           ),
           AuthForm(_submitAuthForm, _isLoading),
         ],

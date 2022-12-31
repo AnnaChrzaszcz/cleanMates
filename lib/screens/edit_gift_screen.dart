@@ -6,6 +6,10 @@ import 'package:provider/provider.dart';
 class EditGiftScreen extends StatefulWidget {
   static const routeName = '/editGift';
 
+  final String roomId;
+
+  EditGiftScreen({this.roomId});
+
   @override
   _EditGiftScreenState createState() => _EditGiftScreenState();
 }
@@ -53,16 +57,20 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
     if (_isInit) {
       final routeArgs =
           ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      final id = routeArgs['id'];
-      roomId = routeArgs['roomId'];
-      if (id != null) {
-        _editedGift =
-            Provider.of<GiftsProvider>(context, listen: false).findById(id);
-        _initValues = {
-          'giftName': _editedGift.giftName,
-          'points': _editedGift.points.toString(),
-        };
-        print(_initValues);
+      if (routeArgs == null) {
+        roomId = widget.roomId;
+      } else {
+        final id = routeArgs['id'];
+        roomId = routeArgs['roomId'];
+        if (id != null) {
+          _editedGift =
+              Provider.of<GiftsProvider>(context, listen: false).findById(id);
+          _initValues = {
+            'giftName': _editedGift.giftName,
+            'points': _editedGift.points.toString(),
+          };
+          print(_initValues);
+        }
       }
     }
     _isInit = false;

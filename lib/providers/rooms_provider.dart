@@ -393,13 +393,15 @@ class RoomsProvider extends ChangeNotifier {
 
   List<UserActivity> getRoomActivitiesByDate(DateTime date) {
     //POPRAWIONE
+    List<UserActivity> activitiesAtDay = [];
 
-    List<UserActivity> activitiesAtDay = userRoom.roomiesActivites
-        .where((activity) => _compareDates(activity.creationDate, date))
-        .toList();
-
-    activitiesAtDay.sort(((a, b) => b.creationDate.compareTo(a.creationDate)));
-
+    if (userRoom != null) {
+      activitiesAtDay = userRoom.roomiesActivites
+          .where((activity) => _compareDates(activity.creationDate, date))
+          .toList();
+      activitiesAtDay
+          .sort(((a, b) => b.creationDate.compareTo(a.creationDate)));
+    }
     return activitiesAtDay;
   }
 
