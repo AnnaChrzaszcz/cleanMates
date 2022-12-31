@@ -1,6 +1,7 @@
 import 'package:clean_mates_app/models/room.dart';
 import 'package:clean_mates_app/screens/edit_activity_screen.dart';
 import 'package:clean_mates_app/widgets/app_drawer.dart';
+import 'package:clean_mates_app/widgets/fab/custom_add_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
@@ -55,10 +56,8 @@ class ActivitiesScreen extends StatelessWidget {
         title: Text('Activities'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _goToEditActivity(context, myRoom),
-        child: Icon(Icons.add),
-      ),
+      floatingActionButton:
+          CustomAddFab(activityScreen: true, roomId: myRoom.id),
       drawer: AppDrawer(),
       body: FutureBuilder(
         future: _refreshActivities(context, myRoom.id),

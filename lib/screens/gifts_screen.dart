@@ -3,6 +3,7 @@ import 'package:clean_mates_app/providers/gifts_provider.dart';
 import 'package:clean_mates_app/screens/edit_activity_screen.dart';
 import 'package:clean_mates_app/screens/edit_gift_screen.dart';
 import 'package:clean_mates_app/widgets/app_drawer.dart';
+import 'package:clean_mates_app/widgets/fab/custom_add_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
@@ -55,10 +56,13 @@ class GiftsScreen extends StatelessWidget {
         title: Text('Gifts'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _goToNewGift(context, myRoom),
-        child: Icon(Icons.add),
-      ),
+      floatingActionButton:
+          CustomAddFab(activityScreen: false, roomId: myRoom.id),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () => _goToNewGift(context, myRoom),
+      //   backgroundColor: Theme.of(context).colorScheme.primary,
+      //   child: Icon(Icons.add),
+      // ),
       drawer: AppDrawer(),
       body: FutureBuilder(
         future: _refreshGifts(context, myRoom.id),
