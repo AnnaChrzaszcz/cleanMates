@@ -60,14 +60,14 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
       await showDialog<void>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: Text('An error occured'),
-          content: Text("You don't have enought points"),
+          title: const Text('An error occured'),
+          content: const Text("You don't have enought points"),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(ctx).pop();
               },
-              child: Text('Okay'),
+              child: const Text('Okay'),
             )
           ],
         ),
@@ -125,12 +125,9 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
               ),
             ),
           ),
-          if (selectedIndexes.length > 0)
+          if (selectedIndexes.isNotEmpty)
             ElevatedButton(
-              onPressed: selectedIndexes.length <= 0 ? null : () => _buyGifts(),
-              child: _isLoading
-                  ? CircularProgressIndicator()
-                  : Text('Buy (${giftsointsSum} points)'),
+              onPressed: selectedIndexes.isEmpty ? null : () => _buyGifts(),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.resolveWith<Color>(
                   (Set<MaterialState> states) {
@@ -141,6 +138,20 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                   },
                 ),
               ),
+              child: _isLoading
+                  ? const CircularProgressIndicator()
+                  // : Text('Buy (${giftsointsSum} points)'),
+                  : AnimatedSwitcher(
+                      transitionBuilder:
+                          (Widget child, Animation<double> animation) {
+                        return ScaleTransition(scale: animation, child: child);
+                      },
+                      duration: const Duration(milliseconds: 200),
+                      child: Text(
+                        'Buy (${giftsointsSum} points)',
+                        key: ValueKey<int>(giftsointsSum),
+                      ),
+                    ),
             ),
         ],
       ),
