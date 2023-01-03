@@ -63,6 +63,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     // TODO: implement dispose
     super.dispose();
     timelineDate.dispose();
+    roomActivitiesNotifier.dispose();
   }
 
   @override

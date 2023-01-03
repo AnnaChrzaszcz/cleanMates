@@ -261,6 +261,8 @@ class RoomsProvider extends ChangeNotifier {
         'roomieId': userId,
         'creationDate': DateTime.now().toIso8601String()
       }).then((documentSnapshot) {
+        print(documentSnapshot.id);
+        print(userActivity.activityName);
         userRoom.roomiesActivites.add(UserActivity(
             id: documentSnapshot.id,
             activityName: userActivity.activityName,
@@ -293,7 +295,8 @@ class RoomsProvider extends ChangeNotifier {
             points: pointsSum,
             imageUrl: oldRoomie.imageUrl);
         myRoom.roomies[roomieIndex] = updatedRoomie;
-        notifyListeners();
+        getUserRoom(userId);
+        //notifyListeners();
       }); // wrzucic to w try catch?
     });
     // notifyListeners(); // czy to poczeka na ten update?
