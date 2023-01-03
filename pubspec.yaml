@@ -75,6 +75,7 @@ flutter:
     - assets/images/prize.png
     - assets/images/cleaning.png
     - assets/images/myPrize.png
+    - assets/images/logo.png
     - assets/images/money.png
     - assets/animations/roomie.riv
     
