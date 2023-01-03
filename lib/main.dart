@@ -52,42 +52,44 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primaryColor: Color.fromRGBO(167, 34, 110, 1),
-          //primarySwatch: Colors.pink,
-          appBarTheme: AppBarTheme(color: Color.fromRGBO(167, 34, 110, 1)),
-          iconTheme: IconThemeData(color: Color.fromRGBO(47, 149, 153, 1)),
-          dividerColor: Color.fromRGBO(47, 149, 153, 1),
-          snackBarTheme: SnackBarThemeData(
-            backgroundColor: Color.fromRGBO(247, 219, 79, 1),
-            // contentTextStyle: TextStyle(color: Color.fromRGBO(236, 32, 73, 1)),
-            contentTextStyle: TextStyle(color: Colors.black),
-          ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ButtonStyle(
-                // backgroundColor: MaterialStateProperty.all(
-                //   Color.fromRGBO(47, 149, 153, 1),
-                // ),
-                backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.disabled))
-                      return Colors.grey;
-                    return Color.fromRGBO(
-                        47, 149, 153, 1); // Use the component's default.
-                  },
-                ),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        side: BorderSide.none))),
-          ),
-          textButtonTheme: TextButtonThemeData(
+            primaryColor: Color.fromRGBO(167, 34, 110, 1),
+            //primarySwatch: Colors.pink,
+            appBarTheme: AppBarTheme(color: Color.fromRGBO(167, 34, 110, 1)),
+            iconTheme: IconThemeData(color: Color.fromRGBO(47, 149, 153, 1)),
+            dividerColor: Color.fromRGBO(47, 149, 153, 1),
+            snackBarTheme: SnackBarThemeData(
+              backgroundColor: Color.fromRGBO(247, 219, 79, 1),
+              // contentTextStyle: TextStyle(color: Color.fromRGBO(236, 32, 73, 1)),
+              contentTextStyle: TextStyle(color: Colors.black),
+            ),
+            elevatedButtonTheme: ElevatedButtonThemeData(
               style: ButtonStyle(
-            foregroundColor:
-                MaterialStateProperty.all(Color.fromRGBO(47, 149, 153, 1)),
-          )),
-          //Color.fromRGBO(247, 219, 79, 1)
-          accentColor: Color.fromRGBO(47, 149, 153, 1),
-        ),
+                  // backgroundColor: MaterialStateProperty.all(
+                  //   Color.fromRGBO(47, 149, 153, 1),
+                  // ),
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.disabled))
+                        return Colors.grey;
+                      return Color.fromRGBO(
+                          47, 149, 153, 1); // Use the component's default.
+                    },
+                  ),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          side: BorderSide.none))),
+            ),
+            textButtonTheme: TextButtonThemeData(
+                style: ButtonStyle(
+              foregroundColor:
+                  MaterialStateProperty.all(Color.fromRGBO(47, 149, 153, 1)),
+            )),
+            //Color.fromRGBO(247, 219, 79, 1)
+            accentColor: Color.fromRGBO(47, 149, 153, 1),
+            colorScheme: ThemeData().colorScheme.copyWith(
+                  primary: Color.fromRGBO(47, 149, 153, 1),
+                )),
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, userSnapshot) {

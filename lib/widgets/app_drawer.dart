@@ -19,21 +19,22 @@ class AppDrawer extends StatelessWidget {
         children: [
           AppBar(
             actions: [
-              Container(
-                margin: EdgeInsets.only(right: 5, bottom: 10),
-                child: CircleAvatar(
-                  backgroundColor: Color.fromRGBO(247, 219, 79, 1),
-                  radius: 30,
-                  child: CircleAvatar(
-                    backgroundImage: FirebaseAuth.instance.currentUser != null
-                        ? NetworkImage(
-                            FirebaseAuth.instance.currentUser.photoURL)
-                        : Icons.error,
-                  ),
-                ),
-              )
+              FirebaseAuth.instance.currentUser != null
+                  ? Container(
+                      margin: EdgeInsets.only(right: 5, bottom: 10),
+                      child: CircleAvatar(
+                        backgroundColor: Color.fromRGBO(247, 219, 79, 1),
+                        radius: 30,
+                        child: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                FirebaseAuth.instance.currentUser.photoURL)),
+                      ),
+                    )
+                  : Container()
             ],
-            title: Text(FirebaseAuth.instance.currentUser.displayName),
+            title: Text(FirebaseAuth.instance.currentUser != null
+                ? FirebaseAuth.instance.currentUser.displayName
+                : ''),
             automaticallyImplyLeading: false,
           ),
           ListTile(
@@ -94,6 +95,7 @@ class AppDrawer extends StatelessWidget {
               FirebaseAuth.instance.signOut();
             },
           ),
+          if (room != null) const Divider(),
         ],
       ),
     );

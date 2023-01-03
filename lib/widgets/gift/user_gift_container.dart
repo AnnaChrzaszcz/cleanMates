@@ -69,7 +69,7 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: 2,
+      flex: MediaQuery.of(context).size.height < 680.0 ? 3 : 2,
       child: Padding(
         padding: EdgeInsets.all(8),
         child: DefaultTabController(
