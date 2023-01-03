@@ -43,8 +43,10 @@ class SaveActivityScreen extends StatelessWidget {
                             .activities.length ==
                         0
                     ? Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 30, horizontal: 10),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 30, horizontal: 30),
                         width: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,

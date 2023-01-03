@@ -78,17 +78,20 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       {
         'title': 'Save Activity',
         'routeName': SaveActivityScreen.routeName,
-        'imagePath': 'assets/images/cleaning.png'
+        'imagePath': 'assets/images/cleaning.png',
+        'color': Color.fromRGBO(236, 32, 73, 0.5),
       },
       {
         'title': 'Money balance',
         'routeName': '', //ExchangeToPrize.routeName,
-        'imagePath': 'assets/images/money.png'
+        'imagePath': 'assets/images/money.png',
+        'color': Color.fromRGBO(167, 34, 110, 0.5),
       },
       {
         'title': 'Buy gift',
         'routeName': BuyGiftScreen.routeName,
-        'imagePath': 'assets/images/myPrize.png'
+        'imagePath': 'assets/images/myPrize.png',
+        'color': Color.fromRGBO(247, 219, 79, 0.5),
       },
       {
         'title': 'Stats',
@@ -136,10 +139,9 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     );
   }
 
-  Widget userDashboardContainer(points, List<Map<String, String>> actions,
+  Widget userDashboardContainer(points, List<Map<String, Object>> actions,
       Room room, String userId, bool isRoomie) {
     return Container(
-      decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
       padding: const EdgeInsets.symmetric(horizontal: 2),
       margin: EdgeInsets.all(8),
       width: double.infinity,
@@ -216,30 +218,44 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),
-                    ActionItem(
-                      'Save Activity',
-                      SaveActivityScreen.routeName,
-                      'assets/images/cleaning.png',
-                      userId,
-                    ),
+                    Expanded(
+                      child: GridView(
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 200,
+                          childAspectRatio: 3 / 3,
+                          crossAxisSpacing: 1,
+                          mainAxisSpacing: 1,
+                        ),
+                        children: [
+                          ActionItem(
+                            'Save Activity',
+                            SaveActivityScreen.routeName,
+                            'assets/images/cleaning.png',
+                            userId,
+                            Color.fromRGBO(236, 32, 73, 0.5),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
             ),
 
           if (!isRoomie)
-            Container(
-              height: 460,
+            Expanded(
+              flex: 3,
+              //height: 460,
               child: GridView(
                 padding: const EdgeInsets.all(10),
                 children: actions
                     .map(
                       (action) => ActionItem(
-                        action['title'] as String,
-                        action['routeName'] as String,
-                        action['imagePath'] as String,
-                        userId,
-                      ),
+                          action['title'] as String,
+                          action['routeName'] as String,
+                          action['imagePath'] as String,
+                          userId,
+                          action['color'] as Color),
                     )
                     .toList(),
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
