@@ -90,9 +90,7 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
           ),
           Expanded(
             child: Container(
-              height: 600,
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-              //decoration: BoxDecoration(border: Border.all(color: Colors.pink)),
               child: ListView.builder(
                 itemCount: widget.activities.length,
                 itemBuilder: ((context, index) => Column(
