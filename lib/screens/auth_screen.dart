@@ -87,16 +87,27 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 110,
-            height: 110,
-            child: Image.asset('assets/images/logo.png'),
-          ),
-          AuthForm(_submitAuthForm, _isLoading),
-        ],
+      body: Container(
+        margin: EdgeInsets.symmetric(vertical: 15),
+        height: MediaQuery.of(context).size.height,
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.height / 6,
+                    height: MediaQuery.of(context).size.height / 6,
+                    child: Image.asset('assets/images/logo.png'),
+                  ),
+                  AuthForm(_submitAuthForm, _isLoading)
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

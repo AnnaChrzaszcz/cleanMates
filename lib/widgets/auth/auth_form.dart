@@ -86,75 +86,73 @@ class _AuthFormState extends State<AuthForm>
         //color: Colors.grey[200],
         shadowColor: Color.fromARGB(255, 255, 247, 22),
         margin: EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                //mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  //if (!_isLogin)
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                    constraints: BoxConstraints(
-                      minHeight: !_isLogin ? 60 : 0,
-                      maxHeight: !_isLogin ? 140 : 0,
-                    ),
-                    child: FadeTransition(
-                      opacity: _opacityAnimation,
-                      child: UserImagePicker(_pickedImage),
-                    ),
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                //if (!_isLogin)
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeIn,
+                  constraints: BoxConstraints(
+                    minHeight: !_isLogin ? 60 : 0,
+                    maxHeight: !_isLogin ? 140 : 0,
                   ),
-                  TextFormField(
-                    key: ValueKey('email'),
-                    validator: (value) {
-                      if (value.isEmpty || !value.contains('@')) {
-                        return 'Please enter a valid email address.';
-                      }
-                      return null;
-                    },
-                    cursorColor: Theme.of(context).accentColor,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                        labelText: 'Email address',
-                        fillColor: Colors.pink,
-                        hoverColor: Colors.pink,
-                        focusColor: Colors.pink),
-                    onSaved: (value) {
-                      _userEmail = value;
-                    },
+                  child: FadeTransition(
+                    opacity: _opacityAnimation,
+                    child: UserImagePicker(_pickedImage),
                   ),
-                  AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                    constraints: BoxConstraints(
-                      minHeight: !_isLogin ? 50 : 0,
-                      maxHeight: !_isLogin ? 90 : 0,
-                    ),
-                    child: FadeTransition(
-                      opacity: _opacityAnimation,
-                      child: TextFormField(
-                        key: ValueKey('Username'),
-                        validator: (value) {
-                          if (!_isLogin &&
-                              (value.isEmpty || value.length < 4)) {
-                            return 'Please enter at least 4 characters';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Username',
-                        ),
-                        onSaved: (value) {
-                          _userName = value;
-                        },
+                ),
+                TextFormField(
+                  key: ValueKey('email'),
+                  validator: (value) {
+                    if (value.isEmpty || !value.contains('@')) {
+                      return 'Please enter a valid email address.';
+                    }
+                    return null;
+                  },
+                  cursorColor: Theme.of(context).accentColor,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                      labelText: 'Email address',
+                      fillColor: Colors.pink,
+                      hoverColor: Colors.pink,
+                      focusColor: Colors.pink),
+                  onSaved: (value) {
+                    _userEmail = value;
+                  },
+                ),
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeIn,
+                  constraints: BoxConstraints(
+                    minHeight: !_isLogin ? 50 : 0,
+                    maxHeight: !_isLogin ? 90 : 0,
+                  ),
+                  child: FadeTransition(
+                    opacity: _opacityAnimation,
+                    child: TextFormField(
+                      key: ValueKey('Username'),
+                      validator: (value) {
+                        if (!_isLogin && (value.isEmpty || value.length < 4)) {
+                          return 'Please enter at least 4 characters';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Username',
                       ),
+                      onSaved: (value) {
+                        _userName = value;
+                      },
                     ),
                   ),
-                  TextFormField(
+                ),
+                Expanded(
+                  child: TextFormField(
                     key: ValueKey('Password'),
                     validator: (value) {
                       if (value.isEmpty || value.length < 7) {
@@ -176,52 +174,52 @@ class _AuthFormState extends State<AuthForm>
                       }
                     },
                   ),
-                  if (!_isLogin)
-                    SizedBox(
-                      height: 12,
-                    ),
-                  if (!_isLogin)
-                    PasswordStrengthChecker(
-                      strength: passNotifier,
-                      configuration: PasswordStrengthCheckerConfiguration(
-                        borderColor: Colors.grey[100],
-                      ),
-                    ),
+                ),
+                if (!_isLogin)
                   SizedBox(
                     height: 12,
                   ),
-                  if (widget.isLoading) const CircularProgressIndicator(),
-                  if (!widget.isLoading)
-                    ElevatedButton(
-                      onPressed: _trySubmit,
-                      child: Text(
-                        _isLogin ? 'Login' : 'Signup',
-                        style: TextStyle(fontSize: 15),
-                      ),
+                if (!_isLogin)
+                  PasswordStrengthChecker(
+                    strength: passNotifier,
+                    configuration: PasswordStrengthCheckerConfiguration(
+                      borderColor: Colors.grey[100],
                     ),
-                  if (!widget.isLoading)
-                    TextButton(
-                      style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all(
-                            Color.fromRGBO(47, 149, 153, 1)
-                            // Color.fromRGBO(242, 107, 56, 1),
-                            //  Color.fromRGBO(236, 32, 73, 1),
-                            ),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _isLogin = !_isLogin;
-                          _isLogin
-                              ? _animationController.reverse()
-                              : _animationController.forward();
-                        });
-                      },
-                      child: Text(_isLogin
-                          ? 'Create new account'
-                          : 'I already have an account'),
+                  ),
+                SizedBox(
+                  height: 12,
+                ),
+                if (widget.isLoading) const CircularProgressIndicator(),
+                if (!widget.isLoading)
+                  ElevatedButton(
+                    onPressed: _trySubmit,
+                    child: Text(
+                      _isLogin ? 'Login' : 'Signup',
+                      style: TextStyle(fontSize: 15),
                     ),
-                ],
-              ),
+                  ),
+                if (!widget.isLoading)
+                  TextButton(
+                    style: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all(
+                          Color.fromRGBO(47, 149, 153, 1)
+                          // Color.fromRGBO(242, 107, 56, 1),
+                          //  Color.fromRGBO(236, 32, 73, 1),
+                          ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isLogin = !_isLogin;
+                        _isLogin
+                            ? _animationController.reverse()
+                            : _animationController.forward();
+                      });
+                    },
+                    child: Text(_isLogin
+                        ? 'Create new account'
+                        : 'I already have an account'),
+                  ),
+              ],
             ),
           ),
         ),
