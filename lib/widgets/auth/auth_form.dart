@@ -46,22 +46,27 @@ class _AuthFormState extends State<AuthForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    final deviceSize = MediaQuery.of(context).size;
+    return Container(
+      height: _isLogin
+          ? deviceSize.height * (deviceSize.height < 680 ? 0.45 : 0.35)
+          : deviceSize.height * (deviceSize.height < 680 ? 0.75 : 0.62),
       child: Card(
         elevation: 15,
         //color: Colors.grey[200],
         shadowColor: Color.fromARGB(255, 255, 247, 22),
         margin: EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (!_isLogin) UserImagePicker(_pickedImage),
-                  TextFormField(
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (!_isLogin)
+                  Expanded(flex: 2, child: UserImagePicker(_pickedImage)),
+                Expanded(
+                  child: TextFormField(
                     key: ValueKey('email'),
                     validator: (value) {
                       if (value.isEmpty || !value.contains('@')) {
@@ -77,8 +82,10 @@ class _AuthFormState extends State<AuthForm> {
                       _userEmail = value;
                     },
                   ),
-                  if (!_isLogin)
-                    TextFormField(
+                ),
+                if (!_isLogin)
+                  Expanded(
+                    child: TextFormField(
                       key: ValueKey('Username'),
                       validator: (value) {
                         if (value.isEmpty || value.length < 4) {
@@ -93,7 +100,9 @@ class _AuthFormState extends State<AuthForm> {
                         _userName = value;
                       },
                     ),
-                  TextFormField(
+                  ),
+                Expanded(
+                  child: TextFormField(
                     key: ValueKey('Password'),
                     validator: (value) {
                       if (value.isEmpty || value.length < 7) {
@@ -109,38 +118,38 @@ class _AuthFormState extends State<AuthForm> {
                       _userPassword = value;
                     },
                   ),
-                  SizedBox(
-                    height: 12,
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                if (widget.isLoading) CircularProgressIndicator(),
+                if (!widget.isLoading)
+                  ElevatedButton(
+                    onPressed: _trySubmit,
+                    child: Text(
+                      _isLogin ? 'Login' : 'Signup',
+                      style: TextStyle(fontSize: 15),
+                    ),
                   ),
-                  if (widget.isLoading) CircularProgressIndicator(),
-                  if (!widget.isLoading)
-                    ElevatedButton(
-                      onPressed: _trySubmit,
-                      child: Text(
-                        _isLogin ? 'Login' : 'Signup',
-                        style: TextStyle(fontSize: 15),
-                      ),
+                if (!widget.isLoading)
+                  TextButton(
+                    style: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all(
+                          Color.fromRGBO(47, 149, 153, 1)
+                          // Color.fromRGBO(242, 107, 56, 1),
+                          //  Color.fromRGBO(236, 32, 73, 1),
+                          ),
                     ),
-                  if (!widget.isLoading)
-                    TextButton(
-                      style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all(
-                            Color.fromRGBO(47, 149, 153, 1)
-                            // Color.fromRGBO(242, 107, 56, 1),
-                            //  Color.fromRGBO(236, 32, 73, 1),
-                            ),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _isLogin = !_isLogin;
-                        });
-                      },
-                      child: Text(_isLogin
-                          ? 'Create new account'
-                          : 'I already have an account'),
-                    ),
-                ],
-              ),
+                    onPressed: () {
+                      setState(() {
+                        _isLogin = !_isLogin;
+                      });
+                    },
+                    child: Text(_isLogin
+                        ? 'Create new account'
+                        : 'I already have an account'),
+                  ),
+              ],
             ),
           ),
         ),
