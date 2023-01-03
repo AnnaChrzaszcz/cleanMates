@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clean_mates_app/screens/buy_gift_screen.dart';
 import 'package:clean_mates_app/screens/history_screen.dart';
 import 'package:clean_mates_app/widgets/fab/action_button.dart';
@@ -80,30 +81,44 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       {
         'title': 'Save Activity',
         'routeName': SaveActivityScreen.routeName,
-        'imagePath': 'assets/images/cleaning.png'
+        'imagePath': 'assets/images/cleaning.png',
+        'color': Color.fromRGBO(236, 32, 73, 0.5),
       },
       {
         'title': 'Money balance',
         'routeName': '', //ExchangeToPrize.routeName,
-        'imagePath': 'assets/images/money.png'
+        'imagePath': 'assets/images/money.png',
+        'color': Color.fromRGBO(167, 34, 110, 0.5),
       },
       {
         'title': 'Buy gift',
         'routeName': BuyGiftScreen.routeName,
-        'imagePath': 'assets/images/myPrize.png'
+        'imagePath': 'assets/images/myPrize.png',
+        'color': Color.fromRGBO(247, 219, 79, 0.5),
       },
       {
         'title': 'Stats',
         'routeName': '', //StatsScreen.routeName,
-        'imagePath': 'assets/images/stats.png'
+        'imagePath': 'assets/images/stats.png',
+        'color': Color.fromRGBO(242, 107, 56, 0.5),
       },
     ];
 
     return Scaffold(
       //PRZY PIERWSZYM LOGOWANIU COS NIE DZIALA
       appBar: AppBar(
-        //title: Text(name),
-        title: Text(roomie.userName ?? ''),
+        //title: Text(roomie.userName ?? ''),
+        title: DefaultTextStyle(
+          style: const TextStyle(
+            fontSize: 20.0,
+          ),
+          child: AnimatedTextKit(
+            animatedTexts: [
+              WavyAnimatedText(roomie.userName ?? ''),
+            ],
+            isRepeatingAnimation: false,
+          ),
+        ),
       ),
       drawer: AppDrawer(),
       floatingActionButton: ExpandableFab(
@@ -159,7 +174,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     );
   }
 
-  Widget userDashboardContainer(points, List<Map<String, String>> actions,
+  Widget userDashboardContainer(points, List<Map<String, Object>> actions,
       Room room, String userId, bool isRoomie) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -207,6 +222,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                       SaveActivityScreen.routeName,
                       'assets/images/cleaning.png',
                       userId,
+                      Color.fromRGBO(47, 149, 153, 1),
                     ),
                   ],
                 ),
@@ -221,11 +237,11 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                 children: actions
                     .map(
                       (action) => ActionItem(
-                        action['title'] as String,
-                        action['routeName'] as String,
-                        action['imagePath'] as String,
-                        userId,
-                      ),
+                          action['title'] as String,
+                          action['routeName'] as String,
+                          action['imagePath'] as String,
+                          userId,
+                          action['color'] as Color),
                     )
                     .toList(),
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
