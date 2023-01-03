@@ -84,7 +84,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   FlutterDatePickerTimeline(
                     startDate: DateTime.now().subtract(const Duration(days: 7)),
                     selectedItemWidth: 140,
-                    endDate: DateTime.now().add(const Duration(days: 1)),
+                    endDate: DateTime.now(),
                     itemHeight: 60.0,
                     selectedItemBackgroundColor:
                         Theme.of(context).iconTheme.color,
