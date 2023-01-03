@@ -21,7 +21,7 @@ class UserRoomScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var userId = FirebaseAuth.instance.currentUser.uid;
-    final room = Provider.of<RoomsProvider>(context).myRoom;
+    Room room = Provider.of<RoomsProvider>(context).myRoom;
     List<Roomie> roomies = [];
     if (room != null) {
       roomies = [
@@ -38,9 +38,8 @@ class UserRoomScreen extends StatelessWidget {
             appBar: AppBar(title: Text('Your room')),
             drawer: AppDrawer(), // jak to zastapic strzalka do tylu
             body: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 18),
               width: double.infinity,
-              height: 600,
-              decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
               child: Column(
                 children: [
                   Text(
