@@ -217,13 +217,25 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),
-                    ActionItem(
-                      'Save Activity',
-                      SaveActivityScreen.routeName,
-                      'assets/images/cleaning.png',
-                      userId,
-                      Color.fromRGBO(47, 149, 153, 1),
-                    ),
+                    Expanded(
+                      child: GridView(
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 200,
+                          childAspectRatio: 3 / 3,
+                          crossAxisSpacing: 1,
+                          mainAxisSpacing: 1,
+                        ),
+                        children: [
+                          ActionItem(
+                            'Save Activity',
+                            SaveActivityScreen.routeName,
+                            'assets/images/cleaning.png',
+                            userId,
+                            Color.fromRGBO(236, 32, 73, 0.5),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
