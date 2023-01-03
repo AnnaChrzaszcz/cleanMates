@@ -84,6 +84,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               child: Column(
                 children: [
                   Expanded(
+                    flex: 2,
                     child: Card(
                       margin: const EdgeInsets.all(8),
                       elevation: 8,
@@ -113,7 +114,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   ),
                   if (roomActivities.isNotEmpty)
                     Expanded(
-                      flex: 10,
+                      flex: 15,
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         child: Timeline.tileBuilder(
@@ -139,7 +140,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     )
                                   : roomActivities[index - 1].roomieId == userId
                                       ? Text(
-                                          '${DateFormat('HH:mm').format(roomActivities[index - 1].creationDate)}  ${roomActivities[index - 1].activityName}')
+                                          '${DateFormat('HH:mm').format(roomActivities[index - 1].creationDate)}  ${roomActivities[index - 1].activityName}',
+                                          textAlign: TextAlign.end,
+                                        )
                                       : Text(''),
                             ),
                             contentsBuilder: (context, index) => Padding(
@@ -166,7 +169,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     ),
                   if (roomActivities.length == 0)
                     const Expanded(
-                      flex: 9,
+                      flex: 15,
                       child: Center(
                         child: Text('No activities during selected day'),
                       ),
