@@ -54,7 +54,7 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
             child: Text(widget.yourBought.length.toString()),
             backgroundColor: Theme.of(context).dividerColor,
           ),
-          title: Text('Bught gifts'),
+          title: Text('Bought gifts'),
           trailing: IconButton(
             icon: Icon(_boughtExpanded ? Icons.expand_less : Icons.expand_more),
             onPressed: () {
