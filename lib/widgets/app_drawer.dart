@@ -1,5 +1,6 @@
 import 'package:clean_mates_app/screens/activities_screen.dart';
 import 'package:clean_mates_app/screens/gifts_screen.dart';
+import 'package:clean_mates_app/screens/user_profile_screen.dart';
 import 'package:clean_mates_app/screens/user_room_screen.dart';
 
 import '../screens/user_dashboard_screen.dart';
@@ -11,7 +12,7 @@ import 'package:provider/provider.dart';
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
+    User user = FirebaseAuth.instance.currentUser;
     final room = Provider.of<RoomsProvider>(context, listen: false).myRoom;
     return Drawer(
       width: 260,
@@ -83,6 +84,17 @@ class AppDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.of(context)
                     .pushReplacementNamed(GiftsScreen.routeName);
+              },
+            ),
+          if (room != null) const Divider(),
+          if (room != null)
+            ListTile(
+              leading: Icon(Icons.card_giftcard_outlined),
+              title: Text('Profile'), //TYLKO JESLI JEST ROOM
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed(
+                    UserProfile.routeName,
+                    arguments: {'user': user});
               },
             ),
           if (room != null) const Divider(),
