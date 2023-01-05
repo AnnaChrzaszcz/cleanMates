@@ -80,7 +80,7 @@ class _AuthFormState extends State<AuthForm>
       curve: Curves.easeIn,
       height: _isLogin
           ? deviceSize.height * (deviceSize.height < 680 ? 0.45 : 0.35)
-          : deviceSize.height * (deviceSize.height < 680 ? 0.8 : 0.62),
+          : deviceSize.height * (deviceSize.height < 680 ? 0.80 : 0.62),
       child: Card(
         elevation: 15,
         //color: Colors.grey[200],
@@ -94,16 +94,18 @@ class _AuthFormState extends State<AuthForm>
               mainAxisSize: MainAxisSize.min,
               children: [
                 //if (!_isLogin)
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeIn,
-                  constraints: BoxConstraints(
-                    minHeight: !_isLogin ? 60 : 0,
-                    maxHeight: !_isLogin ? 140 : 0,
-                  ),
-                  child: FadeTransition(
-                    opacity: _opacityAnimation,
-                    child: UserImagePicker(_pickedImage),
+                Expanded(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                    constraints: BoxConstraints(
+                      minHeight: !_isLogin ? 60 : 0,
+                      maxHeight: !_isLogin ? 140 : 0,
+                    ),
+                    child: FadeTransition(
+                      opacity: _opacityAnimation,
+                      child: UserImagePicker(_pickedImage),
+                    ),
                   ),
                 ),
                 TextFormField(
@@ -151,30 +153,30 @@ class _AuthFormState extends State<AuthForm>
                     ),
                   ),
                 ),
-                Expanded(
-                  child: TextFormField(
-                    key: ValueKey('Password'),
-                    validator: (value) {
-                      if (value.isEmpty || value.length < 7) {
-                        return 'Password must be at least 7 characters long';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                    ),
-                    obscureText: true,
-                    onSaved: (value) {
-                      _userPassword = value;
-                    },
-                    onChanged: (value) {
-                      if (!_isLogin) {
-                        passNotifier.value =
-                            PasswordStrength.calculate(text: value);
-                      }
-                    },
+
+                TextFormField(
+                  key: ValueKey('Password'),
+                  validator: (value) {
+                    if (value.isEmpty || value.length < 7) {
+                      return 'Password must be at least 7 characters long';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Password',
                   ),
+                  obscureText: true,
+                  onSaved: (value) {
+                    _userPassword = value;
+                  },
+                  onChanged: (value) {
+                    if (!_isLogin) {
+                      passNotifier.value =
+                          PasswordStrength.calculate(text: value);
+                    }
+                  },
                 ),
+
                 if (!_isLogin)
                   SizedBox(
                     height: 12,
@@ -187,9 +189,18 @@ class _AuthFormState extends State<AuthForm>
                     ),
                   ),
                 SizedBox(
-                  height: 12,
+                  height: 4,
                 ),
-                if (widget.isLoading) const CircularProgressIndicator(),
+                if (widget.isLoading)
+                  ElevatedButton(
+                    onPressed: null,
+                    child: CircularProgressIndicator(),
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.resolveWith<Color>(
+                      (states) => Colors.white,
+                    )),
+                  ),
                 if (!widget.isLoading)
                   ElevatedButton(
                     onPressed: _trySubmit,
