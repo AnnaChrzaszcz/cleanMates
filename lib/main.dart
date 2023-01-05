@@ -8,6 +8,7 @@ import 'package:clean_mates_app/screens/gifts_screen.dart';
 import 'package:clean_mates_app/screens/history_screen.dart';
 import 'package:clean_mates_app/screens/save_activity_screen.dart';
 import 'package:clean_mates_app/screens/user_dashboard_screen.dart';
+import 'package:clean_mates_app/screens/user_profile_screen.dart';
 import 'package:clean_mates_app/screens/user_room_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -110,6 +111,7 @@ class MyApp extends StatelessWidget {
           SaveActivityScreen.routeName: (context) => SaveActivityScreen(),
           BuyGiftScreen.routeName: (context) => BuyGiftScreen(),
           HistoryScreen.routeName: (context) => HistoryScreen(),
+          UserProfile.routeName: (context) => UserProfile(),
         },
       ),
     );
