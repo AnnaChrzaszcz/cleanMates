@@ -59,6 +59,7 @@ class ActivitiesScreen extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: () => _goToEditActivity(context, myRoom),
         child: Icon(Icons.add),
       ),

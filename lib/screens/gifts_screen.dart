@@ -59,6 +59,7 @@ class GiftsScreen extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: () => _goToNewGift(context, myRoom),
         child: Icon(Icons.add),
       ),
