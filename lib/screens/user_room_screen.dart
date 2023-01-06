@@ -17,7 +17,9 @@ class UserRoomScreen extends StatelessWidget {
   void _leaveRoom(Room actualRoom, BuildContext ctx) {
     Provider.of<RoomsProvider>(ctx, listen: false)
         .leaveRoom(actualRoom.id)
-        .then((_) {});
+        .then((_) {
+      print('opuszczam poko');
+    });
   }
 
   @override
