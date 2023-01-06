@@ -2,7 +2,9 @@ import 'package:clean_mates_app/models/userGift.dart';
 import 'package:clean_mates_app/screens/edit_gift_screen.dart';
 import 'package:clean_mates_app/screens/gifts_screen.dart';
 import 'package:clean_mates_app/widgets/gift/user_gift_container.dart';
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:lottie/lottie.dart';
+import 'package:rive/rive.dart';
 
 import '../widgets/gift/buy_gift_container.dart';
 import 'package:flutter/material.dart';
@@ -84,41 +86,65 @@ class BuyGiftScreen extends StatelessWidget {
                               )
                             ],
                           ),
-                          body: Column(
-                            children: [
-                              gitsData.gifts.length == 0
-                                  ? Expanded(
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 20, horizontal: 10),
-                                        width: double.infinity,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              'You need at least one gift in your dictionary',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6,
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            TextButton(
-                                                onPressed: () => Navigator.of(
-                                                        context)
-                                                    .pushReplacementNamed(
-                                                        GiftsScreen.routeName),
-                                                child: Text(
-                                                    'Go to gift dictionary'))
-                                          ],
+                          body: CustomRefreshIndicator(
+                            builder: MaterialIndicatorDelegate(
+                              builder: (context, controller) {
+                                return const CircleAvatar(
+                                  radius: 55,
+                                  backgroundColor:
+                                      Color.fromRGBO(47, 149, 153, 1),
+                                  child: RiveAnimation.asset(
+                                    'assets/animations/indicator.riv',
+                                  ),
+                                );
+                              },
+                            ),
+                            onRefresh: () {
+                              _refreshGifts(context, myRoom.id);
+                            },
+                            child: Column(
+                              children: [
+                                gitsData.gifts.length == 0
+                                    ? Expanded(
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 20, horizontal: 10),
+                                          width: double.infinity,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                'You need at least one gift in your dictionary',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline6,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.of(context)
+                                                          .pushReplacementNamed(
+                                                              GiftsScreen
+                                                                  .routeName),
+                                                  child: Text(
+                                                      'Go to gift dictionary'))
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  : BuyGiftContainer(gitsData.gifts, userId),
-                              UserGiftContainer(userId, roomieId, yourUsername,
-                                  roomieUsername, userGifts, roomieGifts)
-                            ],
+                                      )
+                                    : BuyGiftContainer(gitsData.gifts, userId),
+                                UserGiftContainer(
+                                  userId,
+                                  roomieId,
+                                  yourUsername,
+                                  roomieUsername,
+                                  userGifts,
+                                  roomieGifts,
+                                )
+                              ],
+                            ),
                           ),
                         )),
                   )));
