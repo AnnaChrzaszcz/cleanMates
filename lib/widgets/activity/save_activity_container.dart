@@ -1,8 +1,10 @@
 import 'dart:ffi';
 
 import 'package:clean_mates_app/models/userActivity.dart';
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:rive/rive.dart';
 import '../../models/activity.dart';
 import '../../providers/rooms_provider.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +12,9 @@ import 'package:provider/provider.dart';
 class SaveActivityContainer extends StatefulWidget {
   final List<Activity> activities;
   final String userId;
-  SaveActivityContainer(@required this.activities, @required this.userId);
+  Function refreshActovoties;
+  SaveActivityContainer(@required this.activities, @required this.userId,
+      @required this.refreshActovoties);
 
   @override
   _SaveActivityContainerState createState() => _SaveActivityContainerState();
@@ -96,46 +100,60 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
             ),
           ),
           Expanded(
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 8),
-              child: ListView.builder(
-                itemCount: widget.activities.length,
-                itemBuilder: ((context, index) => Column(
-                      children: [
-                        CheckboxListTile(
-                          title: Text(
-                            widget.activities[index].activityName,
-                            style: TextStyle(),
+            child: CustomRefreshIndicator(
+              builder: MaterialIndicatorDelegate(
+                builder: (context, controller) {
+                  return const CircleAvatar(
+                    radius: 55,
+                    backgroundColor: Color.fromRGBO(47, 149, 153, 1),
+                    child: RiveAnimation.asset(
+                      'assets/animations/indicator.riv',
+                    ),
+                  );
+                },
+              ),
+              onRefresh: () => widget.refreshActovoties(),
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 8),
+                child: ListView.builder(
+                  itemCount: widget.activities.length,
+                  itemBuilder: ((context, index) => Column(
+                        children: [
+                          CheckboxListTile(
+                            title: Text(
+                              widget.activities[index].activityName,
+                              style: TextStyle(),
+                            ),
+                            secondary: CircleAvatar(
+                              radius: 20,
+                              backgroundColor: selectedIndexes.contains(index)
+                                  ? Theme.of(context).primaryColor
+                                  : Theme.of(context).dividerColor,
+                              foregroundColor: Colors.white,
+                              child: Text('${widget.activities[index].points}'),
+                            ),
+                            value: selectedIndexes.contains(index),
+                            onChanged: (_) {
+                              if (selectedIndexes.contains(index)) {
+                                setState(() {
+                                  selectedIndexes.remove(index);
+                                  activitesPointsSum -=
+                                      widget.activities[index].points;
+                                });
+                              } else {
+                                setState(() {
+                                  selectedIndexes.add(index);
+                                  activitesPointsSum +=
+                                      widget.activities[index].points;
+                                });
+                              }
+                            },
+                            activeColor: Theme.of(context).primaryColor,
                           ),
-                          secondary: CircleAvatar(
-                            radius: 20,
-                            backgroundColor: selectedIndexes.contains(index)
-                                ? Theme.of(context).primaryColor
-                                : Theme.of(context).dividerColor,
-                            foregroundColor: Colors.white,
-                            child: Text('${widget.activities[index].points}'),
-                          ),
-                          value: selectedIndexes.contains(index),
-                          onChanged: (_) {
-                            if (selectedIndexes.contains(index)) {
-                              setState(() {
-                                selectedIndexes.remove(index);
-                                activitesPointsSum -=
-                                    widget.activities[index].points;
-                              });
-                            } else {
-                              setState(() {
-                                selectedIndexes.add(index);
-                                activitesPointsSum +=
-                                    widget.activities[index].points;
-                              });
-                            }
-                          },
-                          activeColor: Theme.of(context).primaryColor,
-                        ),
-                        Divider()
-                      ],
-                    )),
+                          Divider()
+                        ],
+                      )),
+                ),
               ),
             ),
           ),
