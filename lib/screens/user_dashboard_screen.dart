@@ -5,6 +5,8 @@ import 'package:clean_mates_app/screens/buy_gift_screen.dart';
 import 'package:clean_mates_app/screens/history_screen.dart';
 import 'package:clean_mates_app/widgets/fab/action_button.dart';
 import 'package:clean_mates_app/widgets/fab/expandable_fab.dart';
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
+import 'package:rive/rive.dart';
 
 import '../screens/save_activity_screen.dart';
 import '../widgets/app_drawer.dart';
@@ -40,7 +42,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
 
   void _createdRoom() {}
 
-  Future<void> _tryGetYourRoom() async {
+  Future<void> _refreshRoom() async {
     await Provider.of<RoomsProvider>(context, listen: false)
         .getUserRoom(roomie.id);
   }
@@ -143,7 +145,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         ],
       ),
       body: FutureBuilder(
-        future: _tryGetYourRoom(),
+        future: _refreshRoom(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -244,23 +246,37 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
             Expanded(
               flex: 3,
               //height: 460,
-              child: GridView(
-                padding: const EdgeInsets.all(10),
-                children: actions
-                    .map(
-                      (action) => ActionItem(
-                          action['title'] as String,
-                          action['routeName'] as String,
-                          action['imagePath'] as String,
-                          userId,
-                          action['color'] as Color),
-                    )
-                    .toList(),
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 200,
-                  childAspectRatio: 3 / 3,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
+              child: CustomRefreshIndicator(
+                builder: MaterialIndicatorDelegate(
+                  builder: (context, controller) {
+                    return const CircleAvatar(
+                      radius: 55,
+                      backgroundColor: Color.fromRGBO(47, 149, 153, 1),
+                      child: RiveAnimation.asset(
+                        'assets/animations/indicator.riv',
+                      ),
+                    );
+                  },
+                ),
+                onRefresh: _refreshRoom,
+                child: GridView(
+                  padding: const EdgeInsets.all(10),
+                  children: actions
+                      .map(
+                        (action) => ActionItem(
+                            action['title'] as String,
+                            action['routeName'] as String,
+                            action['imagePath'] as String,
+                            userId,
+                            action['color'] as Color),
+                      )
+                      .toList(),
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200,
+                    childAspectRatio: 3 / 3,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                  ),
                 ),
               ),
             ),
