@@ -15,9 +15,12 @@ import '../providers/gifts_provider.dart';
 class BuyGiftScreen extends StatelessWidget {
   static const routeName = '/buyGift';
 
-  Future<void> _refreshGifts(BuildContext context, String roomId) async {
+  Future<void> _refreshGifts(
+      BuildContext context, String roomId, String userId) async {
     await Provider.of<GiftsProvider>(context, listen: false)
         .fetchAndSetData(roomId);
+    await Provider.of<RoomsProvider>(context, listen: false)
+        .getUserRoom(userId);
   }
 
   @override
@@ -60,7 +63,7 @@ class BuyGiftScreen extends StatelessWidget {
             ),
           )
         : FutureBuilder(
-            future: _refreshGifts(context, myRoom.id),
+            future: _refreshGifts(context, myRoom.id, userId),
             builder: ((context, snapshot) => snapshot.connectionState ==
                     ConnectionState.waiting
                 ? Scaffold(
@@ -100,7 +103,7 @@ class BuyGiftScreen extends StatelessWidget {
                               },
                             ),
                             onRefresh: () {
-                              _refreshGifts(context, myRoom.id);
+                              _refreshGifts(context, myRoom.id, userId);
                             },
                             child: Column(
                               children: [
@@ -135,18 +138,22 @@ class BuyGiftScreen extends StatelessWidget {
                                         ),
                                       )
                                     : BuyGiftContainer(gitsData.gifts, userId),
-                                UserGiftContainer(
-                                  userId,
-                                  roomieId,
-                                  yourUsername,
-                                  roomieUsername,
-                                  userGifts,
-                                  roomieGifts,
+                                Consumer<RoomsProvider>(
+                                  builder: (context, roomData, _) {
+                                    print(roomData.myRoom.roomiesGift.length);
+                                    return UserGiftContainer(
+                                        userId,
+                                        roomieId,
+                                        yourUsername,
+                                        roomieUsername,
+                                        roomData.myRoom.roomiesGift);
+                                  },
                                 )
                               ],
                             ),
                           ),
                         )),
-                  )));
+                  )),
+          );
   }
 }

@@ -51,7 +51,10 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
       children: [
         ListTile(
           leading: CircleAvatar(
-            child: Text(widget.yourBought.length.toString()),
+            child: Text(
+              widget.yourBought.length.toString(),
+              style: TextStyle(color: Colors.white),
+            ),
             backgroundColor: Theme.of(context).dividerColor,
           ),
           title: Text('Bought gifts'),
@@ -127,7 +130,8 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
         ListTile(
           title: Text('Recived gifts'),
           leading: CircleAvatar(
-            child: Text(widget.yourRecived.length.toString()),
+            child: Text(widget.yourRecived.length.toString(),
+                style: TextStyle(color: Colors.white)),
             backgroundColor: Theme.of(context).dividerColor,
           ),
           trailing: IconButton(

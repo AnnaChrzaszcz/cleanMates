@@ -9,16 +9,19 @@ class UserGiftContainer extends StatefulWidget {
   final String roomieId;
   final String yourUsername;
   final String roomieUsername;
-  List<UserGift> userGifts;
-  List<UserGift> roomieGifts;
+  List<UserGift> gifts;
+  // List<UserGift> userGifts;
+  // List<UserGift> roomieGifts;
 
   UserGiftContainer(
       @required this.userId,
       @required this.roomieId,
       @required this.yourUsername,
       @required this.roomieUsername,
-      @required this.userGifts,
-      @required this.roomieGifts);
+      @required this.gifts
+      // @required this.userGifts,
+      // @required this.roomieGifts,
+      );
 
   @override
   State<UserGiftContainer> createState() => _UserGiftContainerState();
@@ -27,6 +30,8 @@ class UserGiftContainer extends StatefulWidget {
 class _UserGiftContainerState extends State<UserGiftContainer> {
   var _boughtExpanded = false;
   var _recivedExpanded = false;
+  List<UserGift> userGifts;
+  List<UserGift> roomieGifts;
   List<UserGift> yourRecived;
   List<UserGift> yourBought;
   List<UserGift> roomieRecived;
@@ -35,12 +40,17 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
 
   @override
   void initState() {
-    yourRecived = widget.userGifts.where((gift) => gift.isRealized).toList();
-    yourBought = widget.userGifts.where((gift) => !gift.isRealized).toList();
-    roomieRecived =
-        widget.roomieGifts.where((gift) => gift.isRealized).toList();
-    roomieBought =
-        widget.roomieGifts.where((gift) => !gift.isRealized).toList();
+    print('user gift container');
+    userGifts = widget.gifts
+        .where((roomieGift) => roomieGift.roomieId == widget.userId)
+        .toList();
+    roomieGifts = widget.gifts
+        .where((roomieGift) => roomieGift.roomieId == widget.roomieId)
+        .toList();
+    yourRecived = userGifts.where((gift) => gift.isRealized).toList();
+    yourBought = userGifts.where((gift) => !gift.isRealized).toList();
+    roomieRecived = roomieGifts.where((gift) => gift.isRealized).toList();
+    roomieBought = roomieGifts.where((gift) => !gift.isRealized).toList();
     super.initState();
   }
 
@@ -68,6 +78,10 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
 
   @override
   Widget build(BuildContext context) {
+    // return Text(
+    //   widget.gifts.length.toString(),
+    //   style: TextStyle(fontSize: 40),
+    // );
     return Expanded(
       flex: MediaQuery.of(context).size.height < 680.0 ? 3 : 2,
       child: Padding(
@@ -92,8 +106,30 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
                   child: TabBarView(
                     children: <Widget>[
                       TabBarViewContainer(
-                          yourBought, yourRecived, _receive, widget.userId),
-                      TabBarViewContainer(roomieBought, roomieRecived, _receive,
+                          widget.gifts
+                              .where((roomieGift) =>
+                                  roomieGift.roomieId == widget.userId)
+                              .where((gift) => !gift.isRealized)
+                              .toList(),
+                          widget.gifts
+                              .where((roomieGift) =>
+                                  roomieGift.roomieId == widget.userId)
+                              .where((gift) => gift.isRealized)
+                              .toList(),
+                          _receive,
+                          widget.userId),
+                      TabBarViewContainer(
+                          widget.gifts
+                              .where((roomieGift) =>
+                                  roomieGift.roomieId == widget.roomieId)
+                              .where((gift) => !gift.isRealized)
+                              .toList(),
+                          widget.gifts
+                              .where((roomieGift) =>
+                                  roomieGift.roomieId == widget.roomieId)
+                              .where((gift) => gift.isRealized)
+                              .toList(),
+                          _receive,
                           widget.roomieId),
                     ],
                   ),
