@@ -35,7 +35,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Future<void> _refreshData() async {
     Provider.of<RoomsProvider>(context, listen: false)
         .getUserRoom(userId)
-        .then((value) {
+        .then((room) {
       roomActivitiesNotifier.value =
           Provider.of<RoomsProvider>(context, listen: false)
               .getRoomActivitiesByDate(timelineDate.value);
@@ -55,7 +55,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
     timelineDate = ValueNotifier<DateTime>(DateTime.now());
     roomActivitiesNotifier = ValueNotifier<List<UserActivity>>(
         Provider.of<RoomsProvider>(context, listen: false)
-            .getRoomActivitiesByDate(DateTime.now()));
+            .getRoomActivitiesByDate(timelineDate.value));
+    print(roomActivitiesNotifier.value.length);
   }
 
   @override
@@ -89,7 +90,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     itemHeight: 60.0,
                     selectedItemBackgroundColor:
                         Theme.of(context).iconTheme.color,
-                    initialSelectedDate: DateTime.now(),
+                    initialSelectedDate: timelineDate.value,
                     onSelectedDateChange: (DateTime dateTime) {
                       timelineDate.value = dateTime;
                       roomActivitiesNotifier.value =
