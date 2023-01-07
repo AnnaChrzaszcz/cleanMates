@@ -19,6 +19,7 @@ import '../screens/user_room_screen.dart';
 import '../providers/rooms_provider.dart';
 import 'package:provider/provider.dart';
 import '../models/roomie.dart';
+import 'package:shimmer/shimmer.dart';
 
 class UserDashboardScreen extends StatefulWidget {
   static const String routeName = '/userDashboard';
@@ -84,25 +85,25 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         'title': 'Save Activity',
         'routeName': SaveActivityScreen.routeName,
         'imagePath': 'assets/images/cleaning.png',
-        'color': Color.fromRGBO(236, 32, 73, 0.5),
+        'color': Color.fromRGBO(236, 32, 73, 0.7),
       },
       {
         'title': 'Money balance',
-        'routeName': '', //ExchangeToPrize.routeName,
+        'routeName': 'a', //ExchangeToPrize.routeName,
         'imagePath': 'assets/images/money.png',
-        'color': Color.fromRGBO(167, 34, 110, 0.5),
+        'color': Color.fromRGBO(167, 34, 110, 0.7),
       },
       {
         'title': 'Buy gift',
         'routeName': BuyGiftScreen.routeName,
         'imagePath': 'assets/images/myPrize.png',
-        'color': Color.fromRGBO(247, 219, 79, 0.5),
+        'color': Color.fromRGBO(247, 219, 79, 0.7),
       },
       {
         'title': 'Stats',
-        'routeName': '', //StatsScreen.routeName,
+        'routeName': 'a', //StatsScreen.routeName,
         'imagePath': 'assets/images/stats.png',
-        'color': Color.fromRGBO(242, 107, 56, 0.5),
+        'color': Color.fromRGBO(242, 107, 56, 0.7),
       },
     ];
 
@@ -186,21 +187,55 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Expanded(
-            child: CircleAvatar(
-              radius: 45,
-              backgroundColor: Theme.of(context).primaryColor,
-              foregroundColor: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: FittedBox(
-                  child: Text(
-                    '${points.toString()} pkt',
-                    style: TextStyle(fontSize: 20),
+              flex: 2,
+              child: Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  Shimmer.fromColors(
+                    baseColor: Theme.of(context).primaryColor,
+                    highlightColor: Theme.of(context).colorScheme.primary,
+                    child: CircleAvatar(
+                      radius: 78,
+                      backgroundColor: Theme.of(context).primaryColor,
+                    ),
                   ),
-                ),
+                  CircleAvatar(
+                    radius: 70,
+                    foregroundColor: Theme.of(context).primaryColor,
+                    backgroundColor: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: FittedBox(
+                        child: Text(
+                          '${points.toString()} pkt',
+                          style: TextStyle(
+                              fontSize: 23, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+              // child: CircleAvatar(
+              //   radius: 75,
+              //   backgroundColor: Theme.of(context).primaryColor,
+              //   child: CircleAvatar(
+              //     radius: 70,
+              //     backgroundColor: Colors.white,
+              //     foregroundColor: Theme.of(context).primaryColor,
+              //     child: Padding(
+              //       padding: const EdgeInsets.all(8),
+              //       child: FittedBox(
+              //         child: Text(
+              //           '${points.toString()} pkt',
+              //           style:
+              //               TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               ),
-            ),
-          ),
           if (isRoomie)
             Expanded(
               flex: 3,
@@ -245,7 +280,6 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
           if (!isRoomie)
             Expanded(
               flex: 3,
-              //height: 460,
               child: CustomRefreshIndicator(
                 builder: MaterialIndicatorDelegate(
                   builder: (context, controller) {
