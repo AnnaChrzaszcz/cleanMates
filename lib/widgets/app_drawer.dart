@@ -49,17 +49,8 @@ class AppDrawer extends StatelessWidget {
           const Divider(),
           if (room != null)
             ListTile(
-              leading: const Icon(Icons.home),
-              // leading: AnimateIcon(
-              //   key: UniqueKey(),
-              //   onTap: () {},
-              //   iconType: IconType.continueAnimation,
-              //   height: 35,
-              //   width: 35,
-              //   color: Colors.grey,
-              //   animateIcon: AnimateIcons.home,
-              // ),
-              title: Text('Home'),
+              leading: const Icon(Icons.apartment),
+              title: Text('Room'),
               onTap: () {
                 Navigator.of(context)
                     .pushReplacementNamed(UserRoomScreen.routeName);
@@ -89,7 +80,7 @@ class AppDrawer extends StatelessWidget {
           if (room != null) const Divider(),
           if (room != null)
             ListTile(
-              leading: Icon(Icons.card_giftcard_outlined),
+              leading: Icon(Icons.person),
               title: Text('Profile'), //TYLKO JESLI JEST ROOM
               onTap: () {
                 Navigator.of(context).pushReplacementNamed(
