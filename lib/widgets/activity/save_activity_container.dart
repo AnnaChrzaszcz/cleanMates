@@ -49,13 +49,6 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
       Navigator.of(context).pushReplacementNamed(
           GratificationActivityScreen.routeName,
           arguments: activitesPointsSum);
-
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: Text('You earned ${activitesPointsSum} points'),
-      //     duration: const Duration(seconds: 2),
-      //   ),
-      // );
     } catch (err) {
       await showDialog<Null>(
         context: context,
@@ -76,7 +69,6 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
       setState(() {
         _isLoading = false;
       });
-      //Navigator.of(context).pop(); //JAK POCZEKAC ZEBY SNACK BAR ZNIKNAL?
     }
   }
 
@@ -127,15 +119,28 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                           CheckboxListTile(
                             title: Text(
                               widget.activities[index].activityName,
-                              style: TextStyle(),
+                              style: TextStyle(
+                                  fontWeight: selectedIndexes.contains(index)
+                                      ? FontWeight.w500
+                                      : FontWeight.normal),
                             ),
                             secondary: CircleAvatar(
-                              radius: 20,
-                              backgroundColor: selectedIndexes.contains(index)
-                                  ? Theme.of(context).primaryColor
-                                  : Theme.of(context).dividerColor,
-                              foregroundColor: Colors.white,
-                              child: Text('${widget.activities[index].points}'),
+                              radius: selectedIndexes.contains(index) ? 23 : 22,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              child: CircleAvatar(
+                                radius: 20,
+                                foregroundColor: Colors.black,
+                                backgroundColor: Colors.white,
+                                child: Text(
+                                  '${widget.activities[index].points}',
+                                  style: TextStyle(
+                                      fontWeight:
+                                          selectedIndexes.contains(index)
+                                              ? FontWeight.bold
+                                              : FontWeight.normal),
+                                ),
+                              ),
                             ),
                             value: selectedIndexes.contains(index),
                             onChanged: (_) {
@@ -154,6 +159,9 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                               }
                             },
                             activeColor: Theme.of(context).primaryColor,
+                            tileColor: selectedIndexes.contains(index)
+                                ? Colors.grey[100]
+                                : Colors.white,
                           ),
                           Divider()
                         ],
