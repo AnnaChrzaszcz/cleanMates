@@ -23,15 +23,26 @@ class _TabBarViewContainerState extends State<TabBarViewContainer> {
   var yourSelectedIndex = -1;
 
   @override
+  void initState() {
+    widget.yourRecived
+        .sort(((a, b) => b.realizedDate.compareTo(a.realizedDate)));
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ListTile(
           leading: CircleAvatar(
-            child: Text(widget.yourBought.length.toString()),
+            child: Text(
+              widget.yourBought.length.toString(),
+              style: TextStyle(color: Colors.white),
+            ),
             backgroundColor: Theme.of(context).dividerColor,
           ),
-          title: Text('Bught gifts'),
+          title: Text('Bought gifts'),
           trailing: IconButton(
             icon: Icon(_boughtExpanded ? Icons.expand_less : Icons.expand_more),
             onPressed: () {
@@ -94,7 +105,8 @@ class _TabBarViewContainerState extends State<TabBarViewContainer> {
         ListTile(
           title: Text('Recived gifts'),
           leading: CircleAvatar(
-            child: Text(widget.yourRecived.length.toString()),
+            child: Text(widget.yourRecived.length.toString(),
+                style: TextStyle(color: Colors.white)),
             backgroundColor: Theme.of(context).dividerColor,
           ),
           trailing: IconButton(
