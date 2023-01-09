@@ -37,7 +37,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
 
   void _createdRoom() {}
 
-  Future<void> _tryGetYourRoom() async {
+  Future<void> _refreshRoom() async {
     await Provider.of<RoomsProvider>(context, listen: false)
         .getUserRoom(roomie.id);
   }
@@ -79,24 +79,25 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         'title': 'Save Activity',
         'routeName': SaveActivityScreen.routeName,
         'imagePath': 'assets/images/cleaning.png',
-        'color': Color.fromRGBO(236, 32, 73, 0.5),
+        'color': Color.fromRGBO(236, 32, 73, 1),
       },
       {
         'title': 'Money balance',
         'routeName': '', //ExchangeToPrize.routeName,
         'imagePath': 'assets/images/money.png',
-        'color': Color.fromRGBO(167, 34, 110, 0.5),
+        'color': Color.fromRGBO(167, 34, 110, 1),
       },
       {
         'title': 'Buy gift',
         'routeName': BuyGiftScreen.routeName,
         'imagePath': 'assets/images/myPrize.png',
-        'color': Color.fromRGBO(247, 219, 79, 0.5),
+        'color': Color.fromRGBO(247, 219, 79, 1),
       },
       {
         'title': 'Stats',
         'routeName': '', //StatsScreen.routeName,
-        'imagePath': 'assets/images/stats.png'
+        'imagePath': 'assets/images/stats.png',
+        'color': Color.fromRGBO(242, 107, 56, 1),
       },
     ];
 
@@ -108,7 +109,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       ),
       drawer: AppDrawer(),
       body: FutureBuilder(
-        future: _tryGetYourRoom(),
+        future: _refreshRoom(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -149,57 +150,51 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Expanded(
-            child: CircleAvatar(
-              radius: 45,
-              backgroundColor: Theme.of(context).primaryColor,
-              foregroundColor: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FittedBox(
-                  child: Text(
-                    '${points.toString()} pkt',
-                    style: TextStyle(fontSize: 20),
+              flex: 2,
+              child: Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  CircleAvatar(
+                    radius: 110,
+                    backgroundColor: Theme.of(context).primaryColor,
                   ),
-                ),
-              ),
-            ),
-          ),
-          // AnimateIcon(
-          //   key: UniqueKey(),
-          //   onTap: () {},
-          //   iconType: IconType.animatedOnTap,
-          //   height: 70,
-          //   width: 70,
-          //   color: Color.fromRGBO(47, 149, 153, 1),
-          //   animateIcon: AnimateIcons.home,
-          // ),
-          Expanded(
-            flex: 1,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(UserRoomScreen.routeName)
-                        .then((_) {});
-                  },
-                  icon: const Icon(Icons.home),
-                  iconSize: 40,
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(HistoryScreen.routeName)
-                        .then((_) {});
-                  },
-                  icon: const Icon(Icons.history),
-                  iconSize: 40,
-                ),
-              ],
-            ),
-          ),
-
+                  CircleAvatar(
+                    radius: 104,
+                    backgroundColor: Colors.white,
+                  ),
+                  CircleAvatar(
+                    radius: 98,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                  ),
+                  CircleAvatar(
+                    radius: 92,
+                    foregroundColor: Theme.of(context).primaryColor,
+                    backgroundColor: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: FittedBox(
+                        child: Column(
+                          children: [
+                            Text(
+                              '${points.toString()}',
+                              style: TextStyle(
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              'POINTS',
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.grey),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )),
           if (isRoomie)
             Expanded(
               flex: 3,
@@ -241,7 +236,6 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                 ),
               ),
             ),
-
           if (!isRoomie)
             Expanded(
               flex: 3,
