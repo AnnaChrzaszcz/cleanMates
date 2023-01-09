@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:clean_mates_app/screens/user_dashboard_screen.dart';
 import 'package:clean_mates_app/widgets/app_drawer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
@@ -40,6 +41,11 @@ class _UserProfileState extends State<UserProfile> {
         .child('user_image')
         .child('${user.uid}.jpg')
         .getDownloadURL();
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .update({'image_url': _url});
 
     await user.updatePhotoURL(_url);
     Navigator.of(context).pushReplacementNamed(UserDashboardScreen.routeName);

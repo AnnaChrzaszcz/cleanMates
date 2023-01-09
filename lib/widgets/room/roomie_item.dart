@@ -35,11 +35,7 @@ class RoomieItem extends StatelessWidget {
                   radius: 45,
                   backgroundColor: Color.fromRGBO(247, 219, 79, 1),
                   child: CircleAvatar(
-                      radius: 42,
-                      backgroundImage: NetworkImage(
-                          userId == FirebaseAuth.instance.currentUser.uid
-                              ? FirebaseAuth.instance.currentUser.photoURL
-                              : imageUrl)),
+                      radius: 42, backgroundImage: NetworkImage(imageUrl)),
                 ),
               ),
               Expanded(
