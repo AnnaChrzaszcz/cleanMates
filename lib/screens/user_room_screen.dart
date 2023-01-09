@@ -35,19 +35,17 @@ class UserRoomScreen extends StatelessWidget {
     return room == null
         ? UserDashboardScreen()
         : Scaffold(
-            appBar: AppBar(title: Text('Your room')),
+            appBar: AppBar(title: Text(room != null ? room.roomName : '')),
             drawer: AppDrawer(), // jak to zastapic strzalka do tylu
             body: Container(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 18),
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 25),
               width: double.infinity,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    room.roomName,
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
                   Expanded(
                     child: ListView.builder(
+                      shrinkWrap: true,
                       itemCount: roomies.length,
                       itemBuilder: ((context, index) => RoomieItem(
                           roomies[index].id,
@@ -59,6 +57,8 @@ class UserRoomScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () => _leaveRoom(room, context),
                     child: Text('Leave this room'),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor),
                   ),
                 ],
               ),
