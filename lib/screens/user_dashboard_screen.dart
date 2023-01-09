@@ -150,51 +150,77 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Expanded(
-              flex: 2,
-              child: Stack(
-                alignment: AlignmentDirectional.center,
-                children: [
-                  CircleAvatar(
-                    radius: 110,
-                    backgroundColor: Theme.of(context).primaryColor,
-                  ),
-                  CircleAvatar(
-                    radius: 104,
-                    backgroundColor: Colors.white,
-                  ),
-                  CircleAvatar(
-                    radius: 98,
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                  ),
-                  CircleAvatar(
-                    radius: 92,
-                    foregroundColor: Theme.of(context).primaryColor,
-                    backgroundColor: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: FittedBox(
-                        child: Column(
-                          children: [
-                            Text(
-                              '${points.toString()}',
-                              style: TextStyle(
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              'POINTS',
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.grey),
-                            )
-                          ],
-                        ),
+            flex: 2,
+            child: Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                CircleAvatar(
+                  radius: 100,
+                  backgroundColor: Theme.of(context).primaryColor,
+                ),
+                CircleAvatar(
+                  radius: 94,
+                  backgroundColor: Colors.white,
+                ),
+                CircleAvatar(
+                  radius: 88,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                ),
+                CircleAvatar(
+                  radius: 82,
+                  foregroundColor: Theme.of(context).primaryColor,
+                  backgroundColor: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: FittedBox(
+                      child: Column(
+                        children: [
+                          Text(
+                            '${points.toString()}',
+                            style: TextStyle(
+                                fontSize: 40,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            'POINTS',
+                            style: TextStyle(fontSize: 20, color: Colors.grey),
+                          )
+                        ],
                       ),
                     ),
                   ),
-                ],
-              )),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed(UserRoomScreen.routeName)
+                        .then((_) {});
+                  },
+                  icon: const Icon(Icons.home),
+                  iconSize: 40,
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed(HistoryScreen.routeName)
+                        .then((_) {});
+                  },
+                  icon: const Icon(Icons.history),
+                  iconSize: 40,
+                ),
+              ],
+            ),
+          ),
           if (isRoomie)
             Expanded(
               flex: 3,
@@ -238,8 +264,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
             ),
           if (!isRoomie)
             Expanded(
-              flex: 3,
-              //height: 460,
+              flex: 4,
               child: GridView(
                 padding: const EdgeInsets.all(10),
                 children: actions
