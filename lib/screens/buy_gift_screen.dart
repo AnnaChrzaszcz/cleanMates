@@ -132,7 +132,7 @@ class BuyGiftScreen extends StatelessWidget {
                                                               GiftsScreen
                                                                   .routeName),
                                                   child: Text(
-                                                      'Go to gift dictionary'))
+                                                      'Go to gifts overview'))
                                             ],
                                           ),
                                         ),

@@ -68,7 +68,7 @@ class SaveActivityScreen extends StatelessWidget {
                                   onPressed: () => Navigator.of(context)
                                       .pushReplacementNamed(
                                           ActivitiesScreen.routeName),
-                                  child: Text('Go to dictionary'))
+                                  child: Text('Go to activities overview'))
                             ],
                           ),
                         )
