@@ -60,7 +60,7 @@ class AppDrawer extends StatelessWidget {
           if (room != null)
             ListTile(
               leading: Icon(Icons.clean_hands),
-              title: Text('Activities'),
+              title: Text('Activities Overview'),
               onTap: () {
                 //TYLKO JESLI JEST ROOM
                 Navigator.of(context)
@@ -71,7 +71,7 @@ class AppDrawer extends StatelessWidget {
           if (room != null)
             ListTile(
               leading: Icon(Icons.card_giftcard_outlined),
-              title: Text('Gifts'), //TYLKO JESLI JEST ROOM
+              title: Text('Gifts Overview'), //TYLKO JESLI JEST ROOM
               onTap: () {
                 Navigator.of(context)
                     .pushReplacementNamed(GiftsScreen.routeName);
