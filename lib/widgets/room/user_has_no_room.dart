@@ -35,7 +35,7 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       //decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -44,6 +44,7 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
             'You have currently no room',
             style: Theme.of(context).textTheme.headline6,
           ),
+          SizedBox(height: 20),
           ElevatedButton(
             child: Text('Create new room'),
             onPressed: () {
@@ -54,7 +55,10 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
               });
             },
           ),
-          SizedBox(height: 10),
+          Text(
+            'or',
+            style: TextStyle(fontSize: 20),
+          ),
           GestureDetector(
             onTap: () {
               setState(() {
