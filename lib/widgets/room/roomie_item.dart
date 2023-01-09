@@ -21,10 +21,6 @@ class RoomieItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (FirebaseAuth.instance.currentUser.uid ==
-        FirebaseAuth.instance.currentUser.photoURL) {
-      print(name);
-    }
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       margin: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
@@ -39,11 +35,7 @@ class RoomieItem extends StatelessWidget {
                   radius: 45,
                   backgroundColor: Color.fromRGBO(247, 219, 79, 1),
                   child: CircleAvatar(
-                      radius: 42,
-                      backgroundImage: NetworkImage(
-                          userId == FirebaseAuth.instance.currentUser.uid
-                              ? FirebaseAuth.instance.currentUser.photoURL
-                              : imageUrl)),
+                      radius: 42, backgroundImage: NetworkImage(imageUrl)),
                 ),
               ),
               Expanded(
