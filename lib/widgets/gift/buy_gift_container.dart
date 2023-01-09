@@ -90,15 +90,26 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                         CheckboxListTile(
                           title: Text(
                             widget.gifts[index].giftName,
-                            style: TextStyle(),
+                            style: TextStyle(
+                                fontWeight: selectedIndexes.contains(index)
+                                    ? FontWeight.w500
+                                    : FontWeight.normal),
                           ),
                           secondary: CircleAvatar(
-                            radius: 20,
-                            backgroundColor: selectedIndexes.contains(index)
-                                ? Theme.of(context).primaryColor
-                                : Theme.of(context).dividerColor,
-                            foregroundColor: Colors.white,
-                            child: Text('${widget.gifts[index].points}'),
+                            radius: selectedIndexes.contains(index) ? 23 : 22,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            child: CircleAvatar(
+                              radius: 20,
+                              foregroundColor: Colors.black,
+                              backgroundColor: Colors.white,
+                              child: Text('${widget.gifts[index].points}',
+                                  style: TextStyle(
+                                      fontWeight:
+                                          selectedIndexes.contains(index)
+                                              ? FontWeight.bold
+                                              : FontWeight.normal)),
+                            ),
                           ),
                           value: selectedIndexes.contains(index),
                           onChanged: (_) {
