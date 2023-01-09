@@ -193,49 +193,50 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                 children: [
                   Shimmer.fromColors(
                     baseColor: Theme.of(context).primaryColor,
-                    highlightColor: Theme.of(context).colorScheme.primary,
+                    highlightColor: Color.fromRGBO(167, 34, 110, 0.4),
+                    //highlightColor: Colors.white,
                     child: CircleAvatar(
-                      radius: 78,
+                      radius: 110,
                       backgroundColor: Theme.of(context).primaryColor,
                     ),
                   ),
                   CircleAvatar(
-                    radius: 70,
+                    radius: 104,
+                    backgroundColor: Colors.white,
+                  ),
+                  CircleAvatar(
+                    radius: 98,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                  ),
+                  CircleAvatar(
+                    radius: 92,
                     foregroundColor: Theme.of(context).primaryColor,
                     backgroundColor: Colors.white,
                     child: Padding(
                       padding: const EdgeInsets.all(8),
                       child: FittedBox(
-                        child: Text(
-                          '${points.toString()} pkt',
-                          style: TextStyle(
-                              fontSize: 23, fontWeight: FontWeight.bold),
+                        child: Column(
+                          children: [
+                            Text(
+                              '${points.toString()}',
+                              style: TextStyle(
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              'POINTS',
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.grey),
+                            )
+                          ],
                         ),
                       ),
                     ),
                   ),
                 ],
-              )
-              // child: CircleAvatar(
-              //   radius: 75,
-              //   backgroundColor: Theme.of(context).primaryColor,
-              //   child: CircleAvatar(
-              //     radius: 70,
-              //     backgroundColor: Colors.white,
-              //     foregroundColor: Theme.of(context).primaryColor,
-              //     child: Padding(
-              //       padding: const EdgeInsets.all(8),
-              //       child: FittedBox(
-              //         child: Text(
-              //           '${points.toString()} pkt',
-              //           style:
-              //               TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              ),
+              )),
           if (isRoomie)
             Expanded(
               flex: 3,

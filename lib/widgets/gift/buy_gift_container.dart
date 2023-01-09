@@ -1,3 +1,5 @@
+import 'package:clean_mates_app/screens/gratification_gift_screen.dart';
+
 import 'user_gift_container.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 
@@ -38,14 +40,9 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
         _isLoading = false;
       });
 
-      Navigator.of(context).pop();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('You bought ${selectedGifts.length} gifts'),
-          duration: const Duration(seconds: 2),
-        ),
-      );
+      Navigator.of(context).pushReplacementNamed(
+          GratificationGiftScreen.routeName,
+          arguments: selectedGifts.length);
     } on LogisticExpection catch (err) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

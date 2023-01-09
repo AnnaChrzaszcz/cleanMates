@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:clean_mates_app/models/userActivity.dart';
+import 'package:clean_mates_app/screens/gratification_activity_screen.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -45,12 +46,16 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
           .addActivitiesToRoomie(
               selectedUserActivities, widget.userId, activitesPointsSum);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('You earned ${activitesPointsSum} points'),
-          duration: const Duration(seconds: 2),
-        ),
-      );
+      Navigator.of(context).pushReplacementNamed(
+          GratificationActivityScreen.routeName,
+          arguments: activitesPointsSum);
+
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text('You earned ${activitesPointsSum} points'),
+      //     duration: const Duration(seconds: 2),
+      //   ),
+      // );
     } catch (err) {
       await showDialog<Null>(
         context: context,
@@ -71,7 +76,7 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context).pop(); //JAK POCZEKAC ZEBY SNACK BAR ZNIKNAL?
+      //Navigator.of(context).pop(); //JAK POCZEKAC ZEBY SNACK BAR ZNIKNAL?
     }
   }
 
