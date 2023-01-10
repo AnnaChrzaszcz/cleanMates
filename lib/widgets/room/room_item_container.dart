@@ -27,38 +27,40 @@ class _RoomItemConState extends State<RoomItemContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 400,
-          //decoration: BoxDecoration(border: Border.all(color: Colors.yellow)),
-          child: ListView.builder(
-            itemCount: widget.rooms.length,
-            itemBuilder: ((context, index) {
-              return RoomItem(
-                room: widget.rooms[index],
-                index: index,
-                isSelected: _selectedIndex == index ? true : false,
-                select: _selectRoom,
-              );
-            }),
-          ),
-        ),
-        ElevatedButton(
-          onPressed:
-              _selectedIndex < 0 ? null : () => widget.joinRoom(selectedRoom),
-          child: Text('Join'),
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-              (Set<MaterialState> states) {
-                if (states.contains(MaterialState.disabled)) return Colors.grey;
-                return Theme.of(context)
-                    .primaryColor; // Use the component's default.
-              },
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: widget.rooms.length,
+              itemBuilder: ((context, index) {
+                return RoomItem(
+                  room: widget.rooms[index],
+                  index: index,
+                  isSelected: _selectedIndex == index ? true : false,
+                  select: _selectRoom,
+                );
+              }),
             ),
           ),
-        )
-      ],
+          ElevatedButton(
+            onPressed:
+                _selectedIndex < 0 ? null : () => widget.joinRoom(selectedRoom),
+            child: Text('Join'),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.disabled))
+                    return Colors.grey;
+                  return Theme.of(context)
+                      .primaryColor; // Use the component's default.
+                },
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

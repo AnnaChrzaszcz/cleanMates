@@ -42,7 +42,6 @@ class RoomItem extends StatelessWidget {
           ),
           onTap: () => select(index),
           selected: isSelected,
-          selectedColor: Theme.of(context).primaryColor,
         ),
         const Divider(),
       ],
