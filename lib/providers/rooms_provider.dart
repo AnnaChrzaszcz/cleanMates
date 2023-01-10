@@ -11,7 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class RoomsProvider extends ChangeNotifier {
   List<Room> _rooms;
   Room userRoom;
-  final user = FirebaseAuth.instance.currentUser;
+  User user = FirebaseAuth.instance.currentUser;
 
   RoomsProvider(this._rooms, this.userRoom);
 
@@ -138,6 +138,10 @@ class RoomsProvider extends ChangeNotifier {
   }
 
   Future<void> joinToRoom(String roomId) async {
+    print(roomId);
+    if (user == null) {
+      user = FirebaseAuth.instance.currentUser;
+    }
     //POPRAWIONE
     await FirebaseFirestore.instance
         .collection('users')
