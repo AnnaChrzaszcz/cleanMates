@@ -423,6 +423,9 @@ class RoomsProvider extends ChangeNotifier {
     DocumentSnapshot<Map<String, dynamic>> userSnapshot =
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
     Map<String, dynamic> userData = userSnapshot.data();
-    return userData['username'];
+    if (userData != null) {
+      return userData['username'];
+    } else
+      return '';
   }
 }
