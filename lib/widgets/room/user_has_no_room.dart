@@ -32,6 +32,15 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
   }
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    Provider.of<RoomsProvider>(context, listen: false)
+        .getAvailableRooms()
+        .then((availableRooms) => rooms = availableRooms);
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
