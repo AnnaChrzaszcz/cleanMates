@@ -49,24 +49,48 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            'You have currently no room',
-            style: Theme.of(context).textTheme.headline6,
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeIn,
+            constraints: BoxConstraints(
+              minHeight: !_joinRoom ? 30 : 0,
+              maxHeight: !_joinRoom ? 50 : 0,
+            ),
+            child: Text(
+              'You have currently no room',
+              style: Theme.of(context).textTheme.headline6,
+            ),
           ),
           SizedBox(height: 20),
-          ElevatedButton(
-            child: Text('Create new room'),
-            onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(CreateRoomScreen.routeName)
-                  .then((_) {
-                widget.createdRoom;
-              });
-            },
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeIn,
+            constraints: BoxConstraints(
+              minHeight: !_joinRoom ? 30 : 0,
+              maxHeight: !_joinRoom ? 50 : 0,
+            ),
+            child: ElevatedButton(
+              child: Text('Create new room'),
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamed(CreateRoomScreen.routeName)
+                    .then((_) {
+                  widget.createdRoom;
+                });
+              },
+            ),
           ),
-          Text(
-            'or',
-            style: TextStyle(fontSize: 20),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeIn,
+            constraints: BoxConstraints(
+              minHeight: !_joinRoom ? 30 : 0,
+              maxHeight: !_joinRoom ? 50 : 0,
+            ),
+            child: Text(
+              'or',
+              style: TextStyle(fontSize: 20),
+            ),
           ),
           GestureDetector(
             onTap: () {
@@ -77,8 +101,8 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'Join existing room',
+                Text(
+                  _joinRoom ? 'Create new room' : 'Join existing room',
                   style: TextStyle(
                       color: Color.fromRGBO(47, 149, 153, 1),
                       fontWeight: FontWeight.w500,
