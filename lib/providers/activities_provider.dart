@@ -38,6 +38,7 @@ class ActivitiesProvider extends ChangeNotifier {
           roomId: element['roomId']);
       activities.add(activity);
     });
+    activities.sort(((a, b) => a.activityName.compareTo(b.activityName)));
     _activities = activities;
     notifyListeners();
   }
@@ -61,8 +62,7 @@ class ActivitiesProvider extends ChangeNotifier {
         points: activity.points,
         roomId: activity.roomId);
 
-    _activities.add(newActivity);
-
+    _activities.insert(0, newActivity);
     notifyListeners();
   }
 
