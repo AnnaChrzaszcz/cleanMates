@@ -35,6 +35,7 @@ class GiftsProvider extends ChangeNotifier {
       );
       gifts.add(gift);
     });
+    gifts.sort(((a, b) => a.giftName.compareTo(b.giftName)));
     _gifts = gifts;
     notifyListeners();
   }
@@ -55,8 +56,7 @@ class GiftsProvider extends ChangeNotifier {
         points: gift.points,
         roomId: gift.roomId);
 
-    _gifts.add(newGift);
-
+    _gifts.insert(0, newGift);
     notifyListeners();
   }
 
