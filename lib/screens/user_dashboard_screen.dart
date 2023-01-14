@@ -26,7 +26,6 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   Roomie roomie;
   final user = FirebaseAuth.instance.currentUser;
   var routeArgs;
-  var isRoomie = false;
 
   var _isInit = true;
   void _joinToRoom(Room selectedRoom) {
@@ -45,28 +44,11 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      routeArgs =
-          ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-      if (routeArgs != null) {
-        final userId = routeArgs['userId'];
-        final name = routeArgs['name'];
-        final imageUrl = routeArgs['imageUrl'];
-        final points = routeArgs['points'];
-
-        roomie = Roomie(
-            id: userId, userName: name, points: points, imageUrl: imageUrl);
-        if (userId != user.uid) {
-          isRoomie = true;
-        }
-      } else {
-        isRoomie = false;
-        roomie = Roomie(
-            id: user.uid,
-            userName: user.displayName,
-            points: null,
-            imageUrl: user.photoURL);
-        // }
-      }
+      roomie = Roomie(
+          id: user.uid,
+          userName: user.displayName,
+          points: null,
+          imageUrl: user.photoURL);
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -105,7 +87,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       //PRZY PIERWSZYM LOGOWANIU COS NIE DZIALA
       appBar: AppBar(
         //title: Text(name),
-        title: Text(roomie.userName ?? ''),
+        title: Text(user.displayName),
       ),
       drawer: AppDrawer(),
       body: FutureBuilder(
@@ -119,15 +101,14 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
             return Consumer<RoomsProvider>(
               builder: ((context, roomsdata, _) {
                 if (roomsdata.myRoom != null) {
-                  if (!isRoomie) {
-                    roomie = roomsdata.myRoom.roomies
-                        .firstWhere((roomie) => roomie.id == user.uid);
-                  } else {
-                    roomie = roomsdata.myRoom.roomies
-                        .firstWhere((roomie) => roomie.id != user.uid);
-                  }
-                  return userDashboardContainer(roomie.points, actions,
-                      roomsdata.myRoom, roomie.id, isRoomie);
+                  roomie = roomsdata.myRoom.roomies
+                      .firstWhere((roomie) => roomie.id == user.uid);
+                  return userDashboardContainer(
+                    roomie.points,
+                    actions,
+                    roomsdata.myRoom,
+                    roomie.id,
+                  );
                 } else {
                   return UserHasNoRoom(_joinToRoom, _createdRoom);
                 }
@@ -140,8 +121,8 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     );
   }
 
-  Widget userDashboardContainer(points, List<Map<String, Object>> actions,
-      Room room, String userId, bool isRoomie) {
+  Widget userDashboardContainer(
+      points, List<Map<String, Object>> actions, Room room, String userId) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 2),
       margin: EdgeInsets.all(8),
@@ -221,70 +202,28 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
               ],
             ),
           ),
-          if (isRoomie)
-            Expanded(
-              flex: 3,
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(8),
-                margin: const EdgeInsets.only(bottom: 30),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 30),
-                      child: Text(
-                        'Save your roomie activity',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                    ),
-                    Expanded(
-                      child: GridView(
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 200,
-                          childAspectRatio: 3 / 3,
-                          crossAxisSpacing: 1,
-                          mainAxisSpacing: 1,
-                        ),
-                        children: [
-                          ActionItem(
-                            'Save Activity',
-                            SaveActivityScreen.routeName,
-                            'assets/images/cleaning.png',
-                            userId,
-                            Color.fromRGBO(236, 32, 73, 0.5),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+          Expanded(
+            flex: 4,
+            child: GridView(
+              padding: const EdgeInsets.all(10),
+              children: actions
+                  .map(
+                    (action) => ActionItem(
+                        action['title'] as String,
+                        action['routeName'] as String,
+                        action['imagePath'] as String,
+                        userId,
+                        action['color'] as Color),
+                  )
+                  .toList(),
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200,
+                childAspectRatio: 3 / 3,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
               ),
             ),
-          if (!isRoomie)
-            Expanded(
-              flex: 4,
-              child: GridView(
-                padding: const EdgeInsets.all(10),
-                children: actions
-                    .map(
-                      (action) => ActionItem(
-                          action['title'] as String,
-                          action['routeName'] as String,
-                          action['imagePath'] as String,
-                          userId,
-                          action['color'] as Color),
-                    )
-                    .toList(),
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 200,
-                  childAspectRatio: 3 / 3,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
-                ),
-              ),
-            ),
+          ),
         ],
       ),
     );

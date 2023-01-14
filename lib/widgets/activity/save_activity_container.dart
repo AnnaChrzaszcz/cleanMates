@@ -1,4 +1,5 @@
 import 'package:clean_mates_app/models/userActivity.dart';
+import 'package:clean_mates_app/screens/user_dashboard_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../models/activity.dart';
@@ -18,6 +19,7 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
   var selectedIndexes = [];
   var activitesPointsSum = 0;
   var _isLoading = false;
+  final user = FirebaseAuth.instance.currentUser;
 
   void _saveActivites() async {
     setState(() {
@@ -41,7 +43,8 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('You earned ${activitesPointsSum} points'),
+          content: Text(
+              '${widget.userId == user.uid ? 'You earned ${activitesPointsSum} points' : '${activitesPointsSum} points earned'}'),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -66,7 +69,8 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context).pop(); //JAK POCZEKAC ZEBY SNACK BAR ZNIKNAL?
+      Navigator.of(context).pushReplacementNamed(UserDashboardScreen.routeName);
+      //Navigator.of(context).pop(); //JAK POCZEKAC ZEBY SNACK BAR ZNIKNAL?
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:clean_mates_app/screens/save_activity_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../screens/user_dashboard_screen.dart';
@@ -21,6 +22,7 @@ class RoomieItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User user = FirebaseAuth.instance.currentUser;
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       margin: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
@@ -61,9 +63,11 @@ class RoomieItem extends StatelessWidget {
           SizedBox(
             height: 15,
           ),
-          ElevatedButton(
-              onPressed: () => selectUser(context),
-              child: Text('Go to profile'))
+          if (name != user.displayName)
+            ElevatedButton(
+                onPressed: () => Navigator.of(context)
+                    .pushNamed(SaveActivityScreen.routeName, arguments: userId),
+                child: Text('Save activity as ${name}'))
         ]),
       ),
     );
