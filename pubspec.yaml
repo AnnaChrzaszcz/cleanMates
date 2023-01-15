@@ -95,6 +95,7 @@ flutter:
     - assets/animations/lottie/intro3.json
     - assets/animations/lottie/confetti.json
     - assets/animations/lottie/gift.json
+    - assets/animations/lottie/empty_search.json
     - assets/images/logo.png
     
 

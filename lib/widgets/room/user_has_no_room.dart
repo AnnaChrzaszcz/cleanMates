@@ -1,6 +1,7 @@
 import 'package:clean_mates_app/providers/rooms_provider.dart';
 import 'package:clean_mates_app/screens/user_room_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../../screens/create_room_screen.dart';
 import '../../repositories/room_repository.dart';
@@ -53,6 +54,15 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
             duration: const Duration(milliseconds: 200),
             curve: Curves.easeIn,
             constraints: BoxConstraints(
+              minHeight: !_joinRoom ? 50 : 0,
+              maxHeight: !_joinRoom ? 350 : 0,
+            ),
+            child: Lottie.asset('assets/animations/lottie/empty_search.json'),
+          ),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeIn,
+            constraints: BoxConstraints(
               minHeight: !_joinRoom ? 30 : 0,
               maxHeight: !_joinRoom ? 50 : 0,
             ),
@@ -98,19 +108,46 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
                 _joinRoom = !_joinRoom;
               });
             },
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  _joinRoom ? 'Create new room' : 'Join existing room',
-                  style: TextStyle(
-                      color: Color.fromRGBO(47, 149, 153, 1),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16),
-                ),
-                Icon(!_joinRoom ? Icons.expand_more : Icons.expand_less)
-              ],
-            ),
+            child: _joinRoom
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Icon(Icons.arrow_back_ios),
+                      Text(
+                        'Create new room',
+                        style: TextStyle(
+                            color: Color.fromRGBO(47, 149, 153, 1),
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16),
+                      ),
+                    ],
+                  )
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Text(
+                        'Join existing room',
+                        style: TextStyle(
+                            color: Color.fromRGBO(47, 149, 153, 1),
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16),
+                      ),
+                      Icon(Icons.arrow_forward_ios)
+                    ],
+                  ),
+            // child:  Row(
+            //   mainAxisSize: MainAxisSize.min,
+            //   children: [
+            //     Text(
+            //       _joinRoom ? 'Create new room' : 'Join existing room',
+            //       style: TextStyle(
+            //           color: Color.fromRGBO(47, 149, 153, 1),
+            //           fontWeight: FontWeight.w500,
+            //           fontSize: 16),
+            //     ),
+            //     Icon(!_joinRoom ? Icons.expand_more : Icons.expand)
+            //   ],
+            // ),
           ),
           if (_joinRoom) JoinRoom(widget.joinToRoom, rooms)
         ],
