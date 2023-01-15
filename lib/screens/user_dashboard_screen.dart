@@ -120,6 +120,27 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                         ),
                       ),
                     ),
+                    floatingActionButton: ExpandableFab(
+                      distance: 76.0,
+                      children: [
+                        ActionButton(
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(UserRoomScreen.routeName)
+                                .then((_) {});
+                          },
+                          icon: const Icon(Icons.home),
+                        ),
+                        ActionButton(
+                          onPressed: () => {
+                            Navigator.of(context)
+                                .pushNamed(HistoryScreen.routeName)
+                                .then((_) {})
+                          },
+                          icon: const Icon(Icons.history),
+                        ),
+                      ],
+                    ),
                     drawer: AppDrawer(),
                     body: userDashboardContainer(
                       roomie.points,
