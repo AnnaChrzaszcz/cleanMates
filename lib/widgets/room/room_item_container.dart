@@ -17,6 +17,33 @@ class RoomItemContainer extends StatefulWidget {
 class _RoomItemConState extends State<RoomItemContainer> {
   int _selectedIndex = -1;
   Room selectedRoom;
+  List<Room> rooms;
+  TextEditingController _textEditingController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    rooms = widget.rooms;
+    _textEditingController = TextEditingController();
+    _textEditingController.addListener(_filterList);
+  }
+
+  void _filterList() {
+    setState(() {
+      rooms = widget.rooms
+          .where((room) => room.roomName
+              .toLowerCase()
+              .contains(_textEditingController.text.toLowerCase()))
+          .toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
 
   void _selectRoom(index) {
     setState(() {
@@ -31,12 +58,38 @@ class _RoomItemConState extends State<RoomItemContainer> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Container(
+            height: 40.0,
+            width: 300.0,
+            margin: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+            child: TextField(
+              controller: _textEditingController,
+              cursorRadius: const Radius.circular(10.0),
+              cursorWidth: 2.0,
+              cursorColor: Colors.black,
+              decoration: InputDecoration(
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+                labelText: 'Search...',
+                labelStyle: const TextStyle(
+                  color: Color(0xff5B5B5B),
+                  fontSize: 17.0,
+                  fontWeight: FontWeight.w500,
+                ),
+                contentPadding: EdgeInsets.all(8),
+                icon: Icon(Icons.search),
+                alignLabelWithHint: true,
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    borderSide: const BorderSide()),
+              ),
+            ),
+          ),
           Expanded(
             child: ListView.builder(
-              itemCount: widget.rooms.length,
+              itemCount: rooms.length,
               itemBuilder: ((context, index) {
                 return RoomItem(
-                  room: widget.rooms[index],
+                  room: rooms[index],
                   index: index,
                   isSelected: _selectedIndex == index ? true : false,
                   select: _selectRoom,
