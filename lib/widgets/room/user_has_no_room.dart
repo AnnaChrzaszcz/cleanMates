@@ -112,7 +112,7 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
                 ? Row(
                     mainAxisSize: MainAxisSize.min,
                     children: const [
-                      Icon(Icons.arrow_back_ios),
+                      Icon(Icons.chevron_left),
                       Text(
                         'Create new room',
                         style: TextStyle(
@@ -132,22 +132,9 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
                             fontWeight: FontWeight.w500,
                             fontSize: 16),
                       ),
-                      Icon(Icons.arrow_forward_ios)
+                      Icon(Icons.chevron_right)
                     ],
                   ),
-            // child:  Row(
-            //   mainAxisSize: MainAxisSize.min,
-            //   children: [
-            //     Text(
-            //       _joinRoom ? 'Create new room' : 'Join existing room',
-            //       style: TextStyle(
-            //           color: Color.fromRGBO(47, 149, 153, 1),
-            //           fontWeight: FontWeight.w500,
-            //           fontSize: 16),
-            //     ),
-            //     Icon(!_joinRoom ? Icons.expand_more : Icons.expand)
-            //   ],
-            // ),
           ),
           if (_joinRoom) JoinRoom(widget.joinToRoom, rooms)
         ],
