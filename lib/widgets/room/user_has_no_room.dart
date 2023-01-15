@@ -69,25 +69,52 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
             style: TextStyle(fontSize: 20),
           ),
           GestureDetector(
-            onTap: () {
-              setState(() {
-                _joinRoom = !_joinRoom;
-              });
-            },
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'Join existing room',
-                  style: TextStyle(
-                      color: Color.fromRGBO(47, 149, 153, 1),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16),
-                ),
-                Icon(!_joinRoom ? Icons.expand_more : Icons.expand_less)
-              ],
-            ),
-          ),
+              onTap: () {
+                setState(() {
+                  _joinRoom = !_joinRoom;
+                });
+              },
+              child: !_joinRoom
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Text(
+                          'Join existing room',
+                          style: TextStyle(
+                              color: Color.fromRGBO(47, 149, 153, 1),
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16),
+                        ),
+                        Icon(Icons.chevron_right)
+                      ],
+                    )
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(Icons.chevron_left),
+                        Text(
+                          'Create new room',
+                          style: TextStyle(
+                              color: Color.fromRGBO(47, 149, 153, 1),
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16),
+                        ),
+                      ],
+                    )
+              // child: Row(
+              //   mainAxisSize: MainAxisSize.min,
+              //   children: [
+              //     const Text(
+              //       'Join existing room',
+              //       style: TextStyle(
+              //           color: Color.fromRGBO(47, 149, 153, 1),
+              //           fontWeight: FontWeight.w500,
+              //           fontSize: 16),
+              //     ),
+              //     Icon(!_joinRoom ? Icons.chevron_right : Icons.expand_less)
+              //   ],
+              // ),
+              ),
           if (_joinRoom) JoinRoom(widget.joinToRoom, rooms)
         ],
       ),
