@@ -86,7 +86,7 @@ class _UserProfileState extends State<UserProfile> {
               icon: const Icon(Icons.save))
         ],
       ),
-      drawer: AppDrawer(),
+      //drawer: AppDrawer(),
       body: Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
@@ -94,7 +94,7 @@ class _UserProfileState extends State<UserProfile> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Hero(
-              tag: user.uid,
+              tag: 'profile-pic',
               child: CircleAvatar(
                   backgroundColor: Color.fromRGBO(247, 219, 79, 1),
                   radius: 90,

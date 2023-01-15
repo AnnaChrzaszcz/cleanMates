@@ -24,7 +24,7 @@ class AppDrawer extends StatelessWidget {
                   ? Container(
                       margin: EdgeInsets.only(right: 5, bottom: 10),
                       child: Hero(
-                        tag: user.uid,
+                        tag: 'profile-pic',
                         child: CircleAvatar(
                           backgroundColor: Color.fromRGBO(247, 219, 79, 1),
                           radius: 30,
@@ -86,8 +86,7 @@ class AppDrawer extends StatelessWidget {
               leading: Icon(Icons.person),
               title: Text('Profile'), //TYLKO JESLI JEST ROOM
               onTap: () {
-                Navigator.of(context).pushReplacementNamed(
-                    UserProfile.routeName,
+                Navigator.of(context).pushNamed(UserProfile.routeName,
                     arguments: {'user': user});
               },
             ),
