@@ -5,6 +5,7 @@ import 'package:clean_mates_app/screens/buy_gift_screen.dart';
 import 'package:clean_mates_app/screens/history_screen.dart';
 import 'package:clean_mates_app/widgets/fab/action_button.dart';
 import 'package:clean_mates_app/widgets/fab/expandable_fab.dart';
+import 'package:clean_mates_app/widgets/room/join_room.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:rive/rive.dart';
 
@@ -89,72 +90,67 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       },
     ];
 
-    return Scaffold(
-      //PRZY PIERWSZYM LOGOWANIU COS NIE DZIALA
-      appBar: AppBar(
-        //title: Text(roomie.userName ?? ''),
-        title: DefaultTextStyle(
-          style: const TextStyle(
-            fontSize: 20.0,
-          ),
-          child: AnimatedTextKit(
-            animatedTexts: [
-              WavyAnimatedText(user.displayName),
-            ],
-            isRepeatingAnimation: false,
-          ),
-        ),
-      ),
-      drawer: AppDrawer(),
-      floatingActionButton: ExpandableFab(
-        distance: 76.0,
-        children: [
-          ActionButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(UserRoomScreen.routeName)
-                  .then((_) {});
-            },
-            icon: const Icon(Icons.home),
-          ),
-          ActionButton(
-            onPressed: () => {
-              Navigator.of(context)
-                  .pushNamed(HistoryScreen.routeName)
-                  .then((_) {})
-            },
-            icon: const Icon(Icons.history),
-          ),
-        ],
-      ),
-      body: FutureBuilder(
-        future: _refreshRoom(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+    return FutureBuilder(
+      future: _refreshRoom(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            body: Center(
               child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.connectionState == ConnectionState.done) {
-            return Consumer<RoomsProvider>(
-              builder: ((context, roomsdata, _) {
-                if (roomsdata.myRoom != null) {
-                  roomie = roomsdata.myRoom.roomies
-                      .firstWhere((roomie) => roomie.id == user.uid);
-                  return userDashboardContainer(
-                    roomie.points,
-                    actions,
-                    roomsdata.myRoom,
-                    roomie.id,
-                  );
-                } else {
-                  return UserHasNoRoom(_joinToRoom, _createdRoom);
-                }
-              }),
-            );
-          }
-          return Container(child: Text(''));
-        },
-      ),
+            ),
+          );
+        } else if (snapshot.connectionState == ConnectionState.done) {
+          return Consumer<RoomsProvider>(
+            builder: ((context, roomsdata, _) {
+              if (roomsdata.myRoom != null) {
+                roomie = roomsdata.myRoom.roomies
+                    .firstWhere((roomie) => roomie.id == user.uid);
+                return Scaffold(
+                    appBar: AppBar(
+                      //title: Text(roomie.userName ?? ''),
+                      title: DefaultTextStyle(
+                        style: const TextStyle(
+                          fontSize: 20.0,
+                        ),
+                        child: AnimatedTextKit(
+                          animatedTexts: [
+                            WavyAnimatedText(user.displayName),
+                          ],
+                          isRepeatingAnimation: false,
+                        ),
+                      ),
+                    ),
+                    drawer: AppDrawer(),
+                    body: userDashboardContainer(
+                      roomie.points,
+                      actions,
+                      roomsdata.myRoom,
+                      roomie.id,
+                    ));
+              } else {
+                return Scaffold(
+                    appBar: AppBar(
+                      //title: Text(roomie.userName ?? ''),
+                      title: DefaultTextStyle(
+                        style: const TextStyle(
+                          fontSize: 20.0,
+                        ),
+                        child: AnimatedTextKit(
+                          animatedTexts: [
+                            WavyAnimatedText(user.displayName),
+                          ],
+                          isRepeatingAnimation: false,
+                        ),
+                      ),
+                    ),
+                    drawer: AppDrawer(),
+                    body: UserHasNoRoom(_joinToRoom, _createdRoom));
+              }
+            }),
+          );
+        }
+        return Scaffold(body: Container(child: Text('')));
+      },
     );
   }
 

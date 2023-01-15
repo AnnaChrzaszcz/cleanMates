@@ -23,11 +23,15 @@ class _RoomItemConState extends State<RoomItemContainer>
   int toggle = 0;
   AnimationController _con;
   TextEditingController _textEditingController;
-  bool _speechEnabled = false;
-  String _lastWords = '';
 
   @override
   void initState() {
+    Future.delayed(Duration(milliseconds: 500), () {
+      setState(() {
+        toggle = 1;
+      });
+    });
+
     _textEditingController = TextEditingController();
     rooms = widget.rooms;
     _con = AnimationController(
@@ -105,7 +109,6 @@ class _RoomItemConState extends State<RoomItemContainer>
                             labelText: 'Search...',
                             labelStyle: const TextStyle(
                               color: Color(0xff5B5B5B),
-                              fontSize: 17.0,
                               fontWeight: FontWeight.w500,
                             ),
                             alignLabelWithHint: true,

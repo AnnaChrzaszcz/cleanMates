@@ -36,9 +36,9 @@ class RoomItem extends StatelessWidget {
             style:
                 TextStyle(color: isSelected ? Colors.black87 : Colors.black45),
           ),
-          trailing: const Icon(
+          trailing: Icon(
             Icons.check_rounded,
-            size: 30,
+            size: isSelected ? 30 : 0,
           ),
           onTap: () => select(index),
           selected: isSelected,
