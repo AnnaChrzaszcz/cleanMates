@@ -10,6 +10,7 @@ import 'package:clean_mates_app/screens/gratification_gift_screen.dart';
 import 'package:clean_mates_app/screens/history_screen.dart';
 import 'package:clean_mates_app/screens/intro_screen.dart';
 import 'package:clean_mates_app/screens/onboarding_screen.dart';
+import 'package:clean_mates_app/screens/gifts_reception_screen.dart';
 import 'package:clean_mates_app/screens/save_activity_screen.dart';
 import 'package:clean_mates_app/screens/user_dashboard_screen.dart';
 import 'package:clean_mates_app/screens/user_profile_screen.dart';
@@ -130,6 +131,7 @@ class MyApp extends StatelessWidget {
               GratificationActivityScreen(),
           GratificationGiftScreen.routeName: (context) =>
               GratificationGiftScreen(),
+          RecivedGiftsScreen.routeName: (context) => RecivedGiftsScreen()
         },
       ),
     );

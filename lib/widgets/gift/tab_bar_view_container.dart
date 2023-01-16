@@ -48,6 +48,8 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
 
   @override
   Widget build(BuildContext context) {
+    widget.yourRecived
+        .sort(((a, b) => b.realizedDate.compareTo(a.realizedDate)));
     return Column(
       children: [
         ListTile(
@@ -76,8 +78,11 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
           duration: Duration(milliseconds: 300),
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
           height: _boughtExpanded
-              ? min(widget.yourBought.length * 30.0 + 50,
-                  MediaQuery.of(context).size.height < 680.0 ? 100 : 140)
+              ? min(
+                  widget.yourBought.length * 30.0 + 50,
+                  MediaQuery.of(context).size.height < 680.0
+                      ? MediaQuery.of(context).size.height * 1 / 4
+                      : MediaQuery.of(context).size.height * 1 / 3)
               : 0,
           child: FadeTransition(
             opacity: _opacityAnimation,
@@ -113,6 +118,9 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
             onPressed: yourSelectedIndex >= 0
                 ? () {
                     widget.recive(widget.userId, yourSelectedIndex);
+                    setState(() {
+                      yourSelectedIndex = -1;
+                    });
                   }
                 : null,
             child: false ? CircularProgressIndicator() : Text('Receive'),
@@ -150,8 +158,11 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
           duration: Duration(milliseconds: 300),
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
           height: _recivedExpanded
-              ? min(widget.yourRecived.length * 30.0 + 50,
-                  MediaQuery.of(context).size.height < 680.0 ? 100 : 140)
+              ? min(
+                  widget.yourRecived.length * 30.0 + 50,
+                  MediaQuery.of(context).size.height < 680.0
+                      ? MediaQuery.of(context).size.height * 1 / 4
+                      : MediaQuery.of(context).size.height * 1 / 3)
               : 0,
           child: ListView.builder(
             itemCount: widget.yourRecived.length,

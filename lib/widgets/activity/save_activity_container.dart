@@ -78,9 +78,6 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
-          const SizedBox(
-            height: 10,
-          ),
           CircleAvatar(
             radius: 30,
             backgroundColor: Theme.of(context).primaryColor,

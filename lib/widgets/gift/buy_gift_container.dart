@@ -1,4 +1,6 @@
 import 'package:clean_mates_app/screens/gratification_gift_screen.dart';
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
+import 'package:rive/rive.dart';
 
 import 'user_gift_container.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -14,7 +16,9 @@ import 'package:provider/provider.dart';
 class BuyGiftContainer extends StatefulWidget {
   final List<Gift> gifts;
   final String userId;
-  BuyGiftContainer(@required this.gifts, @required this.userId);
+  Function refreshGifts;
+  BuyGiftContainer(
+      @required this.gifts, @required this.userId, @required this.refreshGifts);
 
   @override
   _BuyGiftsContainerState createState() => _BuyGiftsContainerState();
@@ -24,6 +28,7 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
   var selectedIndexes = [];
   var giftsointsSum = 0;
   var _isLoading = false;
+  var actualUserPoints;
 
   void _buyGifts() async {
     setState(() {
@@ -50,6 +55,7 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
           duration: const Duration(seconds: 2),
         ),
       );
+
       setState(() {
         _isLoading = false;
       });
@@ -77,90 +83,109 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListView.builder(
-                itemCount: widget.gifts.length,
-                itemBuilder: ((context, index) => Column(
-                      children: [
-                        CheckboxListTile(
-                          title: Text(
-                            widget.gifts[index].giftName,
-                            style: TextStyle(
-                                fontWeight: selectedIndexes.contains(index)
-                                    ? FontWeight.w500
-                                    : FontWeight.normal),
-                          ),
-                          secondary: CircleAvatar(
-                            radius: selectedIndexes.contains(index) ? 23 : 22,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            child: CircleAvatar(
-                              radius: 20,
-                              foregroundColor: Colors.black,
-                              backgroundColor: Colors.white,
-                              child: Text('${widget.gifts[index].points}',
-                                  style: TextStyle(
-                                      fontWeight:
-                                          selectedIndexes.contains(index)
-                                              ? FontWeight.bold
-                                              : FontWeight.normal)),
-                            ),
-                          ),
-                          value: selectedIndexes.contains(index),
-                          onChanged: (_) {
-                            if (selectedIndexes.contains(index)) {
-                              setState(() {
-                                selectedIndexes.remove(index);
-                                giftsointsSum -= widget.gifts[index].points;
-                              });
-                            } else {
-                              setState(() {
-                                selectedIndexes.add(index);
-                                giftsointsSum += widget.gifts[index].points;
-                              });
-                            }
-                          },
-                          activeColor: Theme.of(context).primaryColor,
-                        ),
-                        Divider()
-                      ],
-                    )),
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: Theme.of(context).primaryColor,
+            foregroundColor: Colors.white,
+            child: AnimatedSwitcher(
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return ScaleTransition(scale: animation, child: child);
+              },
+              duration: const Duration(milliseconds: 600),
+              child: Text(
+                '${giftsointsSum}',
+                key: ValueKey<int>(giftsointsSum),
               ),
             ),
           ),
-          if (selectedIndexes.isNotEmpty)
-            ElevatedButton(
-              onPressed: selectedIndexes.isEmpty ? null : () => _buyGifts(),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.disabled))
-                      return Colors.grey;
-                    return Theme.of(context)
-                        .primaryColor; // Use the component's default.
-                  },
+          Expanded(
+            child: CustomRefreshIndicator(
+              builder: MaterialIndicatorDelegate(
+                builder: (context, controller) {
+                  return const CircleAvatar(
+                    radius: 55,
+                    backgroundColor: Color.fromRGBO(47, 149, 153, 1),
+                    child: RiveAnimation.asset(
+                      'assets/animations/indicator.riv',
+                    ),
+                  );
+                },
+              ),
+              onRefresh: () => widget.refreshGifts(),
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 8),
+                child: ListView.builder(
+                  itemCount: widget.gifts.length,
+                  itemBuilder: ((context, index) => Column(
+                        children: [
+                          CheckboxListTile(
+                            title: Text(
+                              widget.gifts[index].giftName,
+                              style: TextStyle(
+                                  fontWeight: selectedIndexes.contains(index)
+                                      ? FontWeight.w500
+                                      : FontWeight.normal),
+                            ),
+                            secondary: CircleAvatar(
+                              radius: selectedIndexes.contains(index) ? 23 : 22,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              child: CircleAvatar(
+                                radius: 20,
+                                foregroundColor: Colors.black,
+                                backgroundColor: Colors.white,
+                                child: Text('${widget.gifts[index].points}',
+                                    style: TextStyle(
+                                        fontWeight:
+                                            selectedIndexes.contains(index)
+                                                ? FontWeight.bold
+                                                : FontWeight.normal)),
+                              ),
+                            ),
+                            value: selectedIndexes.contains(index),
+                            onChanged: (_) {
+                              if (selectedIndexes.contains(index)) {
+                                setState(() {
+                                  selectedIndexes.remove(index);
+                                  giftsointsSum -= widget.gifts[index].points;
+                                });
+                              } else {
+                                setState(() {
+                                  selectedIndexes.add(index);
+
+                                  giftsointsSum += widget.gifts[index].points;
+                                });
+                              }
+                            },
+                            activeColor: Theme.of(context).primaryColor,
+                          ),
+                          Divider()
+                        ],
+                      )),
                 ),
               ),
-              child: _isLoading
-                  ? const CircularProgressIndicator()
-                  // : Text('Buy (${giftsointsSum} points)'),
-                  : AnimatedSwitcher(
-                      transitionBuilder:
-                          (Widget child, Animation<double> animation) {
-                        return ScaleTransition(scale: animation, child: child);
-                      },
-                      duration: const Duration(milliseconds: 200),
-                      child: Text(
-                        'Buy (${giftsointsSum} points)',
-                        key: ValueKey<int>(giftsointsSum),
-                      ),
-                    ),
             ),
+          ),
+          ElevatedButton(
+            onPressed: selectedIndexes.isEmpty ? null : () => _buyGifts(),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.disabled))
+                    return Colors.grey;
+                  return Theme.of(context)
+                      .primaryColor; // Use the component's default.
+                },
+              ),
+            ),
+            child: _isLoading
+                ? const CircularProgressIndicator()
+                : const Text('Save'),
+          )
         ],
       ),
     );

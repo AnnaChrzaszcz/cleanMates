@@ -35,7 +35,6 @@ class BuyGiftScreen extends StatelessWidget {
 
     if (myRoom.roomies.length > 1) {
       roomieId = myRoom.roomies.firstWhere((roomie) => roomie.id != userId).id;
-
       userGifts = Provider.of<RoomsProvider>(context, listen: false)
           .getUserGifts(userId); //tu id usera
       roomieGifts = Provider.of<RoomsProvider>(context, listen: false)
@@ -46,114 +45,60 @@ class BuyGiftScreen extends StatelessWidget {
           myRoom.roomies.firstWhere((roomie) => roomie.id == userId).userName;
     }
 
-    return myRoom.roomies.length == 1
-        ? Scaffold(
-            appBar: AppBar(
-              title: Text('Buy gifts'),
-            ),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Text(
-                  'You need to add a roomie to your room',
-                  style: Theme.of(context).textTheme.headline6,
-                  textAlign: TextAlign.center,
-                ),
+    return FutureBuilder(
+      future: _refreshGifts(context, myRoom.id, userId),
+      builder: ((context, snapshot) => snapshot.connectionState ==
+              ConnectionState.waiting
+          ? Scaffold(
+              appBar: AppBar(title: const Text('Buy gifts')),
+              body: const Center(
+                child: CircularProgressIndicator(),
               ),
-            ),
-          )
-        : FutureBuilder(
-            future: _refreshGifts(context, myRoom.id, userId),
-            builder: ((context, snapshot) => snapshot.connectionState ==
-                    ConnectionState.waiting
-                ? Scaffold(
-                    body: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                : Consumer<GiftsProvider>(
-                    builder: ((ctx, gitsData, _) => Scaffold(
-                          appBar: AppBar(
-                            title: Text('Buy gifts'),
-                            actions: [
-                              IconButton(
-                                onPressed: () {
-                                  Navigator.of(context).pushNamed(
-                                      EditGiftScreen.routeName,
-                                      arguments: {'roomId': myRoom.id});
-                                },
-                                icon: gitsData.gifts.length == 0
-                                    ? Lottie.asset(
-                                        'assets/animations/lottie/add2.json')
-                                    : Icon(Icons.add),
-                              )
+            )
+          : Consumer<GiftsProvider>(
+              builder: ((ctx, gitsData, _) => Scaffold(
+                  appBar: AppBar(
+                    title: Text('Buy gifts'),
+                    actions: [
+                      IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                                EditGiftScreen.routeName,
+                                arguments: {'roomId': myRoom.id});
+                          },
+                          icon: gitsData.gifts.isEmpty
+                              ? Lottie.asset(
+                                  'assets/animations/lottie/add2.json')
+                              : const Icon(Icons.add))
+                    ],
+                  ),
+                  body: gitsData.gifts.isEmpty
+                      ? Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 30, horizontal: 10),
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 30, horizontal: 30),
+                          width: double.infinity,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'You need at least one gift in your dictionary',
+                                style: Theme.of(context).textTheme.headline6,
+                                textAlign: TextAlign.center,
+                              ),
+                              TextButton(
+                                  onPressed: () => Navigator.of(context)
+                                      .pushReplacementNamed(
+                                          GiftsScreen.routeName),
+                                  child: Text('Go to gifts overview'))
                             ],
                           ),
-                          body: CustomRefreshIndicator(
-                            builder: MaterialIndicatorDelegate(
-                              builder: (context, controller) {
-                                return const CircleAvatar(
-                                  radius: 55,
-                                  backgroundColor:
-                                      Color.fromRGBO(47, 149, 153, 1),
-                                  child: RiveAnimation.asset(
-                                    'assets/animations/indicator.riv',
-                                  ),
-                                );
-                              },
-                            ),
-                            onRefresh: () {
-                              _refreshGifts(context, myRoom.id, userId);
-                            },
-                            child: Column(
-                              children: [
-                                gitsData.gifts.length == 0
-                                    ? Expanded(
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 20, horizontal: 10),
-                                          width: double.infinity,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                'You need at least one gift in your dictionary',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline6,
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.of(context)
-                                                          .pushReplacementNamed(
-                                                              GiftsScreen
-                                                                  .routeName),
-                                                  child: Text(
-                                                      'Go to gifts overview'))
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                    : BuyGiftContainer(gitsData.gifts, userId),
-                                Consumer<RoomsProvider>(
-                                  builder: (context, roomData, _) {
-                                    print(roomData.myRoom.roomiesGift.length);
-                                    return UserGiftContainer(
-                                        userId,
-                                        roomieId,
-                                        yourUsername,
-                                        roomieUsername,
-                                        roomData.myRoom.roomiesGift);
-                                  },
-                                )
-                              ],
-                            ),
-                          ),
-                        )),
-                  )),
-          );
+                        )
+                      : BuyGiftContainer(gitsData.gifts, userId,
+                          () => _refreshGifts(context, myRoom.id, userId)))),
+            )),
+    );
   }
 }
