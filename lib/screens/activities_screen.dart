@@ -72,57 +72,83 @@ class ActivitiesScreen extends StatelessWidget {
                 child: CircularProgressIndicator(),
               )
             : Consumer<ActivitiesProvider>(
-                builder: ((ctx, activitiesData, _) => Container(
-                      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                      child: ListView.builder(
-                        itemCount: activitiesData.activities.length,
-                        itemBuilder: ((context, index) => Column(
-                              children: [
-                                ListTile(
-                                  trailing: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      IconButton(
-                                        icon: Icon(Icons.edit),
-                                        onPressed: () {
-                                          Navigator.of(context).pushNamed(
-                                              EditActivityScreen.routeName,
-                                              arguments: {
-                                                'id': activitiesData
-                                                    .activities[index].id,
-                                              });
-                                        },
-                                      ),
-                                      IconButton(
-                                        icon: Icon(Icons.delete),
-                                        onPressed: () => _deleteActivity(
-                                            context,
-                                            activitiesData
-                                                .activities[index].id),
-                                      ),
-                                    ],
+                builder: ((ctx, activitiesData, _) => activitiesData
+                        .activities.isEmpty
+                    ? Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: double.infinity,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              'You have no activities yet',
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Text(
+                              'Define some activities below (+)',
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                          ],
+                        ),
+                      )
+                    : Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                        child: ListView.builder(
+                          itemCount: activitiesData.activities.length,
+                          itemBuilder: ((context, index) => Column(
+                                children: [
+                                  ListTile(
+                                    trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
+                                          icon: Icon(Icons.edit),
+                                          onPressed: () {
+                                            Navigator.of(context).pushNamed(
+                                                EditActivityScreen.routeName,
+                                                arguments: {
+                                                  'id': activitiesData
+                                                      .activities[index].id,
+                                                });
+                                          },
+                                        ),
+                                        IconButton(
+                                          icon: Icon(Icons.delete),
+                                          onPressed: () => _deleteActivity(
+                                              context,
+                                              activitiesData
+                                                  .activities[index].id),
+                                        ),
+                                      ],
+                                    ),
+                                    leading: CircleAvatar(
+                                        radius: 25,
+                                        backgroundColor:
+                                            Theme.of(context).dividerColor,
+                                        foregroundColor: Colors.white,
+                                        child: FittedBox(
+                                          child: Text(
+                                              '${activitiesData.activities[index].points}'),
+                                        )),
+                                    title: Text(
+                                      activitiesData
+                                          .activities[index].activityName,
+                                      style: TextStyle(),
+                                    ),
+                                    subtitle: Text(myRoom.roomName),
                                   ),
-                                  leading: CircleAvatar(
-                                      radius: 25,
-                                      backgroundColor:
-                                          Theme.of(context).dividerColor,
-                                      foregroundColor: Colors.white,
-                                      child: FittedBox(
-                                        child: Text(
-                                            '${activitiesData.activities[index].points}'),
-                                      )),
-                                  title: Text(
-                                    activitiesData
-                                        .activities[index].activityName,
-                                    style: TextStyle(),
-                                  ),
-                                  subtitle: Text(myRoom.roomName),
-                                ),
-                                Divider()
-                              ],
-                            )),
-                      ),
-                    )),
+                                  Divider()
+                                ],
+                              )),
+                        ),
+                      )),
               )),
       ),
     );

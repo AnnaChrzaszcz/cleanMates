@@ -72,53 +72,79 @@ class GiftsScreen extends StatelessWidget {
                 child: CircularProgressIndicator(),
               )
             : Consumer<GiftsProvider>(
-                builder: ((ctx, giftsData, _) => Container(
-                      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                      child: ListView.builder(
-                        itemCount: giftsData.gifts.length,
-                        itemBuilder: ((context, index) => Column(
-                              children: [
-                                ListTile(
-                                  trailing: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      IconButton(
-                                        icon: Icon(Icons.edit),
-                                        onPressed: () {
-                                          Navigator.of(context).pushNamed(
-                                              EditGiftScreen.routeName,
-                                              arguments: {
-                                                'id': giftsData.gifts[index].id,
-                                              });
-                                        },
-                                      ),
-                                      IconButton(
-                                        icon: Icon(Icons.delete),
-                                        onPressed: () => _deleteGift(
-                                            context, giftsData.gifts[index].id),
-                                      ),
-                                    ],
+                builder: ((ctx, giftsData, _) => giftsData.gifts.isEmpty
+                    ? Container(
+                        padding: EdgeInsets.all(8.0),
+                        width: double.infinity,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              'You have no gifts yet',
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Text(
+                              'Define some gifts below (+)',
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                          ],
+                        ),
+                      )
+                    : Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                        child: ListView.builder(
+                          itemCount: giftsData.gifts.length,
+                          itemBuilder: ((context, index) => Column(
+                                children: [
+                                  ListTile(
+                                    trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
+                                          icon: Icon(Icons.edit),
+                                          onPressed: () {
+                                            Navigator.of(context).pushNamed(
+                                                EditGiftScreen.routeName,
+                                                arguments: {
+                                                  'id':
+                                                      giftsData.gifts[index].id,
+                                                });
+                                          },
+                                        ),
+                                        IconButton(
+                                          icon: Icon(Icons.delete),
+                                          onPressed: () => _deleteGift(context,
+                                              giftsData.gifts[index].id),
+                                        ),
+                                      ],
+                                    ),
+                                    leading: CircleAvatar(
+                                        radius: 25,
+                                        backgroundColor:
+                                            Theme.of(context).dividerColor,
+                                        foregroundColor: Colors.white,
+                                        child: FittedBox(
+                                          child: Text(
+                                              '${giftsData.gifts[index].points}'),
+                                        )),
+                                    title: Text(
+                                      giftsData.gifts[index].giftName,
+                                      style: TextStyle(),
+                                    ),
+                                    subtitle: Text(myRoom.roomName),
                                   ),
-                                  leading: CircleAvatar(
-                                      radius: 25,
-                                      backgroundColor:
-                                          Theme.of(context).dividerColor,
-                                      foregroundColor: Colors.white,
-                                      child: FittedBox(
-                                        child: Text(
-                                            '${giftsData.gifts[index].points}'),
-                                      )),
-                                  title: Text(
-                                    giftsData.gifts[index].giftName,
-                                    style: TextStyle(),
-                                  ),
-                                  subtitle: Text(myRoom.roomName),
-                                ),
-                                Divider()
-                              ],
-                            )),
-                      ),
-                    )),
+                                  Divider()
+                                ],
+                              )),
+                        ),
+                      )),
               )),
       ),
     );
