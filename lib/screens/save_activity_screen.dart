@@ -31,43 +31,52 @@ class SaveActivityScreen extends StatelessWidget {
               icon: Icon(Icons.add))
         ],
       ),
-      body: FutureBuilder(
-        future: _refreshActivities(context, myRoom.id),
-        builder: ((context, snapshot) => snapshot.connectionState ==
-                ConnectionState.waiting
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : Consumer<ActivitiesProvider>(
-                builder: ((ctx, activitiesData, _) => activitiesData
-                            .activities.length ==
-                        0
-                    ? Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 30, horizontal: 10),
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 30, horizontal: 30),
-                        width: double.infinity,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'You need at least one activity in your dictionary',
-                              style: Theme.of(context).textTheme.headline6,
-                              textAlign: TextAlign.center,
-                            ),
-                            TextButton(
-                                onPressed: () => Navigator.of(context)
-                                    .pushReplacementNamed(
-                                        ActivitiesScreen.routeName),
-                                child: Text('Go to dictionary'))
-                          ],
-                        ),
-                      )
-                    : SaveActivityContainer(activitiesData.activities, userId)),
-              )),
-      ),
+      body: myRoom.roomies.length == 1
+          ? Center(
+              child: Text(
+                'You need to add a roomie to your room',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+            )
+          : FutureBuilder(
+              future: _refreshActivities(context, myRoom.id),
+              builder: ((context, snapshot) => snapshot.connectionState ==
+                      ConnectionState.waiting
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Consumer<ActivitiesProvider>(
+                      builder: ((ctx, activitiesData, _) => activitiesData
+                                  .activities.length ==
+                              0
+                          ? Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 30, horizontal: 10),
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 30, horizontal: 30),
+                              width: double.infinity,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'You need at least one activity in your dictionary',
+                                    style:
+                                        Theme.of(context).textTheme.headline6,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  TextButton(
+                                      onPressed: () => Navigator.of(context)
+                                          .pushReplacementNamed(
+                                              ActivitiesScreen.routeName),
+                                      child: Text('Go to dictionary'))
+                                ],
+                              ),
+                            )
+                          : SaveActivityContainer(
+                              activitiesData.activities, userId)),
+                    )),
+            ),
     );
   }
 }

@@ -81,7 +81,7 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('New gift'),
-        actions: [IconButton(onPressed: _saveForm, icon: Icon(Icons.save))],
+        //actions: [IconButton(onPressed: _saveForm, icon: Icon(Icons.save))],
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())

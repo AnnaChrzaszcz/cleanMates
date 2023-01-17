@@ -19,22 +19,29 @@ class RoomItem extends StatelessWidget {
     return Column(
       children: [
         ListTile(
-          title: Text(room.roomName),
+          title: Text(
+            room.roomName,
+            style: TextStyle(
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                color: Colors.black),
+          ),
           leading: Icon(
-            Icons.house,
-            color: isSelected
-                ? Theme.of(context).primaryColor
-                : Theme.of(context).iconTheme.color,
+            isSelected ? Icons.house : Icons.house_outlined,
+            color: Theme.of(context).colorScheme.primary,
             size: 40,
           ),
-          subtitle: Text('owner: ${room.creatorId}'),
-          trailing: const Icon(
+          selectedTileColor: Colors.grey[100],
+          subtitle: Text(
+            'owner: ${room.creatorId}',
+            style:
+                TextStyle(color: isSelected ? Colors.black87 : Colors.black45),
+          ),
+          trailing: Icon(
             Icons.check_rounded,
-            size: 30,
+            size: isSelected ? 30 : 0,
           ),
           onTap: () => select(index),
           selected: isSelected,
-          selectedColor: Theme.of(context).primaryColor,
         ),
         const Divider(),
       ],

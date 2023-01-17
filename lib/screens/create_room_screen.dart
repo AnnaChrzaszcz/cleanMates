@@ -15,7 +15,6 @@ class CreateRoomScreen extends StatefulWidget {
 class _CreateRoomScreenState extends State<CreateRoomScreen> {
   final _form = GlobalKey<FormState>();
   var _isLoading = false;
-  //var _roomName = '';
   var _initValues = {'roomName': '', 'creatorId': ''};
   var _isInit = true;
 
@@ -24,15 +23,6 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
   void didChangeDependencies() {
     if (_isInit) {
       final id = ModalRoute.of(context).settings.arguments as String;
-      // if (id != null) {
-      //   _editedRoom = Provider.of<ActivitiesProvider>(context, listen: false)
-      //       .findById(id);
-      //   _initValues = {
-      //     'activityName': _editedActivity.activityName,
-      //     'points': _editedActivity.points.toString(),
-      //   };
-      //   print(_initValues);
-      // }
     }
     _isInit = false;
     // TODO: implement didChangeDependencies
@@ -66,9 +56,9 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Create new room'),
-        actions: [
-          IconButton(onPressed: _createNewRoom, icon: Icon(Icons.save))
-        ],
+        // actions: [
+        //   IconButton(onPressed: _createNewRoom, icon: Icon(Icons.save))
+        // ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),

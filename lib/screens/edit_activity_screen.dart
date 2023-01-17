@@ -84,7 +84,7 @@ class _CreateNewActivityScreenState extends State<EditActivityScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('New activity'),
-        actions: [IconButton(onPressed: _saveForm, icon: Icon(Icons.save))],
+        //actions: [IconButton(onPressed: _saveForm, icon: Icon(Icons.save))],
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())

@@ -80,9 +80,6 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
-          SizedBox(
-            height: 10,
-          ),
           CircleAvatar(
             radius: 30,
             backgroundColor: Theme.of(context).primaryColor,
@@ -102,15 +99,27 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                         CheckboxListTile(
                           title: Text(
                             widget.activities[index].activityName,
-                            style: TextStyle(),
+                            style: TextStyle(
+                                fontWeight: selectedIndexes.contains(index)
+                                    ? FontWeight.w500
+                                    : FontWeight.normal),
                           ),
                           secondary: CircleAvatar(
-                            radius: 20,
-                            backgroundColor: selectedIndexes.contains(index)
-                                ? Theme.of(context).primaryColor
-                                : Theme.of(context).dividerColor,
-                            foregroundColor: Colors.white,
-                            child: Text('${widget.activities[index].points}'),
+                            radius: selectedIndexes.contains(index) ? 23 : 22,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            child: CircleAvatar(
+                              radius: 20,
+                              foregroundColor: Colors.black,
+                              backgroundColor: Colors.white,
+                              child: Text(
+                                '${widget.activities[index].points}',
+                                style: TextStyle(
+                                    fontWeight: selectedIndexes.contains(index)
+                                        ? FontWeight.bold
+                                        : FontWeight.normal),
+                              ),
+                            ),
                           ),
                           value: selectedIndexes.contains(index),
                           onChanged: (_) {
@@ -128,7 +137,10 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                               });
                             }
                           },
-                          activeColor: Theme.of(context).primaryColor,
+                          activeColor: Theme.of(context).colorScheme.primary,
+                          tileColor: selectedIndexes.contains(index)
+                              ? Colors.grey[100]
+                              : Colors.white,
                         ),
                         Divider()
                       ],
@@ -146,7 +158,8 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                   if (states.contains(MaterialState.disabled))
                     return Colors.grey;
                   return Theme.of(context)
-                      .primaryColor; // Use the component's default.
+                      .colorScheme
+                      .primary; // Use the component's default.
                 },
               ),
             ),
