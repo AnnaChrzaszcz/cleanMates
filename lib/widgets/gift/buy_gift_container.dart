@@ -161,7 +161,7 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                                 });
                               }
                             },
-                            activeColor: Theme.of(context).primaryColor,
+                            activeColor: Theme.of(context).colorScheme.primary,
                           ),
                           Divider()
                         ],
@@ -178,7 +178,8 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                   if (states.contains(MaterialState.disabled))
                     return Colors.grey;
                   return Theme.of(context)
-                      .primaryColor; // Use the component's default.
+                      .colorScheme
+                      .primary; // Use the component's default.
                 },
               ),
             ),

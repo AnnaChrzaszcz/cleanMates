@@ -172,7 +172,8 @@ class _RoomItemConState extends State<RoomItemContainer>
                   if (states.contains(MaterialState.disabled))
                     return Colors.grey;
                   return Theme.of(context)
-                      .primaryColor; // Use the component's default.
+                      .colorScheme
+                      .primary; // Use the component's default.
                 },
               ),
             ),

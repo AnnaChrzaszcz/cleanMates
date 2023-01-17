@@ -66,9 +66,9 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Create new room'),
-        actions: [
-          IconButton(onPressed: _createNewRoom, icon: Icon(Icons.save))
-        ],
+        // actions: [
+        //   IconButton(onPressed: _createNewRoom, icon: Icon(Icons.save))
+        // ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),

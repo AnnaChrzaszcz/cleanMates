@@ -72,32 +72,43 @@ class BuyGiftScreen extends StatelessWidget {
                               : const Icon(Icons.add))
                     ],
                   ),
-                  body: gitsData.gifts.isEmpty
-                      ? Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 30, horizontal: 10),
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 30, horizontal: 30),
-                          width: double.infinity,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'You need at least one gift in your dictionary',
-                                style: Theme.of(context).textTheme.headline6,
-                                textAlign: TextAlign.center,
-                              ),
-                              TextButton(
-                                  onPressed: () => Navigator.of(context)
-                                      .pushReplacementNamed(
-                                          GiftsScreen.routeName),
-                                  child: Text('Go to gifts overview'))
-                            ],
+                  body: myRoom.roomies.length == 1
+                      ? Center(
+                          child: Text(
+                            'You need to add a roomie to your room',
+                            style: Theme.of(context).textTheme.headline6,
                           ),
                         )
-                      : BuyGiftContainer(gitsData.gifts, userId,
-                          () => _refreshGifts(context, myRoom.id, userId)))),
+                      : gitsData.gifts.isEmpty
+                          ? Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 30, horizontal: 10),
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 30, horizontal: 30),
+                              width: double.infinity,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'You need at least one gift in your dictionary',
+                                    style:
+                                        Theme.of(context).textTheme.headline6,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  TextButton(
+                                      onPressed: () => Navigator.of(context)
+                                          .pushReplacementNamed(
+                                              GiftsScreen.routeName),
+                                      child: Text('Go to gifts overview'))
+                                ],
+                              ),
+                            )
+                          : BuyGiftContainer(
+                              gitsData.gifts,
+                              userId,
+                              () =>
+                                  _refreshGifts(context, myRoom.id, userId)))),
             )),
     );
   }

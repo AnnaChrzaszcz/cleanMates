@@ -21,11 +21,10 @@ class CustomAddFab extends StatelessWidget {
             : EditGiftScreen(roomId: roomId);
       },
       closedShape: CircleBorder(),
-      closedColor: Theme.of(context).colorScheme.primary,
+      closedColor: Theme.of(context).primaryColor,
       closedBuilder: (context, OpenContainer) => Container(
           decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Theme.of(context).colorScheme.primary),
+              shape: BoxShape.circle, color: Theme.of(context).primaryColor),
           height: fabSize,
           width: fabSize,
           child: const Icon(

@@ -46,13 +46,20 @@ class RecivedGiftsScreen extends StatelessWidget {
           title: Text('Gift Reception'),
         ),
         drawer: AppDrawer(),
-        body: Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height,
-          padding: EdgeInsets.all(8.0),
-          child: UserGiftContainer(userId, roomieId, yourUsername,
-              roomieUsername, myRoom.roomiesGift),
-        )
+        body: myRoom.roomies.length == 1
+            ? Center(
+                child: Text(
+                  'You need to add a roomie to your room',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+              )
+            : Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height,
+                padding: EdgeInsets.all(8.0),
+                child: UserGiftContainer(userId, roomieId, yourUsername,
+                    roomieUsername, myRoom.roomiesGift),
+              )
         // body: CustomRefreshIndicator(
         //     builder: MaterialIndicatorDelegate(
         //       builder: (context, controller) {

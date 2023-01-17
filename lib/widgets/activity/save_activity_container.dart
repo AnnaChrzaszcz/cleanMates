@@ -155,7 +155,7 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                                 });
                               }
                             },
-                            activeColor: Theme.of(context).primaryColor,
+                            activeColor: Theme.of(context).colorScheme.primary,
                             tileColor: selectedIndexes.contains(index)
                                 ? Colors.grey[100]
                                 : Colors.white,
@@ -177,7 +177,8 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                   if (states.contains(MaterialState.disabled))
                     return Colors.grey;
                   return Theme.of(context)
-                      .primaryColor; // Use the component's default.
+                      .colorScheme
+                      .primary; // Use the component's default.
                 },
               ),
             ),

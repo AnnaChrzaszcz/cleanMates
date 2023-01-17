@@ -58,11 +58,6 @@ class GiftsScreen extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton:
           CustomAddFab(activityScreen: false, roomId: myRoom.id),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () => _goToNewGift(context, myRoom),
-      //   backgroundColor: Theme.of(context).colorScheme.primary,
-      //   child: Icon(Icons.add),
-      // ),
       drawer: AppDrawer(),
       body: FutureBuilder(
         future: _refreshGifts(context, myRoom.id),

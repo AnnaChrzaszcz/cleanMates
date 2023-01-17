@@ -48,32 +48,42 @@ class SaveActivityScreen extends StatelessWidget {
                               : const Icon(Icons.add))
                     ],
                   ),
-                  body: activitiesData.activities.isEmpty
-                      ? Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 30, horizontal: 10),
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 30, horizontal: 30),
-                          width: double.infinity,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'You need at least one activity in your dictionary',
-                                style: Theme.of(context).textTheme.headline6,
-                                textAlign: TextAlign.center,
-                              ),
-                              TextButton(
-                                  onPressed: () => Navigator.of(context)
-                                      .pushReplacementNamed(
-                                          ActivitiesScreen.routeName),
-                                  child: Text('Go to activities overview'))
-                            ],
+                  body: myRoom.roomies.length == 1
+                      ? Center(
+                          child: Text(
+                            'You need to add a roomie to your room',
+                            style: Theme.of(context).textTheme.headline6,
                           ),
                         )
-                      : SaveActivityContainer(activitiesData.activities, userId,
-                          () => _refreshActivities(context, myRoom.id)))),
+                      : activitiesData.activities.isEmpty
+                          ? Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 30, horizontal: 10),
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 30, horizontal: 30),
+                              width: double.infinity,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'You need at least one activity in your dictionary',
+                                    style:
+                                        Theme.of(context).textTheme.headline6,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  TextButton(
+                                      onPressed: () => Navigator.of(context)
+                                          .pushReplacementNamed(
+                                              ActivitiesScreen.routeName),
+                                      child: Text('Go to activities overview'))
+                                ],
+                              ),
+                            )
+                          : SaveActivityContainer(
+                              activitiesData.activities,
+                              userId,
+                              () => _refreshActivities(context, myRoom.id)))),
             )),
     );
   }
