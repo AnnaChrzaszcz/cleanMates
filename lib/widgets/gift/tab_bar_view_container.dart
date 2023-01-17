@@ -32,6 +32,8 @@ class _TabBarViewContainerState extends State<TabBarViewContainer> {
 
   @override
   Widget build(BuildContext context) {
+    widget.yourRecived
+        .sort(((a, b) => b.realizedDate.compareTo(a.realizedDate)));
     return Column(
       children: [
         ListTile(
@@ -55,7 +57,11 @@ class _TabBarViewContainerState extends State<TabBarViewContainer> {
         if (_boughtExpanded)
           Container(
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-            height: min(widget.yourBought.length * 30.0 + 50, 120),
+            height: min(
+                widget.yourBought.length * 30.0 + 50,
+                MediaQuery.of(context).size.height < 680.0
+                    ? MediaQuery.of(context).size.height * 1 / 4
+                    : MediaQuery.of(context).size.height * 1 / 3),
             child: ListView.builder(
               itemCount: widget.yourBought.length,
               itemBuilder: ((context, index) => Padding(
@@ -87,6 +93,9 @@ class _TabBarViewContainerState extends State<TabBarViewContainer> {
             onPressed: yourSelectedIndex >= 0
                 ? () {
                     widget.recive(widget.userId, yourSelectedIndex);
+                    setState(() {
+                      yourSelectedIndex = -1;
+                    });
                   }
                 : null,
             child: false ? CircularProgressIndicator() : Text('Receive'),
@@ -122,7 +131,11 @@ class _TabBarViewContainerState extends State<TabBarViewContainer> {
         if (_recivedExpanded)
           Container(
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-            height: min(widget.yourRecived.length * 30.0 + 50, 120),
+            height: min(
+                widget.yourRecived.length * 30.0 + 50,
+                MediaQuery.of(context).size.height < 680.0
+                    ? MediaQuery.of(context).size.height * 1 / 4
+                    : MediaQuery.of(context).size.height * 1 / 3),
             child: ListView.builder(
               itemCount: widget.yourRecived.length,
               itemBuilder: ((context, index) => Padding(

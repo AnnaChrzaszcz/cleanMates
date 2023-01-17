@@ -22,6 +22,7 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
   var selectedIndexes = [];
   var giftsointsSum = 0;
   var _isLoading = false;
+  var actualUserPoints;
 
   void _buyGifts() async {
     setState(() {
@@ -80,12 +81,21 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: Theme.of(context).primaryColor,
+            foregroundColor: Colors.white,
+            child: Text(
+              '${giftsointsSum}',
+            ),
+          ),
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 8),
               child: ListView.builder(
                 itemCount: widget.gifts.length,
                 itemBuilder: ((context, index) => Column(
@@ -93,15 +103,26 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                         CheckboxListTile(
                           title: Text(
                             widget.gifts[index].giftName,
-                            style: TextStyle(),
+                            style: TextStyle(
+                                fontWeight: selectedIndexes.contains(index)
+                                    ? FontWeight.w500
+                                    : FontWeight.normal),
                           ),
                           secondary: CircleAvatar(
-                            radius: 20,
-                            backgroundColor: selectedIndexes.contains(index)
-                                ? Theme.of(context).primaryColor
-                                : Theme.of(context).dividerColor,
-                            foregroundColor: Colors.white,
-                            child: Text('${widget.gifts[index].points}'),
+                            radius: selectedIndexes.contains(index) ? 23 : 22,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            child: CircleAvatar(
+                              radius: 20,
+                              foregroundColor: Colors.black,
+                              backgroundColor: Colors.white,
+                              child: Text('${widget.gifts[index].points}',
+                                  style: TextStyle(
+                                      fontWeight:
+                                          selectedIndexes.contains(index)
+                                              ? FontWeight.bold
+                                              : FontWeight.normal)),
+                            ),
                           ),
                           value: selectedIndexes.contains(index),
                           onChanged: (_) {
@@ -113,11 +134,12 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                             } else {
                               setState(() {
                                 selectedIndexes.add(index);
+
                                 giftsointsSum += widget.gifts[index].points;
                               });
                             }
                           },
-                          activeColor: Theme.of(context).primaryColor,
+                          activeColor: Theme.of(context).colorScheme.primary,
                         ),
                         Divider()
                       ],
@@ -125,23 +147,23 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
               ),
             ),
           ),
-          if (selectedIndexes.length > 0)
-            ElevatedButton(
-              onPressed: selectedIndexes.length <= 0 ? null : () => _buyGifts(),
-              child: _isLoading
-                  ? CircularProgressIndicator()
-                  : Text('Buy (${giftsointsSum} points)'),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.disabled))
-                      return Colors.grey;
-                    return Theme.of(context)
-                        .primaryColor; // Use the component's default.
-                  },
-                ),
+          ElevatedButton(
+            onPressed: selectedIndexes.isEmpty ? null : () => _buyGifts(),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.disabled))
+                    return Colors.grey;
+                  return Theme.of(context)
+                      .colorScheme
+                      .primary; // Use the component's default.
+                },
               ),
             ),
+            child: _isLoading
+                ? const CircularProgressIndicator()
+                : const Text('Save'),
+          )
         ],
       ),
     );

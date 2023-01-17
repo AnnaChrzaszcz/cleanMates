@@ -1,5 +1,6 @@
 import 'package:clean_mates_app/screens/activities_screen.dart';
 import 'package:clean_mates_app/screens/gifts_screen.dart';
+import 'package:clean_mates_app/screens/gifts_reception_screen.dart';
 import 'package:clean_mates_app/screens/user_profile_screen.dart';
 import 'package:clean_mates_app/screens/user_room_screen.dart';
 
@@ -80,11 +81,20 @@ class AppDrawer extends StatelessWidget {
           if (room != null) const Divider(),
           if (room != null)
             ListTile(
+              leading: Icon(Icons.handshake),
+              title: Text('Gifts Reception'), //TYLKO JESLI JEST ROOM
+              onTap: () {
+                Navigator.of(context)
+                    .pushReplacementNamed(RecivedGiftsScreen.routeName);
+              },
+            ),
+          if (room != null) const Divider(),
+          if (room != null)
+            ListTile(
               leading: Icon(Icons.person),
               title: Text('Profile'), //TYLKO JESLI JEST ROOM
               onTap: () {
-                Navigator.of(context).pushReplacementNamed(
-                    UserProfile.routeName,
+                Navigator.of(context).pushNamed(UserProfile.routeName,
                     arguments: {'user': user});
               },
             ),
