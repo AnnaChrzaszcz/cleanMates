@@ -45,6 +45,7 @@ class _CreateNewActivityScreenState extends State<EditActivityScreen> {
   double min;
   double max;
   var dziesiatek;
+  var appBarName = 'Create new activity';
 
   Future<void> _saveForm() async {
     final formValid = _form.currentState.validate();
@@ -95,6 +96,7 @@ class _CreateNewActivityScreenState extends State<EditActivityScreen> {
           _value = _editedActivity.points.toDouble();
           _pointsEditingController.text = _initValues['points'];
           _nameEditingController.text = _initValues['activityName'];
+          appBarName = 'Edit activity';
         }
       }
     }
@@ -123,7 +125,7 @@ class _CreateNewActivityScreenState extends State<EditActivityScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create new activity'),
+        title: Text(appBarName),
         //actions: [IconButton(onPressed: _saveForm, icon: Icon(Icons.save))],
       ),
       body: _isLoading
