@@ -36,7 +36,7 @@ class RoomsProvider extends ChangeNotifier {
         availableRooms.add(Room(
             id: room.id,
             roomName: room['roomName'],
-            creatorId: await _getUsernameFromId(room['creatorId']),
+            creatorId: await getUsernameFromId(room['creatorId']),
             roomies: [],
             roomiesActivites: [],
             roomiesGift: []));
@@ -423,7 +423,7 @@ class RoomsProvider extends ChangeNotifier {
     }
   }
 
-  Future<String> _getUsernameFromId(String userId) async {
+  Future<String> getUsernameFromId(String userId) async {
     DocumentSnapshot<Map<String, dynamic>> userSnapshot =
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
     Map<String, dynamic> userData = userSnapshot.data();

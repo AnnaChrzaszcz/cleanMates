@@ -46,9 +46,14 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
           .addActivitiesToRoomie(
               selectedUserActivities, widget.userId, activitesPointsSum);
 
+      var username = await Provider.of<RoomsProvider>(context, listen: false)
+          .getUsernameFromId(widget.userId);
+
+      print(username);
+
       Navigator.of(context).pushReplacementNamed(
           GratificationActivityScreen.routeName,
-          arguments: activitesPointsSum);
+          arguments: {'points': activitesPointsSum, 'username': username});
     } catch (err) {
       await showDialog<Null>(
         context: context,

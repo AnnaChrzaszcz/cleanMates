@@ -15,6 +15,7 @@ class _GratificationActivityScreenState
     extends State<GratificationActivityScreen> {
   final introKey = GlobalKey<IntroductionScreenState>();
   var pointsSum;
+  var username;
 
   void _onIntroEnd(context) {
     Navigator.of(context).push(
@@ -24,7 +25,10 @@ class _GratificationActivityScreenState
 
   @override
   void didChangeDependencies() {
-    pointsSum = ModalRoute.of(context).settings.arguments;
+    Map<String, dynamic> modalArgs = ModalRoute.of(context).settings.arguments;
+    pointsSum = modalArgs['points'];
+    username = modalArgs['username'];
+    //pointsSum = ModalRoute.of(context).settings.arguments;
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
@@ -74,7 +78,7 @@ class _GratificationActivityScreenState
           bodyWidget: Container(
             child: Column(
               children: [
-                Text('You earned $pointsSum points!', style: bodyStyle),
+                Text('${username} earned $pointsSum points!', style: bodyStyle),
                 AnimatedTextKit(
                   animatedTexts: [
                     ScaleAnimatedText('You earned 100 points',
