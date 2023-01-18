@@ -22,6 +22,7 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
     giftName: '',
     points: 0,
   );
+  var appBarName = 'Create new gift';
 
   Future<void> _saveForm() async {
     final formValid = _form.currentState.validate();
@@ -62,7 +63,7 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
           'giftName': _editedGift.giftName,
           'points': _editedGift.points.toString(),
         };
-        print(_initValues);
+        appBarName = 'Edit gift';
       }
     }
     _isInit = false;
@@ -80,7 +81,7 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New gift'),
+        title: Text(appBarName),
         //actions: [IconButton(onPressed: _saveForm, icon: Icon(Icons.save))],
       ),
       body: _isLoading
@@ -91,7 +92,8 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                   child: Form(
                       key: _form,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 30),
                         child: ListView(
                           children: [
                             TextFormField(
@@ -115,6 +117,9 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                   return null;
                               },
                             ),
+                            SizedBox(
+                              height: 30,
+                            ),
                             TextFormField(
                                 initialValue: _initValues['points'],
                                 decoration:
@@ -129,6 +134,8 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                     return 'enter a int value';
                                   else if (int.parse(value) <= 0) {
                                     return 'price must be grater than 0';
+                                  } else if (int.parse(value) > 1000) {
+                                    return 'price can not be greater than 1000';
                                   } else
                                     return null;
                                 },

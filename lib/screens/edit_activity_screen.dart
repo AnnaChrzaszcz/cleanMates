@@ -24,6 +24,7 @@ class _CreateNewActivityScreenState extends State<EditActivityScreen> {
     activityName: '',
     points: 0,
   );
+  var appBarName = 'Create new activity';
 
   Future<void> _saveForm() async {
     final formValid = _form.currentState.validate();
@@ -65,7 +66,7 @@ class _CreateNewActivityScreenState extends State<EditActivityScreen> {
           'activityName': _editedActivity.activityName,
           'points': _editedActivity.points.toString(),
         };
-        print(_initValues);
+        appBarName = 'Edit activity';
       }
     }
     _isInit = false;
@@ -83,7 +84,7 @@ class _CreateNewActivityScreenState extends State<EditActivityScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New activity'),
+        title: Text(appBarName),
         //actions: [IconButton(onPressed: _saveForm, icon: Icon(Icons.save))],
       ),
       body: _isLoading
@@ -94,7 +95,8 @@ class _CreateNewActivityScreenState extends State<EditActivityScreen> {
                   child: Form(
                     key: _form,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 30),
                       child: ListView(
                         children: [
                           TextFormField(
@@ -118,6 +120,9 @@ class _CreateNewActivityScreenState extends State<EditActivityScreen> {
                                 return null;
                             },
                           ),
+                          SizedBox(
+                            height: 30,
+                          ),
                           TextFormField(
                               initialValue: _initValues['points'],
                               decoration: InputDecoration(labelText: 'Points'),
@@ -131,6 +136,8 @@ class _CreateNewActivityScreenState extends State<EditActivityScreen> {
                                   return 'enter a int value';
                                 else if (int.parse(value) <= 0) {
                                   return 'price must be grater than 0';
+                                } else if (int.parse(value) > 400) {
+                                  return 'price can not be greater than 400';
                                 } else
                                   return null;
                               },
