@@ -2,6 +2,7 @@ import 'package:clean_mates_app/providers/gifts_provider.dart';
 import 'package:flutter/material.dart';
 import '../models/gift.dart';
 import 'package:provider/provider.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class EditGiftScreen extends StatefulWidget {
   static const routeName = '/editGift';
@@ -41,6 +42,14 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
   double max;
   var dziesiatek;
   var appBarName = 'Create new gift';
+  List<IconData> icons = [
+    Icons.airplane_ticket,
+    Icons.food_bank_rounded,
+    Icons.card_giftcard_outlined,
+    Icons.coffee,
+    Icons.cookie
+  ];
+  var _iconSelectedIned = 2;
 
   Future<void> _saveForm() async {
     final formValid = _form.currentState.validate();
@@ -185,12 +194,20 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                           child: Chip(
                                             label: Text('${dictionary[index]}',
                                                 style: TextStyle(
+                                                    color: index ==
+                                                            _selectedDictionaryIndex
+                                                        ? Colors.white
+                                                        : Colors.black,
                                                     fontWeight: index ==
                                                             _selectedDictionaryIndex
                                                         ? FontWeight.bold
                                                         : FontWeight.normal)),
-                                            backgroundColor: Color.fromRGBO(
-                                                240, 240, 240, 1),
+                                            backgroundColor: index ==
+                                                    _selectedDictionaryIndex
+                                                ? Color.fromRGBO(
+                                                    242, 107, 56, 1)
+                                                : Color.fromRGBO(
+                                                    240, 240, 240, 1),
                                             padding: EdgeInsets.all(15),
                                           ),
                                         ),
@@ -206,8 +223,7 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                             ),
                             TextFormField(
                                 controller: _pointsEditingController,
-                                decoration:
-                                    InputDecoration(labelText: 'Points'),
+                                decoration: InputDecoration(labelText: 'Value'),
                                 textInputAction: TextInputAction.done,
                                 onFieldSubmitted: ((_) => _saveForm()),
                                 keyboardType: TextInputType.number,
@@ -333,6 +349,43 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                 )
                               ],
                             ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            // Text('Select gift icon:',
+                            //     style: Theme.of(context).textTheme.headline6),
+                            Container(
+                              child: CarouselSlider.builder(
+                                options: CarouselOptions(
+                                  height: 100,
+                                  viewportFraction: 0.4,
+                                  initialPage: _iconSelectedIned,
+                                  enableInfiniteScroll: false,
+                                  reverse: false,
+                                  enlargeCenterPage: true,
+                                  onPageChanged: (index, reason) {
+                                    setState(() {
+                                      _iconSelectedIned = index;
+                                    });
+                                  },
+                                  enlargeStrategy:
+                                      CenterPageEnlargeStrategy.height,
+                                  enlargeFactor: 5,
+                                  scrollDirection: Axis.horizontal,
+                                ),
+                                itemCount: icons.length,
+                                itemBuilder: (BuildContext context,
+                                        int itemIndex, int pageViewIndex) =>
+                                    Icon(
+                                  icons[itemIndex],
+                                  color: itemIndex == _iconSelectedIned
+                                      ? Color.fromRGBO(242, 107, 56, 1)
+                                      : Theme.of(context).colorScheme.primary,
+                                  size:
+                                      itemIndex == _iconSelectedIned ? 55 : 35,
+                                ),
+                              ),
+                            )
                           ],
                         ),
                       )),
