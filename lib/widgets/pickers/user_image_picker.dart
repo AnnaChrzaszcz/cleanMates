@@ -67,7 +67,7 @@ class _UserImagePickerState extends State<UserImagePicker>
         child: !isLoading
             ? pickedImageFile != null
                 ? CircleAvatar(
-                    radius: 40,
+                    radius: 45,
                     backgroundColor: Colors.grey,
                     backgroundImage: Image(
                       image: FileImage(pickedImageFile),
@@ -75,11 +75,11 @@ class _UserImagePickerState extends State<UserImagePicker>
                     ).image,
                   )
                 : const CircleAvatar(
-                    radius: 40,
+                    radius: 45,
                     backgroundColor: Colors.grey,
                   )
             : CircleAvatar(
-                radius: 40,
+                radius: 45,
                 backgroundColor: Colors.grey,
                 child: LoadingAnimationWidget.hexagonDots(
                     color: Colors.white, size: 20),

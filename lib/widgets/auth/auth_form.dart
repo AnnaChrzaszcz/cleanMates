@@ -28,7 +28,7 @@ class _AuthFormState extends State<AuthForm>
   @override
   void initState() {
     _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 400));
+        vsync: this, duration: const Duration(milliseconds: 300));
     _opacityAnimation = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
@@ -79,35 +79,36 @@ class _AuthFormState extends State<AuthForm>
       duration: Duration(milliseconds: 300),
       curve: Curves.easeIn,
       height: _isLogin
-          ? deviceSize.height * (deviceSize.height < 680 ? 0.45 : 0.35)
-          : deviceSize.height * (deviceSize.height < 680 ? 0.80 : 0.62),
+          ? deviceSize.height * (deviceSize.height < 680 ? 0.45 : 0.40)
+          : deviceSize.height * (deviceSize.height < 680 ? 0.80 : 0.68),
       child: Card(
         elevation: 15,
-        //color: Colors.grey[200],
         shadowColor: Color.fromARGB(255, 255, 247, 22),
-        margin: EdgeInsets.all(20),
+        margin: EdgeInsets.all(8),
         child: Padding(
           padding: EdgeInsets.all(16),
           child: Form(
             key: _formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                //if (!_isLogin)
-                Expanded(
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                    constraints: BoxConstraints(
-                      minHeight: !_isLogin ? 60 : 0,
-                      maxHeight: !_isLogin ? 140 : 0,
-                    ),
-                    child: FadeTransition(
-                      opacity: _opacityAnimation,
-                      child: UserImagePicker(_pickedImage),
+                if (!_isLogin)
+                  Expanded(
+                    flex: 2,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
+                      constraints: BoxConstraints(
+                        minHeight: !_isLogin ? 20 : 0,
+                        maxHeight: !_isLogin ? 40 : 0,
+                      ),
+                      child: FadeTransition(
+                        opacity: _opacityAnimation,
+                        child: UserImagePicker(_pickedImage),
+                      ),
                     ),
                   ),
-                ),
                 TextFormField(
                   key: ValueKey('email'),
                   validator: (value) {
@@ -119,41 +120,46 @@ class _AuthFormState extends State<AuthForm>
                   cursorColor: Theme.of(context).accentColor,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                      labelText: 'Email address',
-                      fillColor: Colors.pink,
-                      hoverColor: Colors.pink,
-                      focusColor: Colors.pink),
+                    labelText: 'Email address',
+                  ),
                   onSaved: (value) {
                     _userEmail = value;
                   },
                 ),
-                AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeIn,
-                  constraints: BoxConstraints(
-                    minHeight: !_isLogin ? 50 : 0,
-                    maxHeight: !_isLogin ? 90 : 0,
+                if (!_isLogin)
+                  SizedBox(
+                    height: 8,
                   ),
-                  child: FadeTransition(
-                    opacity: _opacityAnimation,
-                    child: TextFormField(
-                      key: ValueKey('Username'),
-                      validator: (value) {
-                        if (!_isLogin && (value.isEmpty || value.length < 4)) {
-                          return 'Please enter at least 4 characters';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Username',
+                if (!_isLogin)
+                  Expanded(
+                    child: AnimatedContainer(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
+                      constraints: BoxConstraints(
+                        minHeight: !_isLogin ? 40 : 0,
+                        maxHeight: !_isLogin ? 50 : 0,
                       ),
-                      onSaved: (value) {
-                        _userName = value;
-                      },
+                      child: FadeTransition(
+                        opacity: _opacityAnimation,
+                        child: TextFormField(
+                          key: ValueKey('Username'),
+                          validator: (value) {
+                            if (!_isLogin &&
+                                (value.isEmpty || value.length < 4)) {
+                              return 'Please enter at least 4 characters';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Username',
+                          ),
+                          onSaved: (value) {
+                            _userName = value;
+                          },
+                        ),
+                      ),
                     ),
                   ),
-                ),
-
                 TextFormField(
                   key: ValueKey('Password'),
                   validator: (value) {
@@ -176,21 +182,30 @@ class _AuthFormState extends State<AuthForm>
                     }
                   },
                 ),
-
                 if (!_isLogin)
                   SizedBox(
-                    height: 12,
+                    height: 20,
                   ),
                 if (!_isLogin)
-                  PasswordStrengthChecker(
-                    strength: passNotifier,
-                    configuration: PasswordStrengthCheckerConfiguration(
-                      borderColor: Colors.grey[100],
+                  Expanded(
+                    child: AnimatedContainer(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
+                      constraints: BoxConstraints(
+                        minHeight: !_isLogin ? 10 : 0,
+                        maxHeight: !_isLogin ? 50 : 0,
+                      ),
+                      child: FadeTransition(
+                        opacity: _opacityAnimation,
+                        child: PasswordStrengthChecker(
+                          strength: passNotifier,
+                          configuration: PasswordStrengthCheckerConfiguration(
+                            borderColor: Colors.grey[100],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                SizedBox(
-                  height: 4,
-                ),
                 if (widget.isLoading)
                   ElevatedButton(
                     onPressed: null,
@@ -202,34 +217,54 @@ class _AuthFormState extends State<AuthForm>
                     )),
                   ),
                 if (!widget.isLoading)
-                  ElevatedButton(
-                    onPressed: _trySubmit,
-                    child: Text(
-                      _isLogin ? 'Login' : 'Signup',
-                      style: TextStyle(fontSize: 15),
-                    ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: _trySubmit,
+                        child: Text(
+                          _isLogin ? 'Login' : 'Signup',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                      TextButton(
+                        style: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all(
+                              Color.fromRGBO(47, 149, 153, 1)),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isLogin = !_isLogin;
+                            _isLogin
+                                ? _animationController.reverse()
+                                : _animationController.forward();
+                          });
+                        },
+                        child: Text(_isLogin
+                            ? 'Create new account'
+                            : 'I already have an account'),
+                      ),
+                    ],
                   ),
-                if (!widget.isLoading)
-                  TextButton(
-                    style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all(
-                          Color.fromRGBO(47, 149, 153, 1)
-                          // Color.fromRGBO(242, 107, 56, 1),
-                          //  Color.fromRGBO(236, 32, 73, 1),
-                          ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _isLogin = !_isLogin;
-                        _isLogin
-                            ? _animationController.reverse()
-                            : _animationController.forward();
-                      });
-                    },
-                    child: Text(_isLogin
-                        ? 'Create new account'
-                        : 'I already have an account'),
-                  ),
+
+                // if (!widget.isLoading)
+                //   TextButton(
+                //     style: ButtonStyle(
+                //       foregroundColor: MaterialStateProperty.all(
+                //           Color.fromRGBO(47, 149, 153, 1)),
+                //     ),
+                //     onPressed: () {
+                //       setState(() {
+                //         _isLogin = !_isLogin;
+                //         _isLogin
+                //             ? _animationController.reverse()
+                //             : _animationController.forward();
+                //       });
+                //     },
+                //     child: Text(_isLogin
+                //         ? 'Create new account'
+                //         : 'I already have an account'),
+                //   ),
               ],
             ),
           ),
