@@ -2,6 +2,7 @@ import 'package:clean_mates_app/providers/gifts_provider.dart';
 import 'package:flutter/material.dart';
 import '../models/gift.dart';
 import 'package:provider/provider.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class EditGiftScreen extends StatefulWidget {
   static const routeName = '/editGift';
@@ -23,6 +24,18 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
     points: 0,
   );
   var appBarName = 'Create new gift';
+  List<IconData> icons = [
+    Icons.bed,
+    Icons.food_bank_rounded,
+    Icons.question_mark,
+    Icons.coffee,
+    Icons.card_giftcard_outlined,
+    Icons.cookie,
+    Icons.spa_outlined,
+    Icons.theaters,
+    Icons.wine_bar
+  ];
+  var _iconSelectedIndex = 4;
 
   Future<void> _saveForm() async {
     final formValid = _form.currentState.validate();
@@ -79,6 +92,7 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       appBar: AppBar(
         title: Text(appBarName),
@@ -145,6 +159,49 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                       giftName: _editedGift.giftName,
                                       points: int.parse(value));
                                 }),
+                            Container(
+                              margin: EdgeInsets.all(15),
+                              child: CarouselSlider.builder(
+                                key: _scaffoldKey,
+                                options: CarouselOptions(
+                                  height: 100,
+                                  viewportFraction: 0.4,
+                                  initialPage: _iconSelectedIndex,
+                                  enableInfiniteScroll: false,
+                                  reverse: false,
+                                  //enlargeCenterPage: true,
+                                  onPageChanged: (index, reason) {
+                                    setState(() {
+                                      _iconSelectedIndex = index;
+                                    });
+                                  },
+                                  enlargeStrategy:
+                                      CenterPageEnlargeStrategy.height,
+                                  enlargeFactor: 5,
+                                  scrollDirection: Axis.horizontal,
+                                ),
+                                itemCount: icons.length,
+                                itemBuilder: (BuildContext context,
+                                        int itemIndex, int pageViewIndex) =>
+                                    Container(
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                      border: itemIndex != _iconSelectedIndex
+                                          ? Border.symmetric(
+                                              vertical: BorderSide.none,
+                                              horizontal: BorderSide.none)
+                                          : Border.all(color: Colors.grey)),
+                                  child: Icon(
+                                    icons[itemIndex],
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    size: 40,
+
+                                    // itemIndex == _iconSelectedIndex ? 55 : 35,
+                                  ),
+                                ),
+                              ),
+                            )
                           ],
                         ),
                       )),
