@@ -28,11 +28,11 @@ class GiftsProvider extends ChangeNotifier {
 
     giftsData.docs.forEach((element) {
       Gift gift = Gift(
-        id: element.id,
-        giftName: element['giftName'],
-        points: element['points'],
-        roomId: element['roomId'],
-      );
+          id: element.id,
+          giftName: element['giftName'],
+          points: element['points'],
+          roomId: element['roomId'],
+          iconCode: element['iconCode']);
       gifts.add(gift);
     });
     gifts.sort(((a, b) => a.giftName.compareTo(b.giftName)));
@@ -41,6 +41,7 @@ class GiftsProvider extends ChangeNotifier {
   }
 
   Future<void> addGift(Gift gift, String idRoom) async {
+    print(gift.iconCode);
     final newGiftRef =
         await FirebaseFirestore.instance.collection('gifts').doc();
 
@@ -48,23 +49,26 @@ class GiftsProvider extends ChangeNotifier {
       'giftName': gift.giftName,
       'points': gift.points,
       'roomId': idRoom,
+      'iconCode': gift.iconCode
     });
 
     final newGift = Gift(
         id: newGiftRef.id,
         giftName: gift.giftName,
         points: gift.points,
-        roomId: gift.roomId);
+        roomId: gift.roomId,
+        iconCode: gift.iconCode);
 
     _gifts.insert(0, newGift);
     notifyListeners();
   }
 
   Future<void> updateGift(String id, Gift newGift) async {
-    await FirebaseFirestore.instance
-        .collection('gifts')
-        .doc(id)
-        .update({'giftName': newGift.giftName, 'points': newGift.points});
+    await FirebaseFirestore.instance.collection('gifts').doc(id).update({
+      'giftName': newGift.giftName,
+      'points': newGift.points,
+      'iconCode': newGift.iconCode
+    });
 
     final giftIndex = _gifts.indexWhere((gift) => gift.id == id);
     if (giftIndex >= 0) {

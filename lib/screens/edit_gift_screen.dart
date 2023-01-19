@@ -13,16 +13,16 @@ class EditGiftScreen extends StatefulWidget {
 
 class _EditGiftScreenState extends State<EditGiftScreen> {
   final _form = GlobalKey<FormState>();
-  var _initValues = {'roomName': '', 'points': ''};
+  Map<String, dynamic> _initValues = {'roomName': '', 'points': ''};
   final _pointsFocusNode = FocusNode();
   var _isInit = true;
   var _isLoading = false;
   String roomId;
   var _editedGift = Gift(
-    id: null,
-    giftName: '',
-    points: 0,
-  );
+      id: null,
+      giftName: '',
+      points: 0,
+      iconCode: Icons.card_giftcard_outlined.codePoint);
   var appBarName = 'Create new gift';
   List<IconData> icons = [
     Icons.bed,
@@ -33,7 +33,7 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
     Icons.cookie,
     Icons.spa_outlined,
     Icons.theaters,
-    Icons.wine_bar
+    Icons.wine_bar,
   ];
   var _iconSelectedIndex = 4;
 
@@ -77,6 +77,8 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
           'points': _editedGift.points.toString(),
         };
         appBarName = 'Edit gift';
+        _iconSelectedIndex =
+            icons.indexWhere((icon) => icon.codePoint == _editedGift.iconCode);
       }
     }
     _isInit = false;
@@ -119,10 +121,10 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                   .requestFocus(_pointsFocusNode),
                               onSaved: (value) {
                                 _editedGift = Gift(
-                                  id: _editedGift.id,
-                                  giftName: value,
-                                  points: _editedGift.points,
-                                );
+                                    id: _editedGift.id,
+                                    giftName: value,
+                                    points: _editedGift.points,
+                                    iconCode: _editedGift.iconCode);
                               },
                               validator: (value) {
                                 if (value.isEmpty)
@@ -157,7 +159,8 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                   _editedGift = Gift(
                                       id: _editedGift.id,
                                       giftName: _editedGift.giftName,
-                                      points: int.parse(value));
+                                      points: int.parse(value),
+                                      iconCode: _editedGift.iconCode);
                                 }),
                             Container(
                               margin: EdgeInsets.all(15),
@@ -173,7 +176,17 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                   onPageChanged: (index, reason) {
                                     setState(() {
                                       _iconSelectedIndex = index;
+                                      _editedGift = Gift(
+                                        id: _editedGift.id,
+                                        giftName: _editedGift.giftName,
+                                        points: _editedGift.points,
+                                        iconCode:
+                                            icons[_iconSelectedIndex].codePoint,
+                                      );
                                     });
+                                    print(Icon(icons[_iconSelectedIndex])
+                                        .icon
+                                        .codePoint);
                                   },
                                   enlargeStrategy:
                                       CenterPageEnlargeStrategy.height,
@@ -201,7 +214,7 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                   ),
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       )),

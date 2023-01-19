@@ -104,42 +104,45 @@ class GiftsScreen extends StatelessWidget {
                           itemBuilder: ((context, index) => Column(
                                 children: [
                                   ListTile(
-                                    trailing: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        IconButton(
-                                          icon: Icon(Icons.edit),
-                                          onPressed: () {
-                                            Navigator.of(context).pushNamed(
-                                                EditGiftScreen.routeName,
-                                                arguments: {
-                                                  'id':
-                                                      giftsData.gifts[index].id,
-                                                });
-                                          },
-                                        ),
-                                        IconButton(
-                                          icon: Icon(Icons.delete),
-                                          onPressed: () => _deleteGift(context,
-                                              giftsData.gifts[index].id),
-                                        ),
-                                      ],
-                                    ),
-                                    leading: CircleAvatar(
-                                        radius: 25,
-                                        backgroundColor:
-                                            Theme.of(context).dividerColor,
-                                        foregroundColor: Colors.white,
-                                        child: FittedBox(
-                                          child: Text(
-                                              '${giftsData.gifts[index].points}'),
-                                        )),
-                                    title: Text(
-                                      giftsData.gifts[index].giftName,
-                                      style: TextStyle(),
-                                    ),
-                                    subtitle: Text(myRoom.roomName),
-                                  ),
+                                      trailing: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          IconButton(
+                                            icon: Icon(Icons.edit),
+                                            onPressed: () {
+                                              Navigator.of(context).pushNamed(
+                                                  EditGiftScreen.routeName,
+                                                  arguments: {
+                                                    'id': giftsData
+                                                        .gifts[index].id,
+                                                  });
+                                            },
+                                          ),
+                                          IconButton(
+                                            icon: Icon(Icons.delete),
+                                            onPressed: () => _deleteGift(
+                                                context,
+                                                giftsData.gifts[index].id),
+                                          ),
+                                        ],
+                                      ),
+                                      leading: CircleAvatar(
+                                          radius: 25,
+                                          backgroundColor:
+                                              Theme.of(context).dividerColor,
+                                          foregroundColor: Colors.white,
+                                          child: FittedBox(
+                                            child: Icon(IconData(
+                                                (giftsData
+                                                    .gifts[index].iconCode),
+                                                fontFamily: 'MaterialIcons')),
+                                          )),
+                                      title: Text(
+                                        giftsData.gifts[index].giftName,
+                                        style: TextStyle(),
+                                      ),
+                                      subtitle: Text(
+                                          '${giftsData.gifts[index].points} points')),
                                   Divider()
                                 ],
                               )),
