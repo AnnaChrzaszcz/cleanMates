@@ -30,12 +30,12 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
     points: 0,
   );
   double _value = 0;
-  List<String> dictionary = [
-    'Tidbit',
-    'Massage',
-    'Cinema tickets',
-    'Breakfast to bed',
-    'Day off cleaning'
+  List<Map> dictionary = [
+    {'name': 'Treat', 'index': 5},
+    {'name': 'Massage', 'index': 6},
+    {'name': 'Cinema tickets', 'index': 7},
+    {'name': 'Breakfast to bed', 'index': 0},
+    {'name': 'Day off cleaning', 'index': 2},
   ];
   int _selectedDictionaryIndex = -1;
   double min;
@@ -43,13 +43,17 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
   var dziesiatek;
   var appBarName = 'Create new gift';
   List<IconData> icons = [
-    Icons.airplane_ticket,
+    Icons.bed,
     Icons.food_bank_rounded,
-    Icons.card_giftcard_outlined,
+    Icons.question_mark,
     Icons.coffee,
-    Icons.cookie
+    Icons.card_giftcard_outlined,
+    Icons.cookie,
+    Icons.spa_outlined,
+    Icons.theaters,
+    Icons.wine_bar
   ];
-  var _iconSelectedIned = 2;
+  var _iconSelectedIndex = 4;
 
   Future<void> _saveForm() async {
     final formValid = _form.currentState.validate();
@@ -126,6 +130,7 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       appBar: AppBar(
         title: Text(appBarName),
@@ -133,271 +138,282 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                Expanded(
-                  child: Form(
-                      key: _form,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 30),
-                        child: ListView(
-                          children: [
-                            TextFormField(
-                              controller: _nameEditingController,
-                              decoration:
-                                  InputDecoration(labelText: 'Gift name'),
-                              textInputAction: TextInputAction.next,
-                              onFieldSubmitted: (_) => FocusScope.of(context)
-                                  .requestFocus(_pointsFocusNode),
-                              onSaved: (value) {
-                                _editedGift = Gift(
-                                  id: _editedGift.id,
-                                  giftName: value,
-                                  points: _editedGift.points,
-                                );
-                              },
-                              validator: (value) {
-                                if (value.isEmpty)
-                                  return 'enter a name';
-                                else
-                                  return null;
-                              },
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              height: 80,
-                              child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: dictionary.length,
-                                  itemBuilder: ((context, index) {
-                                    return Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              if (index ==
-                                                  _selectedDictionaryIndex) {
-                                                _nameEditingController.text =
-                                                    '';
-                                                _selectedDictionaryIndex = -1;
-                                              } else {
-                                                _nameEditingController.text =
-                                                    dictionary[index];
-                                                _selectedDictionaryIndex =
-                                                    index;
-                                              }
-                                            });
-                                          },
-                                          child: Chip(
-                                            label: Text('${dictionary[index]}',
-                                                style: TextStyle(
-                                                    color: index ==
-                                                            _selectedDictionaryIndex
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                    fontWeight: index ==
-                                                            _selectedDictionaryIndex
-                                                        ? FontWeight.bold
-                                                        : FontWeight.normal)),
-                                            backgroundColor: index ==
-                                                    _selectedDictionaryIndex
-                                                ? Color.fromRGBO(
-                                                    242, 107, 56, 1)
-                                                : Color.fromRGBO(
-                                                    240, 240, 240, 1),
-                                            padding: EdgeInsets.all(15),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 5,
-                                        )
-                                      ],
-                                    );
-                                  })),
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            TextFormField(
-                                controller: _pointsEditingController,
-                                decoration: InputDecoration(labelText: 'Value'),
+          : Container(
+              padding: const EdgeInsets.only(
+                  left: 15, right: 15, top: 30, bottom: 10),
+              // decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
+              child: Column(
+                children: [
+                  Form(
+                    key: _form,
+                    child: Expanded(
+                      child: Container(
+                        child: ListView(children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              TextFormField(
+                                controller: _nameEditingController,
+                                decoration:
+                                    InputDecoration(labelText: 'Gift name'),
                                 textInputAction: TextInputAction.done,
-                                onFieldSubmitted: ((_) => _saveForm()),
-                                keyboardType: TextInputType.number,
-                                focusNode: _pointsFocusNode,
-                                validator: (value) {
-                                  if (value.isEmpty) return 'enter a price';
-                                  if (int.parse(value) == null)
-                                    return 'enter a int value';
-                                  else if (int.parse(value) <= 0) {
-                                    return 'price must be grater than 0';
-                                  } else if (int.parse(value) > 1000) {
-                                    return 'price can not be greater than 1000';
-                                  } else
-                                    return null;
-                                },
+                                // onFieldSubmitted: (_) => FocusScope.of(context)
+                                //     .requestFocus(_pointsFocusNode),
                                 onSaved: (value) {
                                   _editedGift = Gift(
-                                      id: _editedGift.id,
-                                      giftName: _editedGift.giftName,
-                                      points: int.parse(value));
-                                }),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            SliderTheme(
-                              data: SliderTheme.of(context).copyWith(
-                                trackHeight: 10.0,
-                                trackShape: RoundedRectSliderTrackShape(),
-                                activeTrackColor:
-                                    Theme.of(context).colorScheme.primary,
-                                inactiveTrackColor: Theme.of(context)
-                                    .colorScheme
-                                    .primary
-                                    .withOpacity(0.5),
-                                thumbShape: RoundSliderThumbShape(
-                                  enabledThumbRadius: 14.0,
-                                  pressedElevation: 8.0,
-                                ),
-                                thumbColor: Color.fromRGBO(242, 107, 56, 1),
-                                overlayColor: Color.fromRGBO(242, 107, 56, 0.2),
-                                overlayShape: RoundSliderOverlayShape(
-                                    overlayRadius: 32.0),
-                                tickMarkShape: RoundSliderTickMarkShape(),
-                                activeTickMarkColor:
-                                    Color.fromRGBO(247, 219, 79, 1),
-                                inactiveTickMarkColor: Colors.white,
-                                valueIndicatorShape:
-                                    PaddleSliderValueIndicatorShape(),
-                                valueIndicatorColor:
-                                    Color.fromRGBO(242, 107, 56, 1),
-                                valueIndicatorTextStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                ),
-                              ),
-                              child: Slider(
-                                min: min,
-                                max: max,
-                                value: _value,
-                                divisions: 10,
-                                label: '${_value.round()}',
-                                onChanged: (value) {
+                                    id: _editedGift.id,
+                                    giftName: value,
+                                    points: _editedGift.points,
+                                  );
+                                },
+                                onTap: () {
                                   setState(() {
-                                    _value = value;
-                                    _pointsEditingController.text =
-                                        _value.toInt().toString();
+                                    _iconSelectedIndex = 4;
                                   });
                                 },
+                                validator: (value) {
+                                  if (value.isEmpty)
+                                    return 'enter a name';
+                                  else
+                                    return null;
+                                },
                               ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  children: [
-                                    IconButton(
-                                        onPressed: min != 0.0
-                                            ? () {
-                                                setState(() {
-                                                  dziesiatek -= 1;
-                                                  max = (dziesiatek + 1) *
-                                                      100.toDouble();
-
-                                                  min = (dziesiatek) *
-                                                      100.toDouble();
-                                                  // min = 0.0;
-                                                  // max = 100.0;
-                                                  _value -= 100;
-                                                  _pointsEditingController
-                                                          .text =
-                                                      _value.toInt().toString();
-                                                });
-                                              }
-                                            : null,
-                                        icon: Icon(Icons.arrow_back_ios_new)),
-                                    Text('- 100')
-                                  ],
+                              Container(
+                                height: 80,
+                                child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: dictionary.length,
+                                    itemBuilder: ((context, index) {
+                                      return Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                if (index ==
+                                                    _selectedDictionaryIndex) {
+                                                  _nameEditingController.text =
+                                                      '';
+                                                  _selectedDictionaryIndex = 4;
+                                                } else {
+                                                  _nameEditingController.text =
+                                                      dictionary[index]['name'];
+                                                  _selectedDictionaryIndex =
+                                                      index;
+                                                  _iconSelectedIndex =
+                                                      dictionary[index]
+                                                          ['index'];
+                                                }
+                                              });
+                                            },
+                                            child: Chip(
+                                              label: Text(
+                                                  '${dictionary[index]['name']}',
+                                                  style: TextStyle(
+                                                      color: index ==
+                                                              _selectedDictionaryIndex
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                      fontWeight: index ==
+                                                              _selectedDictionaryIndex
+                                                          ? FontWeight.bold
+                                                          : FontWeight.normal)),
+                                              backgroundColor: index ==
+                                                      _selectedDictionaryIndex
+                                                  ? Color.fromRGBO(
+                                                      242, 107, 56, 1)
+                                                  : Color.fromRGBO(
+                                                      240, 240, 240, 1),
+                                              padding: EdgeInsets.all(15),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          )
+                                        ],
+                                      );
+                                    })),
+                              ),
+                              TextFormField(
+                                  controller: _pointsEditingController,
+                                  decoration:
+                                      InputDecoration(labelText: 'Value'),
+                                  textInputAction: TextInputAction.done,
+                                  onFieldSubmitted: ((_) => _saveForm()),
+                                  keyboardType: TextInputType.number,
+                                  focusNode: _pointsFocusNode,
+                                  validator: (value) {
+                                    if (value.isEmpty) return 'enter a price';
+                                    if (int.parse(value) == null)
+                                      return 'enter a int value';
+                                    else if (int.parse(value) <= 0) {
+                                      return 'price must be grater than 0';
+                                    } else if (int.parse(value) > 1000) {
+                                      return 'price can not be greater than 1000';
+                                    } else
+                                      return null;
+                                  },
+                                  onSaved: (value) {
+                                    _editedGift = Gift(
+                                        id: _editedGift.id,
+                                        giftName: _editedGift.giftName,
+                                        points: int.parse(value));
+                                  }),
+                              SliderTheme(
+                                data: SliderTheme.of(context).copyWith(
+                                  trackHeight: 10.0,
+                                  trackShape: RoundedRectSliderTrackShape(),
+                                  activeTrackColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  inactiveTrackColor: Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withOpacity(0.5),
+                                  thumbShape: RoundSliderThumbShape(
+                                    enabledThumbRadius: 14.0,
+                                    pressedElevation: 8.0,
+                                  ),
+                                  thumbColor: Color.fromRGBO(242, 107, 56, 1),
+                                  overlayColor:
+                                      Color.fromRGBO(242, 107, 56, 0.2),
+                                  overlayShape: RoundSliderOverlayShape(
+                                      overlayRadius: 32.0),
+                                  tickMarkShape: RoundSliderTickMarkShape(),
+                                  activeTickMarkColor:
+                                      Color.fromRGBO(247, 219, 79, 1),
+                                  inactiveTickMarkColor: Colors.white,
+                                  valueIndicatorShape:
+                                      PaddleSliderValueIndicatorShape(),
+                                  valueIndicatorColor:
+                                      Color.fromRGBO(242, 107, 56, 1),
+                                  valueIndicatorTextStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20.0,
+                                  ),
                                 ),
-                                Column(
-                                  children: [
-                                    IconButton(
-                                        onPressed: max == 1000
-                                            ? null
-                                            : () {
-                                                setState(() {
-                                                  dziesiatek += 1;
-                                                  min = dziesiatek *
-                                                      100.toDouble();
-
-                                                  max = (dziesiatek + 1) *
-                                                      100.toDouble();
-
-                                                  _value += 100;
-
-                                                  _pointsEditingController
-                                                          .text =
-                                                      _value.toInt().toString();
-                                                });
-                                              },
-                                        icon: Icon(Icons.arrow_forward_ios)),
-                                    Text('+ 100')
-                                  ],
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            // Text('Select gift icon:',
-                            //     style: Theme.of(context).textTheme.headline6),
-                            Container(
-                              child: CarouselSlider.builder(
-                                options: CarouselOptions(
-                                  height: 100,
-                                  viewportFraction: 0.4,
-                                  initialPage: _iconSelectedIned,
-                                  enableInfiniteScroll: false,
-                                  reverse: false,
-                                  enlargeCenterPage: true,
-                                  onPageChanged: (index, reason) {
+                                child: Slider(
+                                  min: min,
+                                  max: max,
+                                  value: _value,
+                                  divisions: 10,
+                                  label: '${_value.round()}',
+                                  onChanged: (value) {
                                     setState(() {
-                                      _iconSelectedIned = index;
+                                      _value = value;
+                                      _pointsEditingController.text =
+                                          _value.toInt().toString();
                                     });
                                   },
-                                  enlargeStrategy:
-                                      CenterPageEnlargeStrategy.height,
-                                  enlargeFactor: 5,
-                                  scrollDirection: Axis.horizontal,
-                                ),
-                                itemCount: icons.length,
-                                itemBuilder: (BuildContext context,
-                                        int itemIndex, int pageViewIndex) =>
-                                    Icon(
-                                  icons[itemIndex],
-                                  color: itemIndex == _iconSelectedIned
-                                      ? Color.fromRGBO(242, 107, 56, 1)
-                                      : Theme.of(context).colorScheme.primary,
-                                  size:
-                                      itemIndex == _iconSelectedIned ? 55 : 35,
                                 ),
                               ),
-                            )
-                          ],
-                        ),
-                      )),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 30),
-                  child: ElevatedButton(
-                    onPressed: _saveForm,
-                    child: Text('Save'),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    children: [
+                                      IconButton(
+                                          onPressed: min != 0.0
+                                              ? () {
+                                                  setState(() {
+                                                    dziesiatek -= 1;
+                                                    max = (dziesiatek + 1) *
+                                                        100.toDouble();
+
+                                                    min = (dziesiatek) *
+                                                        100.toDouble();
+                                                    // min = 0.0;
+                                                    // max = 100.0;
+                                                    _value -= 100;
+                                                    _pointsEditingController
+                                                            .text =
+                                                        _value
+                                                            .toInt()
+                                                            .toString();
+                                                  });
+                                                }
+                                              : null,
+                                          icon: Icon(Icons.arrow_back_ios_new)),
+                                      Text('- 100')
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      IconButton(
+                                          onPressed: max == 1000
+                                              ? null
+                                              : () {
+                                                  setState(() {
+                                                    dziesiatek += 1;
+                                                    min = dziesiatek *
+                                                        100.toDouble();
+
+                                                    max = (dziesiatek + 1) *
+                                                        100.toDouble();
+
+                                                    _value += 100;
+
+                                                    _pointsEditingController
+                                                            .text =
+                                                        _value
+                                                            .toInt()
+                                                            .toString();
+                                                  });
+                                                },
+                                          icon: Icon(Icons.arrow_forward_ios)),
+                                      Text('+ 100')
+                                    ],
+                                  )
+                                ],
+                              ),
+                              Container(
+                                child: CarouselSlider.builder(
+                                  key: _scaffoldKey,
+                                  options: CarouselOptions(
+                                    height: 100,
+                                    viewportFraction: 0.4,
+                                    initialPage: _iconSelectedIndex,
+                                    enableInfiniteScroll: false,
+                                    reverse: false,
+                                    enlargeCenterPage: true,
+                                    onPageChanged: (index, reason) {
+                                      setState(() {
+                                        _iconSelectedIndex = index;
+                                      });
+                                    },
+                                    enlargeStrategy:
+                                        CenterPageEnlargeStrategy.height,
+                                    enlargeFactor: 5,
+                                    scrollDirection: Axis.horizontal,
+                                  ),
+                                  itemCount: icons.length,
+                                  itemBuilder: (BuildContext context,
+                                          int itemIndex, int pageViewIndex) =>
+                                      Icon(
+                                    icons[itemIndex],
+                                    color: itemIndex == _iconSelectedIndex
+                                        ? Color.fromRGBO(242, 107, 56, 1)
+                                        : Theme.of(context).colorScheme.primary,
+                                    size: itemIndex == _iconSelectedIndex
+                                        ? 55
+                                        : 35,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ]),
+                      ),
+                    ),
                   ),
-                )
-              ],
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    child: ElevatedButton(
+                      onPressed: _saveForm,
+                      child: Text('Save'),
+                    ),
+                  )
+                ],
+              ),
             ),
     );
   }
