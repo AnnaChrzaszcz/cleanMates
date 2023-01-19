@@ -16,9 +16,10 @@ import 'package:provider/provider.dart';
 class BuyGiftContainer extends StatefulWidget {
   final List<Gift> gifts;
   final String userId;
+  final int yourPoitns;
   Function refreshGifts;
-  BuyGiftContainer(
-      @required this.gifts, @required this.userId, @required this.refreshGifts);
+  BuyGiftContainer(@required this.gifts, @required this.userId,
+      @required this.yourPoitns, @required this.refreshGifts);
 
   @override
   _BuyGiftsContainerState createState() => _BuyGiftsContainerState();
@@ -88,17 +89,31 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
       child: Column(
         children: [
           CircleAvatar(
-            radius: 30,
+            radius: 50,
             backgroundColor: Theme.of(context).primaryColor,
             foregroundColor: Colors.white,
-            child: AnimatedSwitcher(
-              transitionBuilder: (Widget child, Animation<double> animation) {
-                return ScaleTransition(scale: animation, child: child);
-              },
-              duration: const Duration(milliseconds: 600),
-              child: Text(
-                '${giftsointsSum}',
-                key: ValueKey<int>(giftsointsSum),
+            child: FittedBox(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  AnimatedSwitcher(
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                      return ScaleTransition(scale: animation, child: child);
+                    },
+                    duration: const Duration(milliseconds: 600),
+                    child: Text(
+                      '${giftsointsSum}',
+                      style: TextStyle(fontSize: 25),
+                      key: ValueKey<int>(giftsointsSum),
+                    ),
+                  ),
+                  Text(
+                    ' / ${widget.yourPoitns}',
+                    style: TextStyle(fontSize: 14),
+                  )
+                ],
               ),
             ),
           ),
@@ -185,7 +200,7 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
             ),
             child: _isLoading
                 ? const CircularProgressIndicator()
-                : const Text('Save'),
+                : const Text('Buy'),
           )
         ],
       ),
