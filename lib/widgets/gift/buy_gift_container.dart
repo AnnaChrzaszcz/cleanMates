@@ -12,7 +12,9 @@ import 'package:provider/provider.dart';
 class BuyGiftContainer extends StatefulWidget {
   final List<Gift> gifts;
   final String userId;
-  BuyGiftContainer(@required this.gifts, @required this.userId);
+  final int yourPoints;
+  BuyGiftContainer(
+      @required this.gifts, @required this.userId, @required this.yourPoints);
 
   @override
   _BuyGiftsContainerState createState() => _BuyGiftsContainerState();
@@ -86,11 +88,13 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
       child: Column(
         children: [
           CircleAvatar(
-            radius: 30,
+            radius: 45,
             backgroundColor: Theme.of(context).primaryColor,
             foregroundColor: Colors.white,
-            child: Text(
-              '${giftsointsSum}',
+            child: FittedBox(
+              child: Text(
+                '${giftsointsSum} / ${widget.yourPoints}',
+              ),
             ),
           ),
           Expanded(
@@ -162,7 +166,7 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
             ),
             child: _isLoading
                 ? const CircularProgressIndicator()
-                : const Text('Save'),
+                : const Text('Buy'),
           )
         ],
       ),

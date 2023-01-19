@@ -24,6 +24,7 @@ class BuyGiftScreen extends StatelessWidget {
     var roomieId;
     var roomieUsername;
     var yourUsername;
+    var yourPoints;
     List<UserGift> userGifts = [];
     List<UserGift> roomieGifts = [];
 
@@ -38,6 +39,8 @@ class BuyGiftScreen extends StatelessWidget {
           myRoom.roomies.firstWhere((roomie) => roomie.id != userId).userName;
       yourUsername =
           myRoom.roomies.firstWhere((roomie) => roomie.id == userId).userName;
+      yourPoints =
+          myRoom.roomies.firstWhere((roomie) => roomie.id == userId).points;
     }
 
     return FutureBuilder(
@@ -97,9 +100,7 @@ class BuyGiftScreen extends StatelessWidget {
                               ),
                             )
                           : BuyGiftContainer(
-                              gitsData.gifts,
-                              userId,
-                            ))),
+                              gitsData.gifts, userId, yourPoints))),
             )),
     );
   }
