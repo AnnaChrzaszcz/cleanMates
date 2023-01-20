@@ -22,14 +22,14 @@ class SaveActivityScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Save activity'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(EditActivityScreen.routeName,
-                    arguments: {'roomId': myRoom.id});
-              },
-              icon: Icon(Icons.add))
-        ],
+        // actions: [
+        //   IconButton(
+        //       onPressed: () {
+        //         Navigator.of(context).pushNamed(EditActivityScreen.routeName,
+        //             arguments: {'roomId': myRoom.id});
+        //       },
+        //       icon: Icon(Icons.add))
+        // ],
       ),
       body: myRoom.roomies.length == 1
           ? Center(
