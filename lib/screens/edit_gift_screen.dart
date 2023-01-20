@@ -25,10 +25,10 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
   var _isLoading = false;
   String roomId;
   var _editedGift = Gift(
-    id: null,
-    giftName: '',
-    points: 0,
-  );
+      id: null,
+      giftName: '',
+      points: 0,
+      iconCode: Icons.card_giftcard_outlined.codePoint);
   double _value = 0;
   List<Map> dictionary = [
     {'name': 'Treat', 'index': 5},
@@ -61,6 +61,7 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
       setState(() {
         _isLoading = true;
       });
+      print(_editedGift.iconCode);
       _form.currentState.save();
       if (_editedGift.id != null) {
         await Provider.of<GiftsProvider>(context, listen: false)
@@ -98,6 +99,8 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
             'points': _editedGift.points.toString(),
           };
           appBarName = 'Edit gift';
+          _iconSelectedIndex = icons
+              .indexWhere((icon) => icon.codePoint == _editedGift.iconCode);
           dziesiatek = (_editedGift.points / 100).toInt();
           min = dziesiatek * 100.toDouble();
           max = (dziesiatek + 1) * 100.toDouble();
@@ -161,15 +164,11 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                 //     .requestFocus(_pointsFocusNode),
                                 onSaved: (value) {
                                   _editedGift = Gift(
-                                    id: _editedGift.id,
-                                    giftName: value,
-                                    points: _editedGift.points,
-                                  );
-                                },
-                                onTap: () {
-                                  setState(() {
-                                    _iconSelectedIndex = 4;
-                                  });
+                                      id: _editedGift.id,
+                                      giftName: value,
+                                      points: _editedGift.points,
+                                      iconCode:
+                                          icons[_iconSelectedIndex].codePoint);
                                 },
                                 validator: (value) {
                                   if (value.isEmpty)
@@ -256,7 +255,9 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                     _editedGift = Gift(
                                         id: _editedGift.id,
                                         giftName: _editedGift.giftName,
-                                        points: int.parse(value));
+                                        points: int.parse(value),
+                                        iconCode: icons[_iconSelectedIndex]
+                                            .codePoint);
                                   }),
                               SliderTheme(
                                 data: SliderTheme.of(context).copyWith(
@@ -378,7 +379,15 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                     onPageChanged: (index, reason) {
                                       setState(() {
                                         _iconSelectedIndex = index;
+                                        _editedGift = Gift(
+                                          id: _editedGift.id,
+                                          giftName: _editedGift.giftName,
+                                          points: _editedGift.points,
+                                          iconCode: icons[_iconSelectedIndex]
+                                              .codePoint,
+                                        );
                                       });
+                                      print(_editedGift.iconCode);
                                     },
                                     enlargeStrategy:
                                         CenterPageEnlargeStrategy.height,

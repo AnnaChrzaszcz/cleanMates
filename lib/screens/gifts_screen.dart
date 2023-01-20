@@ -126,70 +126,73 @@ class GiftsScreen extends StatelessWidget {
                             itemBuilder: ((context, index) => Column(
                                   children: [
                                     ListTile(
-                                      trailing: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          IconButton(
-                                            icon: Icon(Icons.edit),
-                                            onPressed: () {
-                                              Navigator.of(context).pushNamed(
-                                                  EditGiftScreen.routeName,
-                                                  arguments: {
-                                                    'id': giftsData
-                                                        .gifts[index].id,
-                                                  });
-                                            },
-                                          ),
-                                          IconButton(
-                                              icon: Icon(Icons.delete),
+                                        trailing: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            IconButton(
+                                              icon: Icon(Icons.edit),
                                               onPressed: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (ctx) => AlertDialog(
-                                                    title:
-                                                        Text('Are you sure?'),
-                                                    content: Text(
-                                                        'Do you want to remove this gift?'),
-                                                    actions: [
-                                                      TextButton(
-                                                          onPressed: () {
-                                                            Navigator.of(ctx)
-                                                                .pop();
-                                                          },
-                                                          child: Text('NO')),
-                                                      TextButton(
-                                                          onPressed: () {
-                                                            Navigator.of(ctx)
-                                                                .pop();
-                                                            _deleteGift(
-                                                                context,
-                                                                giftsData
-                                                                    .gifts[
-                                                                        index]
-                                                                    .id);
-                                                          },
-                                                          child: Text('YES')),
-                                                    ],
-                                                  ),
-                                                );
-                                              }),
-                                        ],
-                                      ),
-                                      leading: CircleAvatar(
-                                          radius: 25,
-                                          backgroundColor:
-                                              Theme.of(context).dividerColor,
-                                          foregroundColor: Colors.white,
-                                          child: FittedBox(
-                                            child: Text(
-                                                '${giftsData.gifts[index].points}'),
-                                          )),
-                                      title: Text(
-                                        giftsData.gifts[index].giftName,
-                                        style: TextStyle(),
-                                      ),
-                                      subtitle: Text(myRoom.roomName),
-                                    ),
+                                                Navigator.of(context).pushNamed(
+                                                    EditGiftScreen.routeName,
+                                                    arguments: {
+                                                      'id': giftsData
+                                                          .gifts[index].id,
+                                                    });
+                                              },
+                                            ),
+                                            IconButton(
+                                                icon: Icon(Icons.delete),
+                                                onPressed: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (ctx) =>
+                                                        AlertDialog(
+                                                      title:
+                                                          Text('Are you sure?'),
+                                                      content: Text(
+                                                          'Do you want to remove this gift?'),
+                                                      actions: [
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(ctx)
+                                                                  .pop();
+                                                            },
+                                                            child: Text('NO')),
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(ctx)
+                                                                  .pop();
+                                                              _deleteGift(
+                                                                  context,
+                                                                  giftsData
+                                                                      .gifts[
+                                                                          index]
+                                                                      .id);
+                                                            },
+                                                            child: Text('YES')),
+                                                      ],
+                                                    ),
+                                                  );
+                                                }),
+                                          ],
+                                        ),
+                                        leading: CircleAvatar(
+                                            radius: 25,
+                                            backgroundColor:
+                                                Theme.of(context).dividerColor,
+                                            foregroundColor: Colors.white,
+                                            child: FittedBox(
+                                              child: Icon(IconData(
+                                                  (giftsData
+                                                      .gifts[index].iconCode),
+                                                  fontFamily: 'MaterialIcons')),
+                                            )),
+                                        title: Text(
+                                          giftsData.gifts[index].giftName,
+                                          style: TextStyle(),
+                                        ),
+                                        subtitle: Text(
+                                            '${giftsData.gifts[index].points} points')),
                                     Divider()
                                   ],
                                 )),

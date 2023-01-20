@@ -62,18 +62,18 @@ class BuyGiftScreen extends StatelessWidget {
               builder: ((ctx, gitsData, _) => Scaffold(
                   appBar: AppBar(
                     title: Text('Buy gifts'),
-                    actions: [
-                      IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(
-                                EditGiftScreen.routeName,
-                                arguments: {'roomId': myRoom.id});
-                          },
-                          icon: gitsData.gifts.isEmpty
-                              ? Lottie.asset(
-                                  'assets/animations/lottie/add2.json')
-                              : const Icon(Icons.add))
-                    ],
+                    actions: gitsData.gifts.isEmpty
+                        ? [
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).pushNamed(
+                                      EditGiftScreen.routeName,
+                                      arguments: {'roomId': myRoom.id});
+                                },
+                                icon: Lottie.asset(
+                                    'assets/animations/lottie/add2.json'))
+                          ]
+                        : [],
                   ),
                   body: myRoom.roomies.length == 1
                       ? Center(

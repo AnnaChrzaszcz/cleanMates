@@ -35,18 +35,18 @@ class SaveActivityScreen extends StatelessWidget {
               builder: ((ctx, activitiesData, _) => Scaffold(
                   appBar: AppBar(
                     title: Text('Save activity'),
-                    actions: [
-                      IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(
-                                EditActivityScreen.routeName,
-                                arguments: {'roomId': myRoom.id});
-                          },
-                          icon: activitiesData.activities.isEmpty
-                              ? Lottie.asset(
-                                  'assets/animations/lottie/add2.json')
-                              : const Icon(Icons.add))
-                    ],
+                    actions: activitiesData.activities.isEmpty
+                        ? [
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).pushNamed(
+                                      EditActivityScreen.routeName,
+                                      arguments: {'roomId': myRoom.id});
+                                },
+                                icon: Lottie.asset(
+                                    'assets/animations/lottie/add2.json'))
+                          ]
+                        : [],
                   ),
                   body: myRoom.roomies.length == 1
                       ? Center(

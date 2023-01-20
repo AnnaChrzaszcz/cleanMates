@@ -183,15 +183,15 @@ class ActivitiesScreen extends StatelessWidget {
                                               Theme.of(context).dividerColor,
                                           foregroundColor: Colors.white,
                                           child: FittedBox(
-                                            child: Text(
-                                                '${activitiesData.activities[index].points}'),
-                                          )),
+                                              child: Icon(Icons
+                                                  .cleaning_services_outlined))),
                                       title: Text(
                                         activitiesData
                                             .activities[index].activityName,
                                         style: TextStyle(),
                                       ),
-                                      subtitle: Text(myRoom.roomName),
+                                      subtitle: Text(
+                                          '${activitiesData.activities[index].points} points'),
                                     ),
                                     Divider()
                                   ],

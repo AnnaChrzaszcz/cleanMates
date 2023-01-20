@@ -5,11 +5,12 @@ class Gift {
   final String giftName;
   final int points;
   final String roomId;
+  final int iconCode;
 
-  Gift({
-    @required this.id,
-    @required this.giftName,
-    @required this.points,
-    @required this.roomId,
-  });
+  Gift(
+      {@required this.id,
+      @required this.giftName,
+      @required this.points,
+      @required this.roomId,
+      @required this.iconCode});
 }
