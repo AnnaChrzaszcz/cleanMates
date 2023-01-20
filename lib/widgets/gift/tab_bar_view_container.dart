@@ -3,6 +3,7 @@ import 'package:clean_mates_app/models/userGift.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 
 class TabBarViewContainer extends StatefulWidget {
   final List<UserGift> yourBought;
@@ -21,7 +22,7 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
     with SingleTickerProviderStateMixin {
   var _boughtExpanded = false;
   var _recivedExpanded = false;
-  var yourSelectedIndex = -1;
+
   AnimationController _animationController;
   Animation<double> _opacityAnimation;
 
@@ -79,7 +80,7 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
           height: _boughtExpanded
               ? min(
-                  widget.yourBought.length * 30.0 + 50,
+                  widget.yourBought.length * 30.0 + 70,
                   MediaQuery.of(context).size.height < 680.0
                       ? MediaQuery.of(context).size.height * 1 / 4
                       : MediaQuery.of(context).size.height * 1 / 3)
@@ -88,53 +89,53 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
             opacity: _opacityAnimation,
             child: ListView.builder(
               itemCount: widget.yourBought.length,
-              itemBuilder: ((context, index) => Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          widget.yourBought[index].giftName,
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        Checkbox(
-                            activeColor: Theme.of(context).primaryColor,
-                            value: yourSelectedIndex == index,
-                            onChanged: (value) {
-                              setState(() {
-                                yourSelectedIndex = value ? index : -1;
-                              });
-                            }),
-                      ],
+              itemBuilder: ((context, index) => Dismissible(
+                    key: Key(widget.yourBought[index].id),
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      color: Theme.of(context).colorScheme.primary,
+                      child: Icon(
+                        Icons.check,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(right: 20),
+                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                    ),
+                    onDismissed: (direction) {
+                      widget.recive(widget.userId, index);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            widget.yourBought[index].giftName,
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          RotatedBox(
+                            quarterTurns: 2,
+                            child: Container(
+                              width: 60,
+                              height: 60,
+                              child: Lottie.asset(
+                                'assets/animations/lottie/swipe2.json',
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   )),
             ),
           ),
         ),
-        if (_boughtExpanded)
-          ElevatedButton(
-            onPressed: yourSelectedIndex >= 0
-                ? () {
-                    widget.recive(widget.userId, yourSelectedIndex);
-                    setState(() {
-                      yourSelectedIndex = -1;
-                    });
-                  }
-                : null,
-            child: false ? CircularProgressIndicator() : Text('Receive'),
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                (Set<MaterialState> states) {
-                  if (states.contains(MaterialState.disabled))
-                    return Colors.grey;
-                  return Theme.of(context)
-                      .primaryColor; // Use the component's default.
-                },
-              ),
-            ),
-          ),
+
         Divider(),
         ListTile(
           title: Text('Recived gifts'),
