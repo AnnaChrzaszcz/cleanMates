@@ -30,7 +30,7 @@ class RoomItem extends StatelessWidget {
             color: Theme.of(context).colorScheme.primary,
             size: 40,
           ),
-          selectedTileColor: Colors.grey[100],
+          selectedTileColor: Color.fromRGBO(195, 227, 227, 1),
           subtitle: Text(
             'owner: ${room.creatorId}',
             style:

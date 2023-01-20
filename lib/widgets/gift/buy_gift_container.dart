@@ -123,7 +123,8 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                 builder: (context, controller) {
                   return const CircleAvatar(
                     radius: 55,
-                    backgroundColor: Color.fromRGBO(47, 149, 153, 1),
+                    backgroundColor: Color.fromRGBO(
+                        199, 236, 240, 1), //Color.fromRGBO(47, 149, 153, 1),
                     child: RiveAnimation.asset(
                       'assets/animations/indicator.riv',
                     ),
@@ -134,54 +135,288 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
               child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 8),
                 child: ListView.builder(
-                  itemCount: widget.gifts.length,
-                  itemBuilder: ((context, index) => Column(
-                        children: [
-                          CheckboxListTile(
-                            title: Text(
-                              widget.gifts[index].giftName,
-                              style: TextStyle(
-                                  fontWeight: selectedIndexes.contains(index)
-                                      ? FontWeight.w500
-                                      : FontWeight.normal),
-                            ),
-                            secondary: CircleAvatar(
-                              radius: selectedIndexes.contains(index) ? 23 : 22,
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.primary,
-                              child: CircleAvatar(
-                                radius: 20,
-                                foregroundColor: Colors.black,
-                                backgroundColor: Colors.white,
-                                child: Text('${widget.gifts[index].points}',
-                                    style: TextStyle(
-                                        fontWeight:
-                                            selectedIndexes.contains(index)
-                                                ? FontWeight.bold
-                                                : FontWeight.normal)),
-                              ),
-                            ),
-                            value: selectedIndexes.contains(index),
-                            onChanged: (_) {
-                              if (selectedIndexes.contains(index)) {
-                                setState(() {
-                                  selectedIndexes.remove(index);
-                                  giftsointsSum -= widget.gifts[index].points;
-                                });
-                              } else {
-                                setState(() {
-                                  selectedIndexes.add(index);
+                    itemCount: widget.gifts.length,
+                    itemBuilder: ((context, index) => Card(
+                          color: selectedIndexes.contains(index)
+                              ? Color.fromRGBO(195, 227, 227, 1)
+                              : Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18)),
+                          elevation: 20,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 4),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: AnimatedContainer(
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.easeIn,
+                                    child: CircleAvatar(
+                                      radius: selectedIndexes.contains(index)
+                                          ? 35
+                                          : 30,
+                                      backgroundColor:
+                                          Theme.of(context).dividerColor,
+                                      foregroundColor: Colors.white,
+                                      child: AnimatedContainer(
+                                        duration: Duration(milliseconds: 300),
+                                        curve: Curves.easeIn,
+                                        child: Icon(
+                                          IconData(
+                                              (widget.gifts[index].iconCode),
+                                              fontFamily: 'MaterialIcons'),
+                                          size: selectedIndexes.contains(index)
+                                              ? 35
+                                              : 28,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(
+                                        height: 5.0,
+                                      ),
+                                      Text(
+                                        widget.gifts[index].giftName,
+                                        style: TextStyle(
+                                            fontSize:
+                                                selectedIndexes.contains(index)
+                                                    ? 20
+                                                    : 17,
+                                            fontWeight:
+                                                selectedIndexes.contains(index)
+                                                    ? FontWeight.w500
+                                                    : FontWeight.normal),
+                                      ),
+                                      Text('${widget.gifts[index].points} pts',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: selectedIndexes
+                                                      .contains(index)
+                                                  ? FontWeight.bold
+                                                  : FontWeight.normal)),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 18,
+                                          backgroundColor: Colors.grey[200],
+                                          foregroundColor: Colors.black,
+                                          child: IconButton(
+                                            icon: Icon(Icons.remove),
+                                            onPressed: () {
+                                              setState(() {
+                                                var indextoDelete =
+                                                    selectedIndexes.indexWhere(
+                                                        (ind) => ind == index);
 
-                                  giftsointsSum += widget.gifts[index].points;
-                                });
-                              }
-                            },
-                            activeColor: Theme.of(context).colorScheme.primary,
+                                                if (indextoDelete != -1) {
+                                                  selectedIndexes
+                                                      .removeAt(indextoDelete);
+                                                  giftsointsSum -= widget
+                                                      .gifts[index].points;
+                                                }
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 2,
+                                        ),
+                                        AnimatedSwitcher(
+                                          transitionBuilder: (Widget child,
+                                              Animation<double> animation) {
+                                            return ScaleTransition(
+                                                scale: animation, child: child);
+                                          },
+                                          duration:
+                                              const Duration(milliseconds: 600),
+                                          child: Text(
+                                            '${selectedIndexes.where((el) => el == index).toList().length}',
+                                            style: TextStyle(fontSize: 18),
+                                            key: ValueKey<int>(selectedIndexes
+                                                .where((el) => el == index)
+                                                .toList()
+                                                .length),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 2,
+                                        ),
+                                        CircleAvatar(
+                                          radius: 18,
+                                          backgroundColor: Colors.grey[200],
+                                          foregroundColor: Colors.black,
+                                          child: FittedBox(
+                                            child: IconButton(
+                                              icon: Icon(Icons.add),
+                                              onPressed: () {
+                                                setState(() {
+                                                  selectedIndexes.add(index);
+                                                  giftsointsSum += widget
+                                                      .gifts[index].points;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ]),
+                                ),
+                              ],
+                            ),
                           ),
-                          Divider()
-                        ],
-                      )),
-                ),
+                        ))
+                    // Card(
+                    //       shape: RoundedRectangleBorder(
+                    //           borderRadius: BorderRadius.circular(18)),
+                    //       elevation: 10,
+                    //       child: Expanded(
+                    //         child: ListTile(
+                    //           contentPadding: EdgeInsets.all(10),
+                    //           onTap: () {
+                    //             if (selectedIndexes.contains(index)) {
+                    //               setState(() {
+                    //                 selectedIndexes.remove(index);
+                    //                 giftsointsSum -= widget.gifts[index].points;
+                    //               });
+                    //             } else {
+                    //               setState(() {
+                    //                 selectedIndexes.add(index);
+
+                    //                 giftsointsSum += widget.gifts[index].points;
+                    //               });
+                    //             }
+                    //           },
+                    //           //activeColor: Theme.of(context).colorScheme.primary,
+                    //           trailing: Column(
+                    //               mainAxisAlignment: MainAxisAlignment.center,
+                    //               children: [
+                    //                 CircleAvatar(
+                    //                   radius: 15,
+                    //                   backgroundColor: Colors.grey[200],
+                    //                   foregroundColor: Colors.black,
+                    //                   child: FittedBox(
+                    //                     child: Icon(
+                    //                       Icons.remove,
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //                 SizedBox(
+                    //                   height: 2,
+                    //                 ),
+                    //                 Text('0'),
+                    //                 SizedBox(
+                    //                   height: 2,
+                    //                 ),
+                    //                 CircleAvatar(
+                    //                   radius: 15,
+                    //                   backgroundColor: Colors.grey[200],
+                    //                   foregroundColor: Colors.black,
+                    //                   child: FittedBox(
+                    //                     child: Icon(
+                    //                       Icons.add,
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //               ]),
+                    //           leading: CircleAvatar(
+                    //             radius: 25,
+                    //             backgroundColor: Theme.of(context).dividerColor,
+                    //             foregroundColor: Colors.white,
+                    //             child: FittedBox(
+                    //               child: Icon(
+                    //                 IconData((widget.gifts[index].iconCode),
+                    //                     fontFamily: 'MaterialIcons'),
+                    //                 shadows: selectedIndexes.contains(index)
+                    //                     ? [
+                    //                         Shadow(
+                    //                             blurRadius: 15,
+                    //                             color: Colors.yellow)
+                    //                       ]
+                    //                     : [],
+                    //               ),
+                    //             ),
+                    //           ),
+                    //           title: Text(
+                    //             widget.gifts[index].giftName,
+                    //             style: TextStyle(
+                    //                 fontSize: selectedIndexes.contains(index)
+                    //                     ? 20
+                    //                     : 17,
+                    //                 fontWeight: selectedIndexes.contains(index)
+                    //                     ? FontWeight.w500
+                    //                     : FontWeight.normal),
+                    //           ),
+                    //           subtitle: Text(
+                    //               '${widget.gifts[index].points} points',
+                    //               style: TextStyle(
+                    //                   fontSize: 18,
+                    //                   fontWeight:
+                    //                       selectedIndexes.contains(index)
+                    //                           ? FontWeight.bold
+                    //                           : FontWeight.normal)),
+                    //         ),
+                    //       ),
+                    //     ))
+                    // Column(
+                    //       children: [
+                    //         CheckboxListTile(
+                    //           title: Text(
+                    //             widget.gifts[index].giftName,
+                    //             style: TextStyle(
+                    //                 fontWeight: selectedIndexes.contains(index)
+                    //                     ? FontWeight.w500
+                    //                     : FontWeight.normal),
+                    //           ),
+                    //           secondary: CircleAvatar(
+                    //             radius: selectedIndexes.contains(index) ? 23 : 22,
+                    //             backgroundColor:
+                    //                 Theme.of(context).colorScheme.primary,
+                    //             child: CircleAvatar(
+                    //               radius: 20,
+                    //               foregroundColor: Colors.black,
+                    //               backgroundColor: Colors.white,
+                    //               child: Text('${widget.gifts[index].points}',
+                    //                   style: TextStyle(
+                    //                       fontWeight:
+                    //                           selectedIndexes.contains(index)
+                    //                               ? FontWeight.bold
+                    //                               : FontWeight.normal)),
+                    //             ),
+                    //           ),
+                    //           value: selectedIndexes.contains(index),
+                    //           onChanged: (_) {
+                    //             if (selectedIndexes.contains(index)) {
+                    //               setState(() {
+                    //                 selectedIndexes.remove(index);
+                    //                 giftsointsSum -= widget.gifts[index].points;
+                    //               });
+                    //             } else {
+                    //               setState(() {
+                    //                 selectedIndexes.add(index);
+
+                    //                 giftsointsSum += widget.gifts[index].points;
+                    //               });
+                    //             }
+                    //           },
+                    //           activeColor: Theme.of(context).colorScheme.primary,
+                    //         ),
+                    //         Divider()
+                    //       ],
+                    //     )),
+                    ),
               ),
             ),
           ),

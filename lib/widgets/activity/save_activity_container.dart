@@ -162,7 +162,7 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                             },
                             activeColor: Theme.of(context).colorScheme.primary,
                             tileColor: selectedIndexes.contains(index)
-                                ? Colors.grey[100]
+                                ? Color.fromRGBO(195, 227, 227, 1)
                                 : Colors.white,
                           ),
                           Divider()
