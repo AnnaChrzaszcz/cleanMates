@@ -99,13 +99,10 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                         CheckboxListTile(
                           title: Text(
                             widget.activities[index].activityName,
-                            style: TextStyle(
-                                fontWeight: selectedIndexes.contains(index)
-                                    ? FontWeight.w500
-                                    : FontWeight.normal),
+                            style: TextStyle(fontWeight: FontWeight.normal),
                           ),
                           secondary: CircleAvatar(
-                            radius: selectedIndexes.contains(index) ? 23 : 22,
+                            radius: 22,
                             backgroundColor:
                                 Theme.of(context).colorScheme.primary,
                             child: CircleAvatar(
@@ -114,10 +111,6 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                               backgroundColor: Colors.white,
                               child: Text(
                                 '${widget.activities[index].points}',
-                                style: TextStyle(
-                                    fontWeight: selectedIndexes.contains(index)
-                                        ? FontWeight.bold
-                                        : FontWeight.normal),
                               ),
                             ),
                           ),
@@ -138,9 +131,6 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                             }
                           },
                           activeColor: Theme.of(context).colorScheme.primary,
-                          tileColor: selectedIndexes.contains(index)
-                              ? Colors.grey[100]
-                              : Colors.white,
                         ),
                         Divider()
                       ],

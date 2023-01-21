@@ -21,20 +21,16 @@ class RoomItem extends StatelessWidget {
         ListTile(
           title: Text(
             room.roomName,
-            style: TextStyle(
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: Colors.black),
+            style: TextStyle(color: Colors.black),
           ),
           leading: Icon(
-            isSelected ? Icons.house : Icons.house_outlined,
+            Icons.house_outlined,
             color: Theme.of(context).colorScheme.primary,
             size: 40,
           ),
-          selectedTileColor: Colors.grey[100],
           subtitle: Text(
             'owner: ${room.creatorId}',
-            style:
-                TextStyle(color: isSelected ? Colors.black87 : Colors.black45),
+            style: TextStyle(color: Colors.black45),
           ),
           trailing: Icon(
             Icons.check_rounded,

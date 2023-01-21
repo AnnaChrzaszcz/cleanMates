@@ -100,21 +100,7 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
                               fontSize: 16),
                         ),
                       ],
-                    )
-              // child: Row(
-              //   mainAxisSize: MainAxisSize.min,
-              //   children: [
-              //     const Text(
-              //       'Join existing room',
-              //       style: TextStyle(
-              //           color: Color.fromRGBO(47, 149, 153, 1),
-              //           fontWeight: FontWeight.w500,
-              //           fontSize: 16),
-              //     ),
-              //     Icon(!_joinRoom ? Icons.chevron_right : Icons.expand_less)
-              //   ],
-              // ),
-              ),
+                    )),
           if (_joinRoom) JoinRoom(widget.joinToRoom, rooms)
         ],
       ),
