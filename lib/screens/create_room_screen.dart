@@ -98,7 +98,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                                 return null;
                             },
                           ),
-                          Text('tu bedzie lista mozliwych osob do dodania?'),
+                          //Text('tu bedzie lista mozliwych osob do dodania?'),
                         ],
                       ),
                     ),
