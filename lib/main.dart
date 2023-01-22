@@ -8,6 +8,7 @@ import 'package:clean_mates_app/screens/gifts_screen.dart';
 import 'package:clean_mates_app/screens/history_screen.dart';
 import 'package:clean_mates_app/screens/gifts_reception_screen.dart';
 import 'package:clean_mates_app/screens/save_activity_screen.dart';
+import 'package:clean_mates_app/screens/stats_screen.dart';
 import 'package:clean_mates_app/screens/user_dashboard_screen.dart';
 import 'package:clean_mates_app/screens/user_profile_screen.dart';
 import 'package:clean_mates_app/screens/user_room_screen.dart';
@@ -114,7 +115,8 @@ class MyApp extends StatelessWidget {
           BuyGiftScreen.routeName: (context) => BuyGiftScreen(),
           HistoryScreen.routeName: (context) => HistoryScreen(),
           UserProfile.routeName: (context) => UserProfile(),
-          RecivedGiftsScreen.routeName: (context) => RecivedGiftsScreen()
+          RecivedGiftsScreen.routeName: (context) => RecivedGiftsScreen(),
+          StatsScreen.routeName: (context) => StatsScreen()
         },
       ),
     );

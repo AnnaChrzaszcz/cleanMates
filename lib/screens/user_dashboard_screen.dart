@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:clean_mates_app/screens/buy_gift_screen.dart';
 import 'package:clean_mates_app/screens/history_screen.dart';
+import 'package:clean_mates_app/screens/stats_screen.dart';
 
 import '../screens/save_activity_screen.dart';
 import '../widgets/app_drawer.dart';
@@ -77,7 +78,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       },
       {
         'title': 'Stats',
-        'routeName': '', //StatsScreen.routeName,
+        'routeName': StatsScreen.routeName, //StatsScreen.routeName,
         'imagePath': 'assets/images/stats.png',
         'color': Color.fromRGBO(242, 107, 56, 1),
       },
@@ -176,32 +177,32 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
               ],
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(UserRoomScreen.routeName)
-                        .then((_) {});
-                  },
-                  icon: const Icon(Icons.home),
-                  iconSize: 40,
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(HistoryScreen.routeName)
-                        .then((_) {});
-                  },
-                  icon: const Icon(Icons.history),
-                  iconSize: 40,
-                ),
-              ],
-            ),
-          ),
+          // Expanded(
+          //   flex: 1,
+          //   child: Row(
+          //     mainAxisSize: MainAxisSize.min,
+          //     children: [
+          //       IconButton(
+          //         onPressed: () {
+          //           Navigator.of(context)
+          //               .pushNamed(UserRoomScreen.routeName)
+          //               .then((_) {});
+          //         },
+          //         icon: const Icon(Icons.home),
+          //         iconSize: 40,
+          //       ),
+          //       IconButton(
+          //         onPressed: () {
+          //           Navigator.of(context)
+          //               .pushNamed(HistoryScreen.routeName)
+          //               .then((_) {});
+          //         },
+          //         icon: const Icon(Icons.history),
+          //         iconSize: 40,
+          //       ),
+          //     ],
+          //   ),
+          // ),
           Expanded(
             flex: 4,
             child: GridView(
