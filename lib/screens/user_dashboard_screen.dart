@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clean_mates_app/screens/buy_gift_screen.dart';
 import 'package:clean_mates_app/screens/history_screen.dart';
+import 'package:clean_mates_app/screens/stats_screen.dart';
 import 'package:clean_mates_app/widgets/fab/action_button.dart';
 import 'package:clean_mates_app/widgets/fab/expandable_fab.dart';
 import 'package:clean_mates_app/widgets/room/join_room.dart';
@@ -84,7 +85,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       },
       {
         'title': 'Stats',
-        'routeName': 'a', //StatsScreen.routeName,
+        'routeName': StatsScreen.routeName, //StatsScreen.routeName,
         'imagePath': 'assets/images/stats.png',
         'color': Color.fromRGBO(242, 107, 56, 0.7),
       },
