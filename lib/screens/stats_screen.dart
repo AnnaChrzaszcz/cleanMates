@@ -164,12 +164,12 @@ class _StatsScreenState extends State<StatsScreen> {
                                           ? [
                                               Text(
                                                 '${you.userName}',
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 16),
+                                                    fontSize: 18),
                                               ),
                                               Text('sum: ${yourDailySum} pts',
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: 16))
@@ -193,12 +193,12 @@ class _StatsScreenState extends State<StatsScreen> {
                                           ? [
                                               Text(
                                                 '${roomie.userName}',
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 16),
+                                                    fontSize: 18),
                                               ),
                                               Text('sum: ${roomieDailySum} pts',
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: 16))
@@ -210,7 +210,7 @@ class _StatsScreenState extends State<StatsScreen> {
                                   : roomActivities[index - 1].roomieId ==
                                           roomieId
                                       ? Text(
-                                          '${DateFormat('HH:mm').format(roomActivities[index - 1].creationDate)}  ${roomActivities[index - 1].activityName}')
+                                          '${DateFormat('HH:mm').format(roomActivities[index - 1].creationDate)}  ${roomActivities[index - 1].activityName} (${roomActivities[index - 1].points}p)')
                                       : Text(''),
                             ),
                             itemCount: roomActivities.length + 1,
