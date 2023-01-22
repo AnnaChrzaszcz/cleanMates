@@ -94,10 +94,19 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
                     direction: DismissDirection.endToStart,
                     background: Container(
                       color: Theme.of(context).colorScheme.primary,
-                      child: Icon(
-                        Icons.check,
-                        color: Colors.white,
-                        size: 40,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Recive',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          Icon(
+                            Icons.check,
+                            color: Colors.white,
+                            size: 40,
+                          ),
+                        ],
                       ),
                       alignment: Alignment.centerRight,
                       padding: EdgeInsets.only(right: 20),
@@ -117,17 +126,20 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-                          RotatedBox(
-                            quarterTurns: 2,
-                            child: Container(
-                              width: 60,
-                              height: 60,
-                              child: Lottie.asset(
-                                'assets/animations/lottie/swipe2.json',
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          )
+                          index == 0
+                              ? Container(
+                                  width: 180,
+                                  height: 60,
+                                  child: Lottie.asset(
+                                    'assets/animations/lottie/swipe.json',
+                                    height: 60,
+                                    width: 90,
+                                    fit: BoxFit.fitWidth,
+                                  ),
+                                )
+                              : Container(
+                                  height: 60,
+                                ),
                         ],
                       ),
                     ),
