@@ -56,12 +56,11 @@ class GiftsScreen extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Gifts'),
+        title: Text('Gifts overview'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton:
           CustomAddFab(activityScreen: false, roomId: myRoom.id),
-      drawer: AppDrawer(),
       body: FutureBuilder(
         future: _refreshGifts(context, myRoom.id),
         builder: ((context, snapshot) => snapshot.connectionState ==

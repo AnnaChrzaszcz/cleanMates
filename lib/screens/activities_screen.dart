@@ -57,12 +57,11 @@ class ActivitiesScreen extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Activities'),
+        title: Text('Activities overview'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton:
           CustomAddFab(activityScreen: true, roomId: myRoom.id),
-      drawer: AppDrawer(),
       body: FutureBuilder(
         future: _refreshActivities(context, myRoom.id),
         builder: ((context, snapshot) => snapshot.connectionState ==
@@ -183,15 +182,13 @@ class ActivitiesScreen extends StatelessWidget {
                                               Theme.of(context).dividerColor,
                                           foregroundColor: Colors.white,
                                           child: FittedBox(
-                                              child: Icon(Icons
-                                                  .cleaning_services_outlined))),
+                                              child: Text(
+                                                  '${activitiesData.activities[index].points}'))),
                                       title: Text(
                                         activitiesData
                                             .activities[index].activityName,
                                         style: TextStyle(),
                                       ),
-                                      subtitle: Text(
-                                          '${activitiesData.activities[index].points} points'),
                                     ),
                                     Divider()
                                   ],

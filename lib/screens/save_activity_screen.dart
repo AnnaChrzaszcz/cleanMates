@@ -33,21 +33,17 @@ class SaveActivityScreen extends StatelessWidget {
             )
           : Consumer<ActivitiesProvider>(
               builder: ((ctx, activitiesData, _) => Scaffold(
-                  appBar: AppBar(
-                    title: Text('Save activity'),
-                    actions: activitiesData.activities.isEmpty
-                        ? [
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.of(context).pushNamed(
-                                      EditActivityScreen.routeName,
-                                      arguments: {'roomId': myRoom.id});
-                                },
-                                icon: Lottie.asset(
-                                    'assets/animations/lottie/add2.json'))
-                          ]
-                        : [],
-                  ),
+                  appBar: AppBar(title: Text('Save activity'), actions: [
+                    IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(
+                              EditActivityScreen.routeName,
+                              arguments: {'roomId': myRoom.id});
+                        },
+                        icon: activitiesData.activities.isEmpty
+                            ? Lottie.asset('assets/animations/lottie/add2.json')
+                            : Icon(Icons.add))
+                  ]),
                   body: myRoom.roomies.length == 1
                       ? Center(
                           child: Text(
@@ -67,16 +63,24 @@ class SaveActivityScreen extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    'You need at least one activity in your dictionary',
+                                    'You need at least one activity in your activities overview',
                                     style:
                                         Theme.of(context).textTheme.headline6,
                                     textAlign: TextAlign.center,
                                   ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
                                   TextButton(
                                       onPressed: () => Navigator.of(context)
-                                          .pushReplacementNamed(
-                                              ActivitiesScreen.routeName),
-                                      child: Text('Go to activities overview'))
+                                          .pushNamed(
+                                              EditActivityScreen.routeName,
+                                              arguments: {'roomId': myRoom.id}),
+                                      child: Text(
+                                        'Click the above "+" to add new activity',
+                                        style: TextStyle(fontSize: 18),
+                                        textAlign: TextAlign.center,
+                                      ))
                                 ],
                               ),
                             )

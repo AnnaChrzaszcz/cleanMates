@@ -62,7 +62,8 @@ class ActivitiesProvider extends ChangeNotifier {
         points: activity.points,
         roomId: activity.roomId);
 
-    _activities.insert(0, newActivity);
+    //_activities.insert(0, newActivity);
+    _activities.add(newActivity);
     notifyListeners();
   }
 
