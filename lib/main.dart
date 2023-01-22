@@ -110,9 +110,11 @@ class MyApp extends StatelessWidget {
                 //return UserDashboardScreen();
                 return OnBoardingPage(isLogin: true); // UserDashboardScreen();
               }
-              return repeat != null ? AuthScreen() : IntroScreen();
+              //return repeat != null ? AuthScreen() : IntroScreen();
+              return IntroScreen();
             }
-            return repeat != null ? AuthScreen() : IntroScreen();
+            //return repeat != null ? AuthScreen() : IntroScreen();
+            return IntroScreen();
             //return OnBoardingPage(isLogin: false); //AuthScreen();
           },
         ),
