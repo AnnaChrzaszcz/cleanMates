@@ -57,17 +57,15 @@ class BuyGiftScreen extends StatelessWidget {
               builder: ((ctx, gitsData, _) => Scaffold(
                   appBar: AppBar(
                     title: Text('Buy gifts'),
-                    actions: gitsData.gifts.isEmpty
-                        ? [
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.of(context).pushNamed(
-                                      EditGiftScreen.routeName,
-                                      arguments: {'roomId': myRoom.id});
-                                },
-                                icon: Icon(Icons.add))
-                          ]
-                        : [],
+                    actions: [
+                      IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                                EditGiftScreen.routeName,
+                                arguments: {'roomId': myRoom.id});
+                          },
+                          icon: Icon(Icons.add))
+                    ],
                   ),
                   body: myRoom.roomies.length == 1
                       ? Center(
@@ -88,16 +86,27 @@ class BuyGiftScreen extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    'You need at least one gift in your dictionary',
+                                    'You need at least one gift in your gifts overview',
                                     style:
                                         Theme.of(context).textTheme.headline6,
                                     textAlign: TextAlign.center,
                                   ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
                                   TextButton(
-                                      onPressed: () => Navigator.of(context)
-                                          .pushReplacementNamed(
-                                              GiftsScreen.routeName),
-                                      child: Text('Go to gifts overview'))
+                                      onPressed: () => {
+                                            Navigator.of(context).pushNamed(
+                                                EditGiftScreen.routeName,
+                                                arguments: {
+                                                  'roomId': myRoom.id
+                                                })
+                                          },
+                                      child: Text(
+                                        'Click above "+" to add new gift',
+                                        style: TextStyle(fontSize: 18),
+                                        textAlign: TextAlign.center,
+                                      ))
                                 ],
                               ),
                             )

@@ -50,12 +50,7 @@ class ActivitiesScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Activities'),
-        // actions: [
-        //   IconButton(
-        //       onPressed: () => _goToEditActivity(context, myRoom),
-        //       icon: Icon(Icons.add))
-        // ],
+        title: Text('Activities overview'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
@@ -63,7 +58,6 @@ class ActivitiesScreen extends StatelessWidget {
         onPressed: () => _goToEditActivity(context, myRoom),
         child: Icon(Icons.add),
       ),
-      drawer: AppDrawer(),
       body: FutureBuilder(
         future: _refreshActivities(context, myRoom.id),
         builder: ((context, snapshot) => snapshot.connectionState ==

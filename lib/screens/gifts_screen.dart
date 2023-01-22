@@ -50,12 +50,7 @@ class GiftsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Gifts'),
-        // actions: [
-        //   IconButton(
-        //       onPressed: () => _goToNewGift(context, myRoom),
-        //       icon: Icon(Icons.add))
-        // ],
+        title: Text('Gifts overview'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
@@ -63,7 +58,6 @@ class GiftsScreen extends StatelessWidget {
         onPressed: () => _goToNewGift(context, myRoom),
         child: Icon(Icons.add),
       ),
-      drawer: AppDrawer(),
       body: FutureBuilder(
         future: _refreshGifts(context, myRoom.id),
         builder: ((context, snapshot) => snapshot.connectionState ==

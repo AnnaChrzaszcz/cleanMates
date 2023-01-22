@@ -22,61 +22,76 @@ class SaveActivityScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Save activity'),
-        // actions: [
-        //   IconButton(
-        //       onPressed: () {
-        //         Navigator.of(context).pushNamed(EditActivityScreen.routeName,
-        //             arguments: {'roomId': myRoom.id});
-        //       },
-        //       icon: Icon(Icons.add))
-        // ],
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(EditActivityScreen.routeName,
+                    arguments: {'roomId': myRoom.id});
+              },
+              icon: Icon(Icons.add))
+        ],
       ),
-      body: myRoom.roomies.length == 1
-          ? Center(
-              child: Text(
-                'You need to add a roomie to your room',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-            )
-          : FutureBuilder(
-              future: _refreshActivities(context, myRoom.id),
-              builder: ((context, snapshot) => snapshot.connectionState ==
-                      ConnectionState.waiting
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : Consumer<ActivitiesProvider>(
-                      builder: ((ctx, activitiesData, _) => activitiesData
-                                  .activities.length ==
-                              0
-                          ? Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 30, horizontal: 10),
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 30, horizontal: 30),
-                              width: double.infinity,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'You need at least one activity in your dictionary',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  TextButton(
-                                      onPressed: () => Navigator.of(context)
-                                          .pushReplacementNamed(
-                                              ActivitiesScreen.routeName),
-                                      child: Text('Go to dictionary'))
-                                ],
-                              ),
-                            )
-                          : SaveActivityContainer(
-                              activitiesData.activities, userId)),
-                    )),
-            ),
+      body: myRoom == null
+          ? Center()
+          : myRoom.roomies.length == 1
+              ? Center(
+                  child: Text(
+                    'You need to add a roomie to your room',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                )
+              : FutureBuilder(
+                  future: _refreshActivities(context, myRoom.id),
+                  builder: ((context, snapshot) => snapshot.connectionState ==
+                          ConnectionState.waiting
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : Consumer<ActivitiesProvider>(
+                          builder: ((ctx, activitiesData, _) =>
+                              activitiesData.activities.length == 0
+                                  ? Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 30, horizontal: 10),
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 30, horizontal: 30),
+                                      width: double.infinity,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            'You need at least one activity in your activities overview',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context)
+                                                      .pushNamed(
+                                                          EditActivityScreen
+                                                              .routeName,
+                                                          arguments: {
+                                                        'roomId': myRoom.id
+                                                      }),
+                                              child: Text(
+                                                'Click above "+" to add new activity',
+                                                style: TextStyle(fontSize: 18),
+                                                textAlign: TextAlign.center,
+                                              ))
+                                        ],
+                                      ),
+                                    )
+                                  : SaveActivityContainer(
+                                      activitiesData.activities, userId)),
+                        )),
+                ),
     );
   }
 }

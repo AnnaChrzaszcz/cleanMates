@@ -64,8 +64,7 @@ class AppDrawer extends StatelessWidget {
               title: Text('Activities Overview'),
               onTap: () {
                 //TYLKO JESLI JEST ROOM
-                Navigator.of(context)
-                    .pushReplacementNamed(ActivitiesScreen.routeName);
+                Navigator.of(context).pushNamed(ActivitiesScreen.routeName);
               },
             ),
           if (room != null) Divider(),
@@ -74,8 +73,7 @@ class AppDrawer extends StatelessWidget {
               leading: Icon(Icons.card_giftcard_outlined),
               title: Text('Gifts Overview'), //TYLKO JESLI JEST ROOM
               onTap: () {
-                Navigator.of(context)
-                    .pushReplacementNamed(GiftsScreen.routeName);
+                Navigator.of(context).pushNamed(GiftsScreen.routeName);
               },
             ),
           if (room != null) const Divider(),
