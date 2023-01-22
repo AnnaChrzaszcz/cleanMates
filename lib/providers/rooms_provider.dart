@@ -130,14 +130,11 @@ class RoomsProvider extends ChangeNotifier {
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
     final userData = roomieSnapshot.data();
 
-    if (userData != null) {
-      return Roomie(
-          id: userId,
-          userName: userData['username'],
-          points: userData['points'],
-          imageUrl: userData['image_url']);
-    } else
-      return Roomie(id: userId, userName: '', points: 0, imageUrl: '');
+    return Roomie(
+        id: userId,
+        userName: userData['username'],
+        points: userData['points'],
+        imageUrl: userData['image_url']);
   }
 
   Future<void> joinToRoom(String roomId) async {
