@@ -71,6 +71,35 @@ class UserRoomScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontSize: 18.0,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                            text:
+                                'To join to a different room, first you have to '),
+                        // WidgetSpan(
+                        //     child: Container(
+                        //   padding: EdgeInsets.all(6.0),
+                        //   decoration: BoxDecoration(
+                        //       borderRadius: BorderRadius.circular(10),
+                        //       color: Color.fromRGBO(167, 34, 110, 1)),
+                        //   child: Text("leave current room",
+                        //       style: const TextStyle(
+                        //           fontWeight: FontWeight.bold,
+                        //           fontSize: 19,
+                        //           backgroundColor:
+                        //               Color.fromRGBO(167, 34, 110, 1),
+                        //           color: Colors.white)),
+                        // )),
+                        TextSpan(text: 'leave current room'),
+                      ],
+                    ),
+                  ),
                   Expanded(
                     child: CustomRefreshIndicator(
                       builder: MaterialIndicatorDelegate(
@@ -100,7 +129,7 @@ class UserRoomScreen extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () => _leaveRoom(room, context),
-                    child: Text('Leave this room'),
+                    child: Text('Leave current room'),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor),
                   ),
