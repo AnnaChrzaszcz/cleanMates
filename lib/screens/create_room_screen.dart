@@ -50,13 +50,13 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
       try {
         await Provider.of<RoomsProvider>(context, listen: false)
             .addNewRoom(_editedRoom);
+        Navigator.of(context).pop();
       } catch (err) {
         print(err);
       } finally {
         setState(() {
           _isLoading = false;
         });
-        Navigator.of(context).pop();
       }
     }
   }

@@ -226,7 +226,7 @@ class RoomsProvider extends ChangeNotifier {
       'roomieId': user.uid,
     });
 
-    //final roomRoomieRef = await newRoomRef.get();
+    final roomRoomieRef = await newRoomRef.get();
 
     await FirebaseFirestore.instance
         .collection('users')
@@ -243,6 +243,8 @@ class RoomsProvider extends ChangeNotifier {
 
     //_rooms.add(newRoom);
     userRoom = newRoom;
+    print('nowy pokoj utowrzony');
+    print(userRoom.roomName);
     notifyListeners();
   }
 

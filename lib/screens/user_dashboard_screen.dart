@@ -94,16 +94,18 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     return FutureBuilder(
       future: _refreshRoom(),
       builder: (context, snapshot) {
+        print(snapshot);
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
             ),
           );
-        } else if (snapshot.connectionState == ConnectionState.done) {
+        } else {
           return Consumer<RoomsProvider>(
             builder: ((context, roomsdata, _) {
               if (roomsdata.myRoom != null) {
+                print(roomsdata.myRoom.roomName);
                 roomie = roomsdata.myRoom.roomies
                     .firstWhere((roomie) => roomie.id == user.uid);
                 return Scaffold(
