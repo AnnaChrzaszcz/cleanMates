@@ -155,27 +155,45 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              TextFormField(
-                                controller: _nameEditingController,
-                                decoration:
-                                    InputDecoration(labelText: 'Gift name'),
-                                textInputAction: TextInputAction.done,
-                                // onFieldSubmitted: (_) => FocusScope.of(context)
-                                //     .requestFocus(_pointsFocusNode),
-                                onSaved: (value) {
-                                  _editedGift = Gift(
-                                      id: _editedGift.id,
-                                      giftName: value,
-                                      points: _editedGift.points,
-                                      iconCode:
-                                          icons[_iconSelectedIndex].codePoint);
-                                },
-                                validator: (value) {
-                                  if (value.isEmpty)
-                                    return 'enter a name';
-                                  else
-                                    return null;
-                                },
+                              Container(
+                                width: double.infinity,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      icons[_iconSelectedIndex],
+                                      size: 40,
+                                    ),
+                                    SizedBox(
+                                      width: 15,
+                                    ),
+                                    Expanded(
+                                      child: TextFormField(
+                                        controller: _nameEditingController,
+                                        decoration: InputDecoration(
+                                            labelText: 'Gift name'),
+                                        textInputAction: TextInputAction.done,
+                                        // onFieldSubmitted: (_) => FocusScope.of(context)
+                                        //     .requestFocus(_pointsFocusNode),
+                                        onSaved: (value) {
+                                          _editedGift = Gift(
+                                              id: _editedGift.id,
+                                              giftName: value,
+                                              points: _editedGift.points,
+                                              iconCode:
+                                                  icons[_iconSelectedIndex]
+                                                      .codePoint);
+                                        },
+                                        validator: (value) {
+                                          if (value.isEmpty)
+                                            return 'enter a name';
+                                          else
+                                            return null;
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                               Container(
                                 height: 80,
@@ -366,48 +384,48 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                   )
                                 ],
                               ),
-                              Container(
-                                child: CarouselSlider.builder(
-                                  key: _scaffoldKey,
-                                  options: CarouselOptions(
-                                    height: 100,
-                                    viewportFraction: 0.4,
-                                    initialPage: _iconSelectedIndex,
-                                    enableInfiniteScroll: false,
-                                    reverse: false,
-                                    enlargeCenterPage: true,
-                                    onPageChanged: (index, reason) {
-                                      setState(() {
-                                        _iconSelectedIndex = index;
-                                        _editedGift = Gift(
-                                          id: _editedGift.id,
-                                          giftName: _editedGift.giftName,
-                                          points: _editedGift.points,
-                                          iconCode: icons[_iconSelectedIndex]
-                                              .codePoint,
-                                        );
-                                      });
-                                      print(_editedGift.iconCode);
-                                    },
-                                    enlargeStrategy:
-                                        CenterPageEnlargeStrategy.height,
-                                    enlargeFactor: 5,
-                                    scrollDirection: Axis.horizontal,
-                                  ),
-                                  itemCount: icons.length,
-                                  itemBuilder: (BuildContext context,
-                                          int itemIndex, int pageViewIndex) =>
-                                      Icon(
-                                    icons[itemIndex],
-                                    color: itemIndex == _iconSelectedIndex
-                                        ? Color.fromRGBO(242, 107, 56, 1)
-                                        : Theme.of(context).colorScheme.primary,
-                                    size: itemIndex == _iconSelectedIndex
-                                        ? 55
-                                        : 35,
-                                  ),
-                                ),
-                              )
+                              // Container(
+                              //   child: CarouselSlider.builder(
+                              //     key: _scaffoldKey,
+                              //     options: CarouselOptions(
+                              //       height: 100,
+                              //       viewportFraction: 0.4,
+                              //       initialPage: _iconSelectedIndex,
+                              //       enableInfiniteScroll: false,
+                              //       reverse: false,
+                              //       enlargeCenterPage: true,
+                              //       onPageChanged: (index, reason) {
+                              //         setState(() {
+                              //           _iconSelectedIndex = index;
+                              //           _editedGift = Gift(
+                              //             id: _editedGift.id,
+                              //             giftName: _editedGift.giftName,
+                              //             points: _editedGift.points,
+                              //             iconCode: icons[_iconSelectedIndex]
+                              //                 .codePoint,
+                              //           );
+                              //         });
+                              //         print(_editedGift.iconCode);
+                              //       },
+                              //       enlargeStrategy:
+                              //           CenterPageEnlargeStrategy.height,
+                              //       enlargeFactor: 5,
+                              //       scrollDirection: Axis.horizontal,
+                              //     ),
+                              //     itemCount: icons.length,
+                              //     itemBuilder: (BuildContext context,
+                              //             int itemIndex, int pageViewIndex) =>
+                              //         Icon(
+                              //       icons[itemIndex],
+                              //       color: itemIndex == _iconSelectedIndex
+                              //           ? Color.fromRGBO(242, 107, 56, 1)
+                              //           : Theme.of(context).colorScheme.primary,
+                              //       size: itemIndex == _iconSelectedIndex
+                              //           ? 55
+                              //           : 35,
+                              //     ),
+                              //   ),
+                              // )
                             ],
                           ),
                         ]),
