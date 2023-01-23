@@ -45,7 +45,7 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
   List<IconData> icons = [
     Icons.bed,
     Icons.food_bank_rounded,
-    Icons.question_mark,
+    Icons.mood,
     Icons.coffee,
     Icons.card_giftcard_outlined,
     Icons.cookie,
