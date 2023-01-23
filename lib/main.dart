@@ -99,23 +99,37 @@ class MyApp extends StatelessWidget {
                   primary: Color.fromRGBO(47, 149, 153, 1),
                 )),
         home: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
+          stream: FirebaseAuth.instance.userChanges(),
           builder: (context, userSnapshot) {
-            print(userSnapshot);
-            print(repeat);
-            if (userSnapshot.connectionState == ConnectionState.active) {
-              if (userSnapshot.hasData) {
-                print(userSnapshot.hasData);
-                print('siemanko has data');
-                //return UserDashboardScreen();
-                return OnBoardingPage(isLogin: true); // UserDashboardScreen();
+            print('userSnapshot: ${userSnapshot}');
+            if (userSnapshot.hasData) {
+              User user = userSnapshot.data;
+              if (user.displayName != null && user.photoURL != null) {
+                print('wszystko git');
+                return UserDashboardScreen();
               }
-              return repeat != null ? AuthScreen() : IntroScreen();
-              //return IntroScreen();
+              print('has data ale zle');
             }
-            return repeat != null ? AuthScreen() : IntroScreen();
-            //return IntroScreen();
-            //return OnBoardingPage(isLogin: false); //AuthScreen();
+            print('tak zwana dupa');
+            return AuthScreen();
+            // if (userSnapshot.connectionState == ConnectionState.active) {
+            //   if (userSnapshot.hasData) {
+            //     User user = userSnapshot.data;
+            //     if (user.displayName != null) {
+            //       print(user.displayName);
+            //       print('eloooo');
+            //
+            //     }
+            //   }
+            //   //return repeat != null ? AuthScreen() : IntroScreen();
+
+            //   //return IntroScreen();
+            // } else {
+            //   return OnBoardingPage(isLogin: false); //AuthScreen();
+            // }
+            // return OnBoardingPage(isLogin: false); //AuthScreen();
+            // //return repeat != null ? AuthScreen() : IntroScreen();
+            // //return IntroScreen();
           },
         ),
         routes: {
@@ -135,7 +149,7 @@ class MyApp extends StatelessWidget {
           GratificationGiftScreen.routeName: (context) =>
               GratificationGiftScreen(),
           RecivedGiftsScreen.routeName: (context) => RecivedGiftsScreen(),
-          StatsScreen.routeName: (context) => StatsScreen()
+          StatsScreen.routeName: (context) => StatsScreen(),
         },
       ),
     );

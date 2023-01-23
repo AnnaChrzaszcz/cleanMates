@@ -19,8 +19,8 @@ class _AuthScreenState extends State<AuthScreen> {
 
   void _submitAuthForm(String email, String username, String password,
       File image, bool isLogin, BuildContext ctx) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('visited', true);
+    // final prefs = await SharedPreferences.getInstance();
+    // await prefs.setBool('visited', true);
 
     UserCredential userCredential;
     try {
@@ -30,25 +30,35 @@ class _AuthScreenState extends State<AuthScreen> {
       if (isLogin) {
         userCredential = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
+        User user = userCredential.user;
       } else {
         userCredential = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
         User user = userCredential.user;
+
         await user.updateDisplayName(username);
+        var url;
+        print('przekazany username: ${username}');
 
-        print(image.path);
+        if (image == null) {
+          url = await FirebaseStorage.instance
+              .ref()
+              .child('user_image')
+              .child('149071.png')
+              .getDownloadURL();
+        } else {
+          await FirebaseStorage.instance
+              .ref()
+              .child('user_image')
+              .child('${user.uid}.jpg')
+              .putFile(image);
 
-        await FirebaseStorage.instance
-            .ref()
-            .child('user_image')
-            .child('${user.uid}.jpg')
-            .putFile(image);
-
-        final url = await FirebaseStorage.instance
-            .ref()
-            .child('user_image')
-            .child('${user.uid}.jpg')
-            .getDownloadURL();
+          url = await FirebaseStorage.instance
+              .ref()
+              .child('user_image')
+              .child('${user.uid}.jpg')
+              .getDownloadURL();
+        }
 
         await user.updatePhotoURL(url);
 
