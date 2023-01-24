@@ -114,12 +114,37 @@ class ActivitiesScreen extends StatelessWidget {
                                           },
                                         ),
                                         IconButton(
-                                          icon: Icon(Icons.delete),
-                                          onPressed: () => _deleteActivity(
-                                              context,
-                                              activitiesData
-                                                  .activities[index].id),
-                                        ),
+                                            icon: Icon(Icons.delete),
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (ctx) => AlertDialog(
+                                                  title: Text('Are you sure?'),
+                                                  content: Text(
+                                                      'Do you want to remove this activity?'),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(ctx)
+                                                              .pop();
+                                                        },
+                                                        child: Text('NO')),
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(ctx)
+                                                              .pop();
+                                                          _deleteActivity(
+                                                              context,
+                                                              activitiesData
+                                                                  .activities[
+                                                                      index]
+                                                                  .id);
+                                                        },
+                                                        child: Text('YES')),
+                                                  ],
+                                                ),
+                                              );
+                                            }),
                                       ],
                                     ),
                                     leading: CircleAvatar(
@@ -128,15 +153,13 @@ class ActivitiesScreen extends StatelessWidget {
                                             Theme.of(context).dividerColor,
                                         foregroundColor: Colors.white,
                                         child: FittedBox(
-                                            child: Icon(Icons
-                                                .cleaning_services_outlined))),
+                                            child: Text(
+                                                '${activitiesData.activities[index].points}'))),
                                     title: Text(
                                       activitiesData
                                           .activities[index].activityName,
                                       style: TextStyle(),
                                     ),
-                                    subtitle: Text(
-                                        '${activitiesData.activities[index].points} points'),
                                   ),
                                   Divider()
                                 ],
