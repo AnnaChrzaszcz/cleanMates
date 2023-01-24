@@ -26,27 +26,33 @@ class _AuthScreenState extends State<AuthScreen> {
       if (isLogin) {
         userCredential = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
+        User user = userCredential.user;
       } else {
         userCredential = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
         User user = userCredential.user;
         await user.updateDisplayName(username);
+        var url;
 
-        print(image.path);
+        if (image == null) {
+          url = await FirebaseStorage.instance
+              .ref()
+              .child('user_image')
+              .child('149071.png')
+              .getDownloadURL();
+        } else {
+          await FirebaseStorage.instance
+              .ref()
+              .child('user_image')
+              .child('${user.uid}.jpg')
+              .putFile(image);
 
-        await FirebaseStorage.instance
-            .ref()
-            .child('user_image')
-            .child('${user.uid}.jpg')
-            .putFile(image);
-
-        final url = await FirebaseStorage.instance
-            .ref()
-            .child('user_image')
-            .child('${user.uid}.jpg')
-            .getDownloadURL();
-
-        await user.updatePhotoURL(url);
+          url = await FirebaseStorage.instance
+              .ref()
+              .child('user_image')
+              .child('${user.uid}.jpg')
+              .getDownloadURL();
+        }
 
         await FirebaseFirestore.instance
             .collection('users')
@@ -57,6 +63,7 @@ class _AuthScreenState extends State<AuthScreen> {
           'image_url': url,
           'points': 0
         });
+        await user.updatePhotoURL(url);
       }
     } on PlatformException catch (err) {
       var message = 'An error occured, please check your credentials';

@@ -36,7 +36,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
-          value: RoomsProvider([], null),
+          value: RoomsProvider(
+            [],
+            null,
+          ),
         ),
         ChangeNotifierProvider.value(
           value: ActivitiesProvider(

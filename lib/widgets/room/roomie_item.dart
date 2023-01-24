@@ -41,9 +41,11 @@ class RoomieItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        name,
-                        style: Theme.of(context).textTheme.headline4,
+                      FittedBox(
+                        child: Text(
+                          name,
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
                       ),
                       Text(
                         '${points.toString()} points',

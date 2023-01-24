@@ -13,9 +13,27 @@ class UserRoomScreen extends StatelessWidget {
   static const String routeName = '/userRoom';
 
   void _leaveRoom(Room actualRoom, BuildContext ctx) {
-    Provider.of<RoomsProvider>(ctx, listen: false)
-        .leaveRoom(actualRoom.id)
-        .then((_) {});
+    showDialog(
+      context: ctx,
+      builder: (ctx) => AlertDialog(
+        title: Text('Are you sure?'),
+        content: Text('You will lost all your points'),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: Text('NO')),
+          TextButton(
+              onPressed: () {
+                Provider.of<RoomsProvider>(ctx, listen: false)
+                    .leaveRoom(actualRoom.id);
+                Navigator.of(ctx).pop();
+              },
+              child: Text('YES')),
+        ],
+      ),
+    );
   }
 
   @override
@@ -43,6 +61,35 @@ class UserRoomScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontSize: 18.0,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                            text:
+                                'To join to a different room, first you have to '),
+                        // WidgetSpan(
+                        //     child: Container(
+                        //   padding: EdgeInsets.all(6.0),
+                        //   decoration: BoxDecoration(
+                        //       borderRadius: BorderRadius.circular(10),
+                        //       color: Color.fromRGBO(167, 34, 110, 1)),
+                        //   child: Text("leave current room",
+                        //       style: const TextStyle(
+                        //           fontWeight: FontWeight.bold,
+                        //           fontSize: 19,
+                        //           backgroundColor:
+                        //               Color.fromRGBO(167, 34, 110, 1),
+                        //           color: Colors.white)),
+                        // )),
+                        TextSpan(text: 'leave current room'),
+                      ],
+                    ),
+                  ),
                   Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,
@@ -56,7 +103,16 @@ class UserRoomScreen extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () => _leaveRoom(room, context),
-                    child: Text('Leave this room'),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.exit_to_app),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text('Leave current room'),
+                      ],
+                    ),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor),
                   ),
