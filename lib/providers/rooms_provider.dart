@@ -11,7 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class RoomsProvider extends ChangeNotifier {
   List<Room> _rooms;
   Room userRoom;
-  final user = FirebaseAuth.instance.currentUser;
+  User user = FirebaseAuth.instance.currentUser;
 
   RoomsProvider(this._rooms, this.userRoom);
 
@@ -48,6 +48,7 @@ class RoomsProvider extends ChangeNotifier {
   Future<void> getUserRoom(String userId) async {
     //DO POPRAWY MORDO
     print('jestew w rooms provider getUserRoom');
+    print('probuej znalezc pokoj dla ${userId} ');
     List<Roomie> roomies = [];
     List<UserActivity> roomiesActivities = [];
     List<UserGift> roomiesGifts = [];
@@ -74,7 +75,7 @@ class RoomsProvider extends ChangeNotifier {
         });
       });
 
-      roomSnapshot.reference
+      await roomSnapshot.reference
           .collection('roomiesActivities')
           .get()
           .then((value) {
@@ -120,7 +121,9 @@ class RoomsProvider extends ChangeNotifier {
           roomies: roomies,
           roomiesActivites: roomiesActivities,
           roomiesGift: roomiesGifts);
+
       notifyListeners();
+      return userRoom;
     }
   }
 
@@ -138,6 +141,8 @@ class RoomsProvider extends ChangeNotifier {
   }
 
   Future<void> joinToRoom(String roomId) async {
+    user = FirebaseAuth.instance.currentUser;
+
     //POPRAWIONE
     await FirebaseFirestore.instance
         .collection('users')
@@ -175,6 +180,10 @@ class RoomsProvider extends ChangeNotifier {
         );
     await _deleteRoomieActivities(roomId, user.uid);
     await _deleteRoomieGifts(roomId, user.uid);
+
+    // if (myRoom.roomies.length == 1) {
+    //   await FirebaseFirestore.instance.collection('rooms').doc(roomId).delete();
+    // }
 
     userRoom = null;
     notifyListeners();
@@ -223,7 +232,7 @@ class RoomsProvider extends ChangeNotifier {
       'roomieId': user.uid,
     });
 
-    //final roomRoomieRef = await newRoomRef.get();
+    final roomRoomieRef = await newRoomRef.get();
 
     await FirebaseFirestore.instance
         .collection('users')
@@ -293,7 +302,7 @@ class RoomsProvider extends ChangeNotifier {
             points: pointsSum,
             imageUrl: oldRoomie.imageUrl);
         myRoom.roomies[roomieIndex] = updatedRoomie;
-        getUserRoom(userId);
+        //getUserRoom(userId);
         //notifyListeners();
       }); // wrzucic to w try catch?
     });
