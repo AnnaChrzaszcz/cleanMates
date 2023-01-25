@@ -17,6 +17,30 @@ class BuyGiftScreen extends StatelessWidget {
         .fetchAndSetData(roomId);
   }
 
+  void _deleteGift(BuildContext context, String id) async {
+    try {
+      await Provider.of<GiftsProvider>(context, listen: false).deleteGift(id);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Gift deleted!',
+            textAlign: TextAlign.center,
+          ),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Deleting failed!',
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var myRoom = Provider.of<RoomsProvider>(context, listen: false).myRoom;
@@ -67,51 +91,206 @@ class BuyGiftScreen extends StatelessWidget {
                           icon: Icon(Icons.add))
                     ],
                   ),
-                  body: myRoom.roomies.length == 1
-                      ? Center(
-                          child: Text(
-                            'You need to add a roomie to your room',
-                            style: Theme.of(context).textTheme.headline6,
+                  body: DefaultTabController(
+                    length: 2, // length of tabs
+                    initialIndex: 0,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Container(
+                            child: TabBar(
+                              labelColor: Theme.of(context).primaryColor,
+                              unselectedLabelColor: Colors.black,
+                              tabs: [
+                                Tab(text: 'Buy gift'),
+                                Tab(text: 'Gifts overview'),
+                              ],
+                            ),
                           ),
-                        )
-                      : gitsData.gifts.isEmpty
-                          ? Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 30, horizontal: 10),
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 30, horizontal: 30),
-                              width: double.infinity,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'You need at least one gift in your gifts overview',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  TextButton(
-                                      onPressed: () => {
-                                            Navigator.of(context).pushNamed(
-                                                EditGiftScreen.routeName,
-                                                arguments: {
-                                                  'roomId': myRoom.id
-                                                })
-                                          },
-                                      child: Text(
-                                        'Click above "+" to add new gift',
-                                        style: TextStyle(fontSize: 18),
-                                        textAlign: TextAlign.center,
-                                      ))
-                                ],
-                              ),
-                            )
-                          : BuyGiftContainer(
-                              gitsData.gifts, userId, yourPoints))),
+                          Flexible(
+                            child: TabBarView(
+                              children: <Widget>[
+                                myRoom.roomies.length == 1
+                                    ? Center(
+                                        child: Text(
+                                          'You need to add a roomie to your room',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6,
+                                        ),
+                                      )
+                                    : gitsData.gifts.isEmpty
+                                        ? Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 30, horizontal: 10),
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 30, horizontal: 30),
+                                            width: double.infinity,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  'You need at least one gift in your gifts overview',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline6,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+                                                TextButton(
+                                                    onPressed: () => {
+                                                          Navigator.of(context)
+                                                              .pushNamed(
+                                                                  EditGiftScreen
+                                                                      .routeName,
+                                                                  arguments: {
+                                                                'roomId':
+                                                                    myRoom.id
+                                                              })
+                                                        },
+                                                    child: Text(
+                                                      'Click above "+" to add new gift',
+                                                      style: TextStyle(
+                                                          fontSize: 18),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ))
+                                              ],
+                                            ),
+                                          )
+                                        : BuyGiftContainer(
+                                            gitsData.gifts, userId, yourPoints),
+                                gitsData.gifts.isEmpty
+                                    ? Container(
+                                        padding: EdgeInsets.all(8.0),
+                                        width: double.infinity,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text(
+                                              'You have no gifts yet',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline5,
+                                            ),
+                                            SizedBox(
+                                              height: 30,
+                                            ),
+                                            Text(
+                                              'Define some gifts below (+)',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6,
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : Container(
+                                        margin: EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 8),
+                                        child: ListView.builder(
+                                          itemCount: gitsData.gifts.length,
+                                          itemBuilder:
+                                              ((context, index) => Column(
+                                                    children: [
+                                                      ListTile(
+                                                          trailing: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              IconButton(
+                                                                icon: Icon(
+                                                                    Icons.edit),
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pushNamed(
+                                                                          EditGiftScreen
+                                                                              .routeName,
+                                                                          arguments: {
+                                                                        'id': gitsData
+                                                                            .gifts[index]
+                                                                            .id,
+                                                                      });
+                                                                },
+                                                              ),
+                                                              IconButton(
+                                                                  icon: Icon(Icons
+                                                                      .delete),
+                                                                  onPressed:
+                                                                      () {
+                                                                    showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (ctx) =>
+                                                                              AlertDialog(
+                                                                        title: Text(
+                                                                            'Are you sure?'),
+                                                                        content:
+                                                                            Text('Do you want to remove this gift?'),
+                                                                        actions: [
+                                                                          TextButton(
+                                                                              onPressed: () {
+                                                                                Navigator.of(ctx).pop();
+                                                                              },
+                                                                              child: Text('NO')),
+                                                                          TextButton(
+                                                                              onPressed: () {
+                                                                                Navigator.of(ctx).pop();
+                                                                                _deleteGift(context, gitsData.gifts[index].id);
+                                                                              },
+                                                                              child: Text('YES')),
+                                                                        ],
+                                                                      ),
+                                                                    );
+                                                                  }),
+                                                            ],
+                                                          ),
+                                                          leading: CircleAvatar(
+                                                              radius: 25,
+                                                              backgroundColor:
+                                                                  Theme.of(
+                                                                          context)
+                                                                      .dividerColor,
+                                                              foregroundColor:
+                                                                  Colors.white,
+                                                              child: FittedBox(
+                                                                child: Icon(IconData(
+                                                                    (gitsData
+                                                                        .gifts[
+                                                                            index]
+                                                                        .iconCode),
+                                                                    fontFamily:
+                                                                        'MaterialIcons')),
+                                                              )),
+                                                          title: Text(
+                                                            gitsData
+                                                                .gifts[index]
+                                                                .giftName,
+                                                            style: TextStyle(),
+                                                          ),
+                                                          subtitle: Text(
+                                                              '${gitsData.gifts[index].points} points')),
+                                                      Divider()
+                                                    ],
+                                                  )),
+                                        ),
+                                      ),
+                              ],
+                            ),
+                          ),
+                        ]),
+                  ))),
             )),
     );
   }
