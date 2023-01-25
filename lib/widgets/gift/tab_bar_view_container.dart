@@ -128,10 +128,10 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
                           ),
                           index == 0
                               ? Container(
-                                  width: 180,
+                                  width: 100,
                                   height: 60,
                                   child: Lottie.asset(
-                                    'assets/animations/lottie/swipe.json',
+                                    'assets/animations/lottie/swipe2.json',
                                     height: 60,
                                     width: 90,
                                     fit: BoxFit.fitWidth,
