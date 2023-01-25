@@ -16,8 +16,10 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
+  User user;
+  var url;
 
-  void _submitAuthForm(String email, String username, String password,
+  Future<void> _submitAuthForm(String email, String username, String password,
       File image, bool isLogin, BuildContext ctx) async {
     // final prefs = await SharedPreferences.getInstance();
     // await prefs.setBool('visited', true);
@@ -27,18 +29,22 @@ class _AuthScreenState extends State<AuthScreen> {
       setState(() {
         _isLoading = true;
       });
+
       if (isLogin) {
         userCredential = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
-        User user = userCredential.user;
+        print('isLogin');
+
+        user = userCredential.user;
+        print(user.displayName);
+        await user.updateDisplayName(user.displayName);
+        await user.updatePhotoURL(user.photoURL);
       } else {
         userCredential = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
-        User user = userCredential.user;
-
-        await user.updateDisplayName(username);
-        var url;
-        print('przekazany username: ${username}');
+        print('register');
+        print(username);
+        user = userCredential.user;
 
         if (image == null) {
           url = await FirebaseStorage.instance
@@ -59,9 +65,6 @@ class _AuthScreenState extends State<AuthScreen> {
               .child('${user.uid}.jpg')
               .getDownloadURL();
         }
-
-        await user.updatePhotoURL(url);
-
         await FirebaseFirestore.instance
             .collection('users')
             .doc(userCredential.user.uid)
@@ -71,6 +74,9 @@ class _AuthScreenState extends State<AuthScreen> {
           'image_url': url,
           'points': 0
         });
+
+        await user.updateDisplayName(username);
+        await user.updatePhotoURL(url);
       }
     } on PlatformException catch (err) {
       var message = 'An error occured, please check your credentials';

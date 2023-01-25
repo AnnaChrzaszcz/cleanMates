@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:clean_mates_app/screens/buy_gift_screen.dart';
 import 'package:clean_mates_app/screens/history_screen.dart';
+import 'package:clean_mates_app/screens/intro_screen.dart';
+import 'package:clean_mates_app/screens/onboarding_screen.dart';
 import 'package:clean_mates_app/screens/stats_screen.dart';
 import 'package:clean_mates_app/widgets/fab/action_button.dart';
 import 'package:clean_mates_app/widgets/fab/expandable_fab.dart';
@@ -32,8 +34,9 @@ class UserDashboardScreen extends StatefulWidget {
 
 class _UserDashboardScreenState extends State<UserDashboardScreen> {
   Roomie roomie;
-  final user = FirebaseAuth.instance.currentUser;
+  User user;
   var routeArgs;
+  Future<Room> _myFuture;
 
   var _isInit = true;
   void _joinToRoom(Room selectedRoom) {
@@ -42,11 +45,18 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         .then((_) {});
   }
 
+  @override
+  void initState() {
+    user = FirebaseAuth.instance.currentUser;
+    _myFuture = _refreshRoom();
+    super.initState();
+  }
+
   void _createdRoom() {}
 
-  Future<void> _refreshRoom() async {
+  Future<Room> _refreshRoom() async {
     await Provider.of<RoomsProvider>(context, listen: false)
-        .getUserRoom(roomie.id);
+        .getUserRoom(user.uid);
   }
 
   @override
@@ -92,7 +102,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     ];
 
     return FutureBuilder(
-      future: _refreshRoom(),
+      future: _myFuture,
       builder: (context, snapshot) {
         print(snapshot);
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -110,7 +120,6 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                     .firstWhere((roomie) => roomie.id == user.uid);
                 return Scaffold(
                     appBar: AppBar(
-                      //title: Text(roomie.userName ?? ''),
                       title: DefaultTextStyle(
                         style: const TextStyle(
                           fontSize: 20.0,
@@ -154,6 +163,22 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
               } else {
                 return Scaffold(
                     appBar: AppBar(
+                      actions: [
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          child: IconButton(
+                            icon: Icon(Icons.question_mark),
+                            onPressed: () =>
+                                Navigator.of(context).push(PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      IntroScreen(
+                                isLogin: true,
+                              ),
+                            )),
+                          ),
+                        ),
+                      ],
                       //title: Text(roomie.userName ?? ''),
                       title: DefaultTextStyle(
                         style: const TextStyle(

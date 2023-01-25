@@ -9,7 +9,8 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 
 class IntroScreen extends StatefulWidget {
   @override
-  IntroScreen();
+  final bool isLogin;
+  IntroScreen({this.isLogin});
 
   _OnBoardingPageState createState() => _OnBoardingPageState();
 }
@@ -25,7 +26,8 @@ class _OnBoardingPageState extends State<IntroScreen> {
 
   Route _createRoute() {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => AuthScreen(),
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          widget.isLogin ? UserDashboardScreen() : AuthScreen(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return ScaleTransition(
           scale: Tween<double>(
@@ -96,7 +98,8 @@ class _OnBoardingPageState extends State<IntroScreen> {
       showSkipButton: true,
       showNextButton: false,
       skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600)),
-      done: const Text('Join', style: TextStyle(fontWeight: FontWeight.w600)),
+      done:
+          const Text('Explore', style: TextStyle(fontWeight: FontWeight.w600)),
     );
   }
 }
