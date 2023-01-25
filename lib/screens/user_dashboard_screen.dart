@@ -193,7 +193,10 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                       ),
                     ),
                     drawer: AppDrawer(),
-                    body: UserHasNoRoom(_joinToRoom, _createdRoom));
+                    body: UserHasNoRoom(
+                      _joinToRoom,
+                      _createdRoom,
+                    ));
               }
             }),
           );
@@ -205,101 +208,101 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
 
   Widget userDashboardContainer(
       points, List<Map<String, Object>> actions, Room room, String userId) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 2),
-      margin: EdgeInsets.all(8),
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Expanded(
-              flex: 2,
-              child: Stack(
-                alignment: AlignmentDirectional.center,
-                children: [
-                  Shimmer.fromColors(
-                    baseColor: Theme.of(context).primaryColor,
-                    highlightColor: Color.fromRGBO(167, 34, 110, 0.4),
-                    //highlightColor: Colors.white,
-                    child: CircleAvatar(
-                      radius: 110,
-                      backgroundColor: Theme.of(context).primaryColor,
+    return CustomRefreshIndicator(
+      builder: MaterialIndicatorDelegate(
+        builder: (context, controller) {
+          return const CircleAvatar(
+            radius: 55,
+            backgroundColor: Color.fromRGBO(47, 149, 153, 1),
+            child: RiveAnimation.asset(
+              'assets/animations/indicator.riv',
+            ),
+          );
+        },
+      ),
+      onRefresh: _refreshRoom,
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.95,
+        width: double.infinity,
+        child: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.95,
+            child: Column(children: [
+              Expanded(
+                child: Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    Shimmer.fromColors(
+                      baseColor: Theme.of(context).primaryColor,
+                      highlightColor: Color.fromRGBO(167, 34, 110, 0.4),
+                      child: CircleAvatar(
+                        radius: 110,
+                        backgroundColor: Theme.of(context).primaryColor,
+                      ),
                     ),
-                  ),
-                  CircleAvatar(
-                    radius: 104,
-                    backgroundColor: Colors.white,
-                  ),
-                  CircleAvatar(
-                    radius: 98,
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                  ),
-                  CircleAvatar(
-                    radius: 92,
-                    foregroundColor: Theme.of(context).primaryColor,
-                    backgroundColor: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: FittedBox(
-                        child: Column(
-                          children: [
-                            Text(
-                              '${points.toString()}',
-                              style: TextStyle(
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              'POINTS',
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.grey),
-                            )
-                          ],
+                    CircleAvatar(
+                      radius: 104,
+                      backgroundColor: Colors.white,
+                    ),
+                    CircleAvatar(
+                      radius: 98,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                    ),
+                    CircleAvatar(
+                      radius: 92,
+                      foregroundColor: Theme.of(context).primaryColor,
+                      backgroundColor: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: FittedBox(
+                          child: Column(
+                            children: [
+                              Text(
+                                '${points.toString()}',
+                                style: TextStyle(
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                'POINTS',
+                                style:
+                                    TextStyle(fontSize: 20, color: Colors.grey),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              )),
-          Expanded(
-            flex: 3,
-            child: CustomRefreshIndicator(
-              builder: MaterialIndicatorDelegate(
-                builder: (context, controller) {
-                  return const CircleAvatar(
-                    radius: 55,
-                    backgroundColor: Color.fromRGBO(47, 149, 153, 1),
-                    child: RiveAnimation.asset(
-                      'assets/animations/indicator.riv',
-                    ),
-                  );
-                },
-              ),
-              onRefresh: _refreshRoom,
-              child: GridView(
-                padding: const EdgeInsets.all(10),
-                children: actions
-                    .map(
-                      (action) => ActionItem(
-                          action['title'] as String,
-                          action['routeName'] as String,
-                          action['imagePath'] as String,
-                          userId,
-                          action['color'] as Color),
-                    )
-                    .toList(),
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 200,
-                  childAspectRatio: 3 / 3,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
+                  ],
                 ),
               ),
-            ),
+              Expanded(
+                flex: 2,
+                child: GridView(
+                  padding: const EdgeInsets.all(10),
+                  children: actions
+                      .map(
+                        (action) => ActionItem(
+                            action['title'] as String,
+                            action['routeName'] as String,
+                            action['imagePath'] as String,
+                            userId,
+                            action['color'] as Color),
+                      )
+                      .toList(),
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200,
+                    childAspectRatio: 3 / 3,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                  ),
+                ),
+              ),
+            ]),
           ),
-        ],
+        ),
       ),
     );
   }
