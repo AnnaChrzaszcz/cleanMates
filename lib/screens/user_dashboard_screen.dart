@@ -28,6 +28,9 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   User user;
   var routeArgs;
   Future<Room> _myFuture;
+  AppBar appBar = AppBar(
+    title: Text('test'),
+  );
 
   var _isInit = true;
   void _joinToRoom(Room selectedRoom) {
@@ -132,108 +135,119 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
 
   Widget userDashboardContainer(
       points, List<Map<String, Object>> actions, Room room, String userId) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 2),
-      margin: EdgeInsets.all(8),
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Expanded(
-            flex: 2,
-            child: Stack(
-              alignment: AlignmentDirectional.center,
-              children: [
-                CircleAvatar(
-                  radius: 100,
-                  backgroundColor: Theme.of(context).primaryColor,
-                ),
-                CircleAvatar(
-                  radius: 94,
-                  backgroundColor: Colors.white,
-                ),
-                CircleAvatar(
-                  radius: 88,
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                ),
-                CircleAvatar(
-                  radius: 82,
-                  foregroundColor: Theme.of(context).primaryColor,
-                  backgroundColor: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: FittedBox(
-                      child: Column(
-                        children: [
-                          Text(
-                            '${points.toString()}',
-                            style: TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                            textAlign: TextAlign.center,
+    return RefreshIndicator(
+      backgroundColor: Colors.white,
+      color: Colors.white,
+      onRefresh: _refreshRoom,
+      child: Container(
+        height:
+            MediaQuery.of(context).size.height - appBar.preferredSize.height,
+        padding: EdgeInsets.all(8),
+        width: double.infinity,
+        child: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height -
+                appBar.preferredSize.height,
+            width: double.infinity,
+            child: Column(children: [
+              Expanded(
+                flex: 4,
+                child: Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 100,
+                      backgroundColor: Theme.of(context).primaryColor,
+                    ),
+                    CircleAvatar(
+                      radius: 94,
+                      backgroundColor: Colors.white,
+                    ),
+                    CircleAvatar(
+                      radius: 88,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                    ),
+                    CircleAvatar(
+                      radius: 82,
+                      foregroundColor: Theme.of(context).primaryColor,
+                      backgroundColor: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: FittedBox(
+                          child: Column(
+                            children: [
+                              Text(
+                                '${points.toString()}',
+                                style: TextStyle(
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                'POINTS',
+                                style:
+                                    TextStyle(fontSize: 20, color: Colors.grey),
+                              )
+                            ],
                           ),
-                          Text(
-                            'POINTS',
-                            style: TextStyle(fontSize: 20, color: Colors.grey),
-                          )
-                        ],
+                        ),
                       ),
                     ),
+                  ],
+                ),
+              ),
+              // Expanded(
+              //   flex: 1,
+              //   child: Row(
+              //     mainAxisSize: MainAxisSize.min,
+              //     children: [
+              //       IconButton(
+              //         onPressed: () {
+              //           Navigator.of(context)
+              //               .pushNamed(UserRoomScreen.routeName)
+              //               .then((_) {});
+              //         },
+              //         icon: const Icon(Icons.home),
+              //         iconSize: 40,
+              //       ),
+              //       IconButton(
+              //         onPressed: () {
+              //           Navigator.of(context)
+              //               .pushNamed(HistoryScreen.routeName)
+              //               .then((_) {});
+              //         },
+              //         icon: const Icon(Icons.history),
+              //         iconSize: 40,
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              Expanded(
+                flex: 7,
+                child: GridView(
+                  padding: const EdgeInsets.all(10),
+                  children: actions
+                      .map(
+                        (action) => ActionItem(
+                            action['title'] as String,
+                            action['routeName'] as String,
+                            action['imagePath'] as String,
+                            userId,
+                            action['color'] as Color),
+                      )
+                      .toList(),
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200,
+                    childAspectRatio: 3 / 3,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
                   ),
                 ),
-              ],
-            ),
-          ),
-          // Expanded(
-          //   flex: 1,
-          //   child: Row(
-          //     mainAxisSize: MainAxisSize.min,
-          //     children: [
-          //       IconButton(
-          //         onPressed: () {
-          //           Navigator.of(context)
-          //               .pushNamed(UserRoomScreen.routeName)
-          //               .then((_) {});
-          //         },
-          //         icon: const Icon(Icons.home),
-          //         iconSize: 40,
-          //       ),
-          //       IconButton(
-          //         onPressed: () {
-          //           Navigator.of(context)
-          //               .pushNamed(HistoryScreen.routeName)
-          //               .then((_) {});
-          //         },
-          //         icon: const Icon(Icons.history),
-          //         iconSize: 40,
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          Expanded(
-            flex: 4,
-            child: GridView(
-              padding: const EdgeInsets.all(10),
-              children: actions
-                  .map(
-                    (action) => ActionItem(
-                        action['title'] as String,
-                        action['routeName'] as String,
-                        action['imagePath'] as String,
-                        userId,
-                        action['color'] as Color),
-                  )
-                  .toList(),
-              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 200,
-                childAspectRatio: 3 / 3,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
               ),
-            ),
+            ]),
           ),
-        ],
+        ),
       ),
     );
   }
