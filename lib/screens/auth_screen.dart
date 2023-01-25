@@ -15,8 +15,10 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
+  User user;
+  var url;
 
-  void _submitAuthForm(String email, String username, String password,
+  Future<void> _submitAuthForm(String email, String username, String password,
       File image, bool isLogin, BuildContext ctx) async {
     UserCredential userCredential;
     try {
@@ -26,13 +28,18 @@ class _AuthScreenState extends State<AuthScreen> {
       if (isLogin) {
         userCredential = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
-        User user = userCredential.user;
+        print('isLogin');
+
+        user = userCredential.user;
+        print(user.displayName);
+        await user.updateDisplayName(user.displayName);
+        await user.updatePhotoURL(user.photoURL);
       } else {
         userCredential = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
-        User user = userCredential.user;
-        await user.updateDisplayName(username);
-        var url;
+        print('register');
+        print(username);
+        user = userCredential.user;
 
         if (image == null) {
           url = await FirebaseStorage.instance
@@ -63,6 +70,8 @@ class _AuthScreenState extends State<AuthScreen> {
           'image_url': url,
           'points': 0
         });
+
+        await user.updateDisplayName(username);
         await user.updatePhotoURL(url);
       }
     } on PlatformException catch (err) {

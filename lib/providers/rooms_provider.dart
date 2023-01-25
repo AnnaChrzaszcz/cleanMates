@@ -45,7 +45,8 @@ class RoomsProvider extends ChangeNotifier {
     return availableRooms;
   }
 
-  Future<void> getUserRoom(String userId) async {
+  Future<Room> getUserRoom(String userId) async {
+    user = FirebaseAuth.instance.currentUser;
     //DO POPRAWY MORDO
     print('jestew w rooms provider getUserRoom');
     print('probuej znalezc pokoj dla ${userId} ');
@@ -141,8 +142,9 @@ class RoomsProvider extends ChangeNotifier {
   }
 
   Future<void> joinToRoom(String roomId) async {
-    user = FirebaseAuth.instance.currentUser;
-
+    if (user == null) {
+      user = FirebaseAuth.instance.currentUser;
+    }
     //POPRAWIONE
     await FirebaseFirestore.instance
         .collection('users')
@@ -157,8 +159,7 @@ class RoomsProvider extends ChangeNotifier {
         .doc(user.uid)
         .set({'roomieId': user.uid});
 
-    getUserRoom(user.uid); // moze jakos inaczej?
-    //notifyListeners();
+    userRoom = await getUserRoom(user.uid); // moze jakos inaczej?
   }
 
   Future<void> leaveRoom(String roomId) async {

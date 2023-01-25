@@ -25,8 +25,9 @@ class UserDashboardScreen extends StatefulWidget {
 
 class _UserDashboardScreenState extends State<UserDashboardScreen> {
   Roomie roomie;
-  final user = FirebaseAuth.instance.currentUser;
+  User user;
   var routeArgs;
+  Future<Room> _myFuture;
 
   var _isInit = true;
   void _joinToRoom(Room selectedRoom) {
@@ -35,11 +36,18 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         .then((_) {});
   }
 
+  @override
+  void initState() {
+    user = FirebaseAuth.instance.currentUser;
+    _myFuture = _refreshRoom();
+    super.initState();
+  }
+
   void _createdRoom() {}
 
-  Future<void> _refreshRoom() async {
+  Future<Room> _refreshRoom() async {
     await Provider.of<RoomsProvider>(context, listen: false)
-        .getUserRoom(roomie.id);
+        .getUserRoom(user.uid);
   }
 
   @override
@@ -92,7 +100,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       ),
       drawer: AppDrawer(),
       body: FutureBuilder(
-        future: _refreshRoom(),
+        future: _myFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
