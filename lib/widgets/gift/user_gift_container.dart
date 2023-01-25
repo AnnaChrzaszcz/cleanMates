@@ -24,8 +24,6 @@ class UserGiftContainer extends StatefulWidget {
 }
 
 class _UserGiftContainerState extends State<UserGiftContainer> {
-  var _boughtExpanded = false;
-  var _recivedExpanded = false;
   List<UserGift> userGifts;
   List<UserGift> roomieGifts;
   List<UserGift> yourRecived;
@@ -98,27 +96,14 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
                   labelColor: Theme.of(context).primaryColor,
                   unselectedLabelColor: Colors.black,
                   tabs: [
-                    Tab(text: widget.yourUsername),
                     Tab(text: widget.roomieUsername),
+                    Tab(text: widget.yourUsername),
                   ],
                 ),
               ),
               Flexible(
                 child: TabBarView(
                   children: <Widget>[
-                    TabBarViewContainer(
-                        widget.gifts
-                            .where((roomieGift) =>
-                                roomieGift.roomieId == widget.userId)
-                            .where((gift) => !gift.isRealized)
-                            .toList(),
-                        widget.gifts
-                            .where((roomieGift) =>
-                                roomieGift.roomieId == widget.userId)
-                            .where((gift) => gift.isRealized)
-                            .toList(),
-                        _receive,
-                        widget.userId),
                     TabBarViewContainer(
                         widget.gifts
                             .where((roomieGift) =>
@@ -132,6 +117,19 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
                             .toList(),
                         _receive,
                         widget.roomieId),
+                    TabBarViewContainer(
+                        widget.gifts
+                            .where((roomieGift) =>
+                                roomieGift.roomieId == widget.userId)
+                            .where((gift) => !gift.isRealized)
+                            .toList(),
+                        widget.gifts
+                            .where((roomieGift) =>
+                                roomieGift.roomieId == widget.userId)
+                            .where((gift) => gift.isRealized)
+                            .toList(),
+                        _receive,
+                        widget.userId),
                   ],
                 ),
               ),

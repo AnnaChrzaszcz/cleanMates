@@ -59,29 +59,6 @@ class RecivedGiftsScreen extends StatelessWidget {
                 padding: EdgeInsets.all(8.0),
                 child: UserGiftContainer(userId, roomieId, yourUsername,
                     roomieUsername, myRoom.roomiesGift),
-              )
-        // body: CustomRefreshIndicator(
-        //     builder: MaterialIndicatorDelegate(
-        //       builder: (context, controller) {
-        //         return const CircleAvatar(
-        //           radius: 55,
-        //           backgroundColor: Color.fromRGBO(47, 149, 153, 1),
-        //           child: RiveAnimation.asset(
-        //             'assets/animations/indicator.riv',
-        //           ),
-        //         );
-        //       },
-        //     ),
-        //     onRefresh: () {
-        //       _refreshGifts(context, myRoom.id, userId);
-        //     },
-        //     child: Container(
-        //       width: double.infinity,
-        //       height: MediaQuery.of(context).size.height,
-        //       padding: EdgeInsets.all(8.0),
-        //       child: UserGiftContainer(userId, roomieId, yourUsername,
-        //           roomieUsername, myRoom.roomiesGift),
-        //     )),
-        );
+              ));
   }
 }
