@@ -18,7 +18,7 @@ class TabBarViewContainer extends StatefulWidget {
 }
 
 class _TabBarViewContainerState extends State<TabBarViewContainer> {
-  var _boughtExpanded = false;
+  var _boughtExpanded = true;
   var _recivedExpanded = false;
   var yourSelectedIndex = -1;
 
@@ -36,22 +36,21 @@ class _TabBarViewContainerState extends State<TabBarViewContainer> {
         .sort(((a, b) => b.realizedDate.compareTo(a.realizedDate)));
     return Column(
       children: [
-        ListTile(
-          leading: CircleAvatar(
-            child: Text(
-              widget.yourBought.length.toString(),
-              style: TextStyle(color: Colors.white),
+        GestureDetector(
+          onTap: () => setState(() {
+            _boughtExpanded = !_boughtExpanded;
+          }),
+          child: ListTile(
+            leading: CircleAvatar(
+              child: Text(
+                widget.yourBought.length.toString(),
+                style: TextStyle(color: Colors.white),
+              ),
+              backgroundColor: Theme.of(context).dividerColor,
             ),
-            backgroundColor: Theme.of(context).dividerColor,
-          ),
-          title: Text('Bought gifts'),
-          trailing: IconButton(
-            icon: Icon(_boughtExpanded ? Icons.expand_less : Icons.expand_more),
-            onPressed: () {
-              setState(() {
-                _boughtExpanded = !_boughtExpanded;
-              });
-            },
+            title: Text('Bought gifts'),
+            trailing:
+                Icon(_boughtExpanded ? Icons.expand_less : Icons.expand_more),
           ),
         ),
         if (_boughtExpanded)
@@ -111,21 +110,19 @@ class _TabBarViewContainerState extends State<TabBarViewContainer> {
             ),
           ),
         Divider(),
-        ListTile(
-          title: Text('Recived gifts'),
-          leading: CircleAvatar(
-            child: Text(widget.yourRecived.length.toString(),
-                style: TextStyle(color: Colors.white)),
-            backgroundColor: Theme.of(context).dividerColor,
-          ),
-          trailing: IconButton(
-            icon:
+        GestureDetector(
+          onTap: () => setState(() {
+            _recivedExpanded = !_recivedExpanded;
+          }),
+          child: ListTile(
+            title: Text('Recived gifts'),
+            leading: CircleAvatar(
+              child: Text(widget.yourRecived.length.toString(),
+                  style: TextStyle(color: Colors.white)),
+              backgroundColor: Theme.of(context).dividerColor,
+            ),
+            trailing:
                 Icon(_recivedExpanded ? Icons.expand_less : Icons.expand_more),
-            onPressed: () {
-              setState(() {
-                _recivedExpanded = !_recivedExpanded;
-              });
-            },
           ),
         ),
         if (_recivedExpanded)
