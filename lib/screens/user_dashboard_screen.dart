@@ -37,6 +37,9 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   User user;
   var routeArgs;
   Future<Room> _myFuture;
+  AppBar appBar = AppBar(
+    title: Text('test'),
+  );
 
   var _isInit = true;
   void _joinToRoom(Room selectedRoom) {
@@ -222,13 +225,18 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       ),
       onRefresh: _refreshRoom,
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.95,
+        height:
+            MediaQuery.of(context).size.height - appBar.preferredSize.height,
+        padding: EdgeInsets.all(8),
         width: double.infinity,
         child: SingleChildScrollView(
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.95,
+            height: MediaQuery.of(context).size.height -
+                appBar.preferredSize.height,
+            width: double.infinity,
             child: Column(children: [
               Expanded(
+                flex: 4,
                 child: Stack(
                   alignment: AlignmentDirectional.center,
                   children: [
@@ -236,20 +244,20 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                       baseColor: Theme.of(context).primaryColor,
                       highlightColor: Color.fromRGBO(167, 34, 110, 0.4),
                       child: CircleAvatar(
-                        radius: 110,
+                        radius: 106,
                         backgroundColor: Theme.of(context).primaryColor,
                       ),
                     ),
                     CircleAvatar(
-                      radius: 104,
+                      radius: 100,
                       backgroundColor: Colors.white,
                     ),
                     CircleAvatar(
-                      radius: 98,
+                      radius: 94,
                       backgroundColor: Theme.of(context).colorScheme.primary,
                     ),
                     CircleAvatar(
-                      radius: 92,
+                      radius: 88,
                       foregroundColor: Theme.of(context).primaryColor,
                       backgroundColor: Colors.white,
                       child: Padding(
@@ -279,7 +287,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                 ),
               ),
               Expanded(
-                flex: 2,
+                flex: 7,
                 child: GridView(
                   padding: const EdgeInsets.all(10),
                   children: actions
