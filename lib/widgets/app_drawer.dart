@@ -15,6 +15,8 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     User user = FirebaseAuth.instance.currentUser;
     final room = Provider.of<RoomsProvider>(context, listen: false).myRoom;
+    print(ModalRoute.of(context).settings.name);
+
     return Drawer(
       width: 260,
       child: Column(
@@ -44,7 +46,13 @@ class AppDrawer extends StatelessWidget {
             automaticallyImplyLeading: false,
           ),
           ListTile(
-            leading: Icon(Icons.dashboard),
+            leading: Icon(
+              Icons.dashboard,
+              color: ModalRoute.of(context).settings.name ==
+                      UserDashboardScreen.routeName
+                  ? Theme.of(context).primaryColor
+                  : Colors.grey,
+            ),
             title: Text('Dashboard'),
             onTap: () {
               Navigator.of(context)
@@ -54,7 +62,13 @@ class AppDrawer extends StatelessWidget {
           const Divider(),
           if (room != null)
             ListTile(
-              leading: const Icon(Icons.apartment),
+              leading: Icon(
+                Icons.apartment,
+                color: ModalRoute.of(context).settings.name ==
+                        UserRoomScreen.routeName
+                    ? Theme.of(context).primaryColor
+                    : Colors.grey,
+              ),
               title: Text('Room'),
               onTap: () {
                 Navigator.of(context)
@@ -107,6 +121,8 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushReplacementNamed('/');
+              Provider.of<RoomsProvider>(context, listen: false).userRoom =
+                  null;
               FirebaseAuth.instance.signOut();
             },
           ),
