@@ -11,11 +11,18 @@ import '../providers/rooms_provider.dart';
 import 'package:provider/provider.dart';
 
 class AppDrawer extends StatelessWidget {
+  var roomieBoughtGifts;
+
   @override
   Widget build(BuildContext context) {
     User user = FirebaseAuth.instance.currentUser;
     final room = Provider.of<RoomsProvider>(context, listen: false).myRoom;
-    print(ModalRoute.of(context).settings.name);
+    roomieBoughtGifts = room != null
+        ? room.roomiesGift
+            .where((gift) => gift.roomieId != user.uid)
+            .where((gift) => gift.isRealized == false)
+            .length
+        : null;
 
     return Drawer(
       width: 260,
@@ -76,33 +83,58 @@ class AppDrawer extends StatelessWidget {
               },
             ),
           if (room != null) const Divider(),
+          // if (room != null)
+          //   ListTile(
+          //     leading: Icon(Icons.clean_hands),
+          //     title: Text('Activities Overview'),
+          //     onTap: () {
+          //       //TYLKO JESLI JEST ROOM
+          //       Navigator.of(context).pushNamed(ActivitiesScreen.routeName);
+          //     },
+          //   ),
+          // if (room != null) Divider(),
+          // if (room != null)
+          //   ListTile(
+          //     leading: Icon(Icons.card_giftcard_outlined),
+          //     title: Text('Gifts Overview'), //TYLKO JESLI JEST ROOM
+          //     onTap: () {
+          //       Navigator.of(context).pushNamed(GiftsScreen.routeName);
+          //     },
+          //   ),
+          // if (room != null) const Divider(),
           if (room != null)
-            ListTile(
-              leading: Icon(Icons.clean_hands),
-              title: Text('Activities Overview'),
-              onTap: () {
-                //TYLKO JESLI JEST ROOM
-                Navigator.of(context).pushNamed(ActivitiesScreen.routeName);
-              },
-            ),
-          if (room != null) Divider(),
-          if (room != null)
-            ListTile(
-              leading: Icon(Icons.card_giftcard_outlined),
-              title: Text('Gifts Overview'), //TYLKO JESLI JEST ROOM
-              onTap: () {
-                Navigator.of(context).pushNamed(GiftsScreen.routeName);
-              },
-            ),
-          if (room != null) const Divider(),
-          if (room != null)
-            ListTile(
-              leading: Icon(Icons.handshake),
-              title: Text('Gifts Reception'), //TYLKO JESLI JEST ROOM
-              onTap: () {
-                Navigator.of(context)
-                    .pushReplacementNamed(RecivedGiftsScreen.routeName);
-              },
+            Stack(
+              children: [
+                ListTile(
+                  leading: Icon(
+                    Icons.handshake,
+                    color: ModalRoute.of(context).settings.name ==
+                            RecivedGiftsScreen.routeName
+                        ? Theme.of(context).primaryColor
+                        : Colors.grey,
+                  ),
+
+                  title: Text('Bought gifts', style: TextStyle()),
+
+                  //TYLKO JESLI JEST ROOM
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushReplacementNamed(RecivedGiftsScreen.routeName);
+                  },
+                ),
+                Positioned(
+                  right: 80,
+                  child: CircleAvatar(
+                    child: Text(
+                      '${roomieBoughtGifts}',
+                      style: TextStyle(fontSize: 13),
+                    ),
+                    radius: 12,
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+              ],
             ),
           if (room != null) const Divider(),
           if (room != null)

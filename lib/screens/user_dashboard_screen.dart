@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:clean_mates_app/models/userGift.dart';
 import 'package:clean_mates_app/screens/buy_gift_screen.dart';
 import 'package:clean_mates_app/screens/history_screen.dart';
 import 'package:clean_mates_app/screens/intro_screen.dart';
@@ -37,6 +38,8 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   User user;
   var routeArgs;
   Future<Room> _myFuture;
+  var _roomieBoughtGifts;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   AppBar appBar = AppBar(
     title: Text('test'),
   );
@@ -121,8 +124,39 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                 print(roomsdata.myRoom.roomName);
                 roomie = roomsdata.myRoom.roomies
                     .firstWhere((roomie) => roomie.id == user.uid);
+                _roomieBoughtGifts = roomsdata.myRoom.roomiesGift
+                    .where((gift) => gift.roomieId != roomie.id)
+                    .where((gift) => gift.isRealized == false)
+                    .length;
                 return Scaffold(
+                    key: _scaffoldKey,
+                    drawer: AppDrawer(),
                     appBar: AppBar(
+                      leading: GestureDetector(
+                        onTap: () => _scaffoldKey.currentState?.openDrawer(),
+                        child: Stack(
+                          alignment: AlignmentDirectional.center,
+                          children: [
+                            Positioned(
+                                left: 15,
+                                child: Icon(
+                                  Icons.menu,
+                                  size: 30,
+                                )),
+                            if (_roomieBoughtGifts > 0)
+                              Positioned(
+                                top: 5,
+                                left: 30,
+                                child: CircleAvatar(
+                                  child: Text('${_roomieBoughtGifts}'),
+                                  radius: 10,
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
                       title: DefaultTextStyle(
                         style: const TextStyle(
                           fontSize: 20.0,
@@ -156,7 +190,6 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                         ),
                       ],
                     ),
-                    drawer: AppDrawer(),
                     body: userDashboardContainer(
                       roomie.points,
                       actions,

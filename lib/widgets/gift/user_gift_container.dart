@@ -83,58 +83,55 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(8),
-      child: DefaultTabController(
-        length: 2, // length of tabs
-        initialIndex: 0,
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Container(
-                child: TabBar(
-                  labelColor: Theme.of(context).primaryColor,
-                  unselectedLabelColor: Colors.black,
-                  tabs: [
-                    Tab(text: widget.roomieUsername),
-                    Tab(text: widget.yourUsername),
-                  ],
-                ),
+    return DefaultTabController(
+      length: 2, // length of tabs
+      initialIndex: 0,
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Container(
+              child: TabBar(
+                labelColor: Theme.of(context).primaryColor,
+                unselectedLabelColor: Colors.black,
+                tabs: [
+                  Tab(text: widget.roomieUsername),
+                  Tab(text: widget.yourUsername),
+                ],
               ),
-              Flexible(
-                child: TabBarView(
-                  children: <Widget>[
-                    TabBarViewContainer(
-                        widget.gifts
-                            .where((roomieGift) =>
-                                roomieGift.roomieId == widget.roomieId)
-                            .where((gift) => !gift.isRealized)
-                            .toList(),
-                        widget.gifts
-                            .where((roomieGift) =>
-                                roomieGift.roomieId == widget.roomieId)
-                            .where((gift) => gift.isRealized)
-                            .toList(),
-                        _receive,
-                        widget.roomieId),
-                    TabBarViewContainer(
-                        widget.gifts
-                            .where((roomieGift) =>
-                                roomieGift.roomieId == widget.userId)
-                            .where((gift) => !gift.isRealized)
-                            .toList(),
-                        widget.gifts
-                            .where((roomieGift) =>
-                                roomieGift.roomieId == widget.userId)
-                            .where((gift) => gift.isRealized)
-                            .toList(),
-                        _receive,
-                        widget.userId),
-                  ],
-                ),
+            ),
+            Flexible(
+              child: TabBarView(
+                children: <Widget>[
+                  TabBarViewContainer(
+                      widget.gifts
+                          .where((roomieGift) =>
+                              roomieGift.roomieId == widget.roomieId)
+                          .where((gift) => !gift.isRealized)
+                          .toList(),
+                      widget.gifts
+                          .where((roomieGift) =>
+                              roomieGift.roomieId == widget.roomieId)
+                          .where((gift) => gift.isRealized)
+                          .toList(),
+                      _receive,
+                      widget.roomieId),
+                  TabBarViewContainer(
+                      widget.gifts
+                          .where((roomieGift) =>
+                              roomieGift.roomieId == widget.userId)
+                          .where((gift) => !gift.isRealized)
+                          .toList(),
+                      widget.gifts
+                          .where((roomieGift) =>
+                              roomieGift.roomieId == widget.userId)
+                          .where((gift) => gift.isRealized)
+                          .toList(),
+                      _receive,
+                      widget.userId),
+                ],
               ),
-            ]),
-      ),
+            ),
+          ]),
     );
   }
 }
