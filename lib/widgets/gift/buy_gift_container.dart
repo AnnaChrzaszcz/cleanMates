@@ -90,10 +90,14 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
           CircleAvatar(
             radius: 50,
             backgroundColor: Theme.of(context).primaryColor,
-            foregroundColor: Colors.white,
-            child: FittedBox(
-              child: Text(
-                '${giftsointsSum} / ${widget.yourPoints}',
+            child: CircleAvatar(
+              radius: 48,
+              backgroundColor: Colors.white,
+              foregroundColor: Theme.of(context).primaryColor,
+              child: FittedBox(
+                child: Text(
+                  '${giftsointsSum} / ${widget.yourPoints}',
+                ),
               ),
             ),
           ),

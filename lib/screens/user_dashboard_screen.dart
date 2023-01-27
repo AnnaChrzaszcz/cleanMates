@@ -28,6 +28,8 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   User user;
   var routeArgs;
   Future<Room> _myFuture;
+  var _roomieBoughtGifts;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   AppBar appBar = AppBar(
     title: Text('test'),
   );
@@ -95,158 +97,176 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       },
     ];
 
-    return Scaffold(
-      //PRZY PIERWSZYM LOGOWANIU COS NIE DZIALA
-      appBar: AppBar(
-        //title: Text(name),
-        title: Text(user.displayName),
-      ),
-      drawer: AppDrawer(),
-      body: FutureBuilder(
-        future: _myFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+    return FutureBuilder(
+      future: _myFuture,
+      builder: (context, snapshot) {
+        print(snapshot);
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            body: Center(
               child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.connectionState == ConnectionState.done) {
-            return Consumer<RoomsProvider>(
-              builder: ((context, roomsdata, _) {
-                if (roomsdata.myRoom != null) {
-                  roomie = roomsdata.myRoom.roomies
-                      .firstWhere((roomie) => roomie.id == user.uid);
-                  return userDashboardContainer(
-                    roomie.points,
-                    actions,
-                    roomsdata.myRoom,
-                    roomie.id,
-                  );
-                } else {
-                  return UserHasNoRoom(_joinToRoom, _createdRoom);
-                }
-              }),
-            );
-          }
-          return Container(child: Text(''));
-        },
-      ),
+            ),
+          );
+        } else {
+          return Consumer<RoomsProvider>(
+            builder: ((context, roomsdata, _) {
+              if (roomsdata.myRoom != null) {
+                print(roomsdata.myRoom.roomName);
+                roomie = roomsdata.myRoom.roomies
+                    .firstWhere((roomie) => roomie.id == user.uid);
+                _roomieBoughtGifts = roomsdata.myRoom.roomiesGift
+                    .where((gift) => gift.roomieId != roomie.id)
+                    .where((gift) => gift.isRealized == false)
+                    .length;
+                return Scaffold(
+                    key: _scaffoldKey,
+                    drawer: AppDrawer(),
+                    appBar: AppBar(
+                      leading: GestureDetector(
+                        onTap: () => _scaffoldKey.currentState?.openDrawer(),
+                        child: Stack(
+                          alignment: AlignmentDirectional.center,
+                          children: [
+                            Positioned(
+                                left: 15,
+                                child: Icon(
+                                  Icons.menu,
+                                  size: 30,
+                                )),
+                            if (_roomieBoughtGifts > 0)
+                              Positioned(
+                                top: 5,
+                                left: 30,
+                                child: CircleAvatar(
+                                  child: Text('${_roomieBoughtGifts}'),
+                                  radius: 10,
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      title: DefaultTextStyle(
+                        style: const TextStyle(
+                          fontSize: 20.0,
+                        ),
+                        child: Text(user.displayName),
+                      ),
+                    ),
+                    body: userDashboardContainer(
+                      roomie.points,
+                      actions,
+                      roomsdata.myRoom,
+                      roomie.id,
+                    ));
+              } else {
+                return Scaffold(
+                    appBar: AppBar(
+                      //title: Text(roomie.userName ?? ''),
+                      title: DefaultTextStyle(
+                        style: const TextStyle(
+                          fontSize: 20.0,
+                        ),
+                        child: Text(user.displayName),
+                      ),
+                    ),
+                    drawer: AppDrawer(),
+                    body: UserHasNoRoom(
+                      _joinToRoom,
+                      _createdRoom,
+                    ));
+              }
+            }),
+          );
+        }
+        return Scaffold(body: Container(child: Text('')));
+      },
     );
   }
 
   Widget userDashboardContainer(
       points, List<Map<String, Object>> actions, Room room, String userId) {
-    return RefreshIndicator(
-      backgroundColor: Colors.white,
-      color: Colors.white,
-      onRefresh: _refreshRoom,
-      child: Container(
-        height:
-            MediaQuery.of(context).size.height - appBar.preferredSize.height,
-        padding: EdgeInsets.all(8),
-        width: double.infinity,
-        child: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height -
-                appBar.preferredSize.height,
-            width: double.infinity,
-            child: Column(children: [
-              Expanded(
-                flex: 4,
-                child: Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 100,
-                      backgroundColor: Theme.of(context).primaryColor,
-                    ),
-                    CircleAvatar(
-                      radius: 94,
-                      backgroundColor: Colors.white,
-                    ),
-                    CircleAvatar(
-                      radius: 88,
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                    ),
-                    CircleAvatar(
-                      radius: 82,
-                      foregroundColor: Theme.of(context).primaryColor,
-                      backgroundColor: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: FittedBox(
-                          child: Column(
-                            children: [
-                              Text(
-                                '${points.toString()}',
-                                style: TextStyle(
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                                textAlign: TextAlign.center,
-                              ),
-                              Text(
-                                'POINTS',
-                                style:
-                                    TextStyle(fontSize: 20, color: Colors.grey),
-                              )
-                            ],
-                          ),
+    return Container(
+      height: MediaQuery.of(context).size.height - appBar.preferredSize.height,
+      padding: EdgeInsets.all(8),
+      width: double.infinity,
+      child: SingleChildScrollView(
+        child: Container(
+          height:
+              MediaQuery.of(context).size.height - appBar.preferredSize.height,
+          width: double.infinity,
+          child: Column(children: [
+            Expanded(
+              flex: 4,
+              child: Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  CircleAvatar(
+                    radius: 100,
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
+                  CircleAvatar(
+                    radius: 94,
+                    backgroundColor: Colors.white,
+                  ),
+                  CircleAvatar(
+                    radius: 88,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                  ),
+                  CircleAvatar(
+                    radius: 82,
+                    foregroundColor: Theme.of(context).primaryColor,
+                    backgroundColor: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: FittedBox(
+                        child: Column(
+                          children: [
+                            Text(
+                              '${points.toString()}',
+                              style: TextStyle(
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              'POINTS',
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.grey),
+                            )
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              // Expanded(
-              //   flex: 1,
-              //   child: Row(
-              //     mainAxisSize: MainAxisSize.min,
-              //     children: [
-              //       IconButton(
-              //         onPressed: () {
-              //           Navigator.of(context)
-              //               .pushNamed(UserRoomScreen.routeName)
-              //               .then((_) {});
-              //         },
-              //         icon: const Icon(Icons.home),
-              //         iconSize: 40,
-              //       ),
-              //       IconButton(
-              //         onPressed: () {
-              //           Navigator.of(context)
-              //               .pushNamed(HistoryScreen.routeName)
-              //               .then((_) {});
-              //         },
-              //         icon: const Icon(Icons.history),
-              //         iconSize: 40,
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              Expanded(
-                flex: 7,
-                child: GridView(
-                  padding: const EdgeInsets.all(10),
-                  children: actions
-                      .map(
-                        (action) => ActionItem(
-                            action['title'] as String,
-                            action['routeName'] as String,
-                            action['imagePath'] as String,
-                            userId,
-                            action['color'] as Color),
-                      )
-                      .toList(),
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200,
-                    childAspectRatio: 3 / 3,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
                   ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 7,
+              child: GridView(
+                padding: const EdgeInsets.all(10),
+                children: actions
+                    .map(
+                      (action) => ActionItem(
+                          action['title'] as String,
+                          action['routeName'] as String,
+                          action['imagePath'] as String,
+                          userId,
+                          action['color'] as Color),
+                    )
+                    .toList(),
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 200,
+                  childAspectRatio: 3 / 3,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
                 ),
               ),
-            ]),
-          ),
+            ),
+          ]),
         ),
       ),
     );

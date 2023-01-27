@@ -81,12 +81,16 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
       child: Column(
         children: [
           CircleAvatar(
-            radius: 30,
             backgroundColor: Theme.of(context).primaryColor,
-            foregroundColor: Colors.white,
-            child: Text(
-              '${activitesPointsSum}',
-              style: TextStyle(fontSize: 15),
+            radius: 32,
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.white,
+              foregroundColor: Theme.of(context).primaryColor,
+              child: Text(
+                '${activitesPointsSum}',
+                style: TextStyle(fontSize: 15),
+              ),
             ),
           ),
           Expanded(

@@ -1,3 +1,4 @@
+import 'package:clean_mates_app/models/room.dart';
 import 'package:clean_mates_app/models/userGift.dart';
 import 'package:clean_mates_app/screens/edit_gift_screen.dart';
 import 'package:clean_mates_app/screens/gifts_screen.dart';
@@ -41,6 +42,11 @@ class BuyGiftScreen extends StatelessWidget {
     }
   }
 
+  void _goToNewGift(BuildContext context, Room myRoom) {
+    Navigator.of(context)
+        .pushNamed(EditGiftScreen.routeName, arguments: {'roomId': myRoom.id});
+  }
+
   @override
   Widget build(BuildContext context) {
     var myRoom = Provider.of<RoomsProvider>(context, listen: false).myRoom;
@@ -79,17 +85,13 @@ class BuyGiftScreen extends StatelessWidget {
             )
           : Consumer<GiftsProvider>(
               builder: ((ctx, gitsData, _) => Scaffold(
-                  appBar: AppBar(
-                    title: Text('Buy gifts'),
-                    actions: [
-                      IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(
-                                EditGiftScreen.routeName,
-                                arguments: {'roomId': myRoom.id});
-                          },
-                          icon: Icon(Icons.add))
-                    ],
+                  appBar: AppBar(title: const Text('Buy gifts')),
+                  floatingActionButtonLocation:
+                      FloatingActionButtonLocation.endFloat,
+                  floatingActionButton: FloatingActionButton(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    onPressed: () => _goToNewGift(context, myRoom),
+                    child: Icon(Icons.add),
                   ),
                   body: DefaultTabController(
                     length: 2, // length of tabs
@@ -153,7 +155,7 @@ class BuyGiftScreen extends StatelessWidget {
                                                               })
                                                         },
                                                     child: Text(
-                                                      'Click above "+" to add new gift',
+                                                      'Click the "+" below to add new gift',
                                                       style: TextStyle(
                                                           fontSize: 18),
                                                       textAlign:
@@ -170,7 +172,7 @@ class BuyGiftScreen extends StatelessWidget {
                                         width: double.infinity,
                                         child: Column(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                              MainAxisAlignment.start,
                                           children: [
                                             SizedBox(
                                               height: 20,
