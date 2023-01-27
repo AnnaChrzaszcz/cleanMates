@@ -86,52 +86,52 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
     return DefaultTabController(
       length: 2, // length of tabs
       initialIndex: 0,
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Container(
-              child: TabBar(
-                labelColor: Theme.of(context).primaryColor,
-                unselectedLabelColor: Colors.black,
-                tabs: [
-                  Tab(text: widget.roomieUsername),
-                  Tab(text: widget.yourUsername),
-                ],
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <
+          Widget>[
+        Container(
+          child: TabBar(
+            labelColor: Theme.of(context).primaryColor,
+            unselectedLabelColor: Colors.black,
+            tabs: [
+              Tab(text: widget.roomieUsername),
+              Tab(text: widget.yourUsername),
+            ],
+          ),
+        ),
+        Flexible(
+          child: TabBarView(
+            children: <Widget>[
+              TabBarViewContainer(
+                widget.gifts
+                    .where(
+                        (roomieGift) => roomieGift.roomieId == widget.roomieId)
+                    .where((gift) => !gift.isRealized)
+                    .toList(),
+                widget.gifts
+                    .where(
+                        (roomieGift) => roomieGift.roomieId == widget.roomieId)
+                    .where((gift) => gift.isRealized)
+                    .toList(),
+                _receive,
+                widget.roomieId,
               ),
-            ),
-            Flexible(
-              child: TabBarView(
-                children: <Widget>[
-                  TabBarViewContainer(
-                      widget.gifts
-                          .where((roomieGift) =>
-                              roomieGift.roomieId == widget.roomieId)
-                          .where((gift) => !gift.isRealized)
-                          .toList(),
-                      widget.gifts
-                          .where((roomieGift) =>
-                              roomieGift.roomieId == widget.roomieId)
-                          .where((gift) => gift.isRealized)
-                          .toList(),
-                      _receive,
-                      widget.roomieId),
-                  TabBarViewContainer(
-                      widget.gifts
-                          .where((roomieGift) =>
-                              roomieGift.roomieId == widget.userId)
-                          .where((gift) => !gift.isRealized)
-                          .toList(),
-                      widget.gifts
-                          .where((roomieGift) =>
-                              roomieGift.roomieId == widget.userId)
-                          .where((gift) => gift.isRealized)
-                          .toList(),
-                      _receive,
-                      widget.userId),
-                ],
-              ),
-            ),
-          ]),
+              TabBarViewContainer(
+                  widget.gifts
+                      .where(
+                          (roomieGift) => roomieGift.roomieId == widget.userId)
+                      .where((gift) => !gift.isRealized)
+                      .toList(),
+                  widget.gifts
+                      .where(
+                          (roomieGift) => roomieGift.roomieId == widget.userId)
+                      .where((gift) => gift.isRealized)
+                      .toList(),
+                  _receive,
+                  widget.userId),
+            ],
+          ),
+        ),
+      ]),
     );
   }
 }

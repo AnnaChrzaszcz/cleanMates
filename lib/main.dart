@@ -106,12 +106,13 @@ class MyApp extends StatelessWidget {
               User user = userSnapshot.data;
               if (user.displayName != null && user.photoURL != null) {
                 print('wszystko git');
-                return UserDashboardScreen();
+                return const OnBoardingPage(isLogin: true);
               }
               print('has data ale zle');
             }
-            print('tak zwana dupa');
+            print('login screen');
             return AuthScreen();
+
             // if (userSnapshot.connectionState == ConnectionState.active) {
             //   if (userSnapshot.hasData) {
             //     User user = userSnapshot.data;

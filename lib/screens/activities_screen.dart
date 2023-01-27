@@ -44,11 +44,6 @@ class ActivitiesScreen extends StatelessWidget {
     }
   }
 
-  void _goToEditActivity(BuildContext context, Room myRoom) {
-    Navigator.of(context).pushNamed(EditActivityScreen.routeName,
-        arguments: {'roomId': myRoom.id});
-  }
-
   @override
   Widget build(BuildContext context) {
     Room myRoom = Provider.of<RoomsProvider>(context).myRoom;

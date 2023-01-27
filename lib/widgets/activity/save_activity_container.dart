@@ -84,17 +84,21 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
       child: Column(
         children: [
           CircleAvatar(
-            radius: 30,
             backgroundColor: Theme.of(context).primaryColor,
-            foregroundColor: Colors.white,
-            child: AnimatedSwitcher(
-              transitionBuilder: (Widget child, Animation<double> animation) {
-                return ScaleTransition(scale: animation, child: child);
-              },
-              duration: const Duration(milliseconds: 600),
-              child: Text(
-                '${activitesPointsSum}',
-                key: ValueKey<int>(activitesPointsSum),
+            radius: 32,
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.white,
+              foregroundColor: Theme.of(context).primaryColor,
+              child: AnimatedSwitcher(
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return ScaleTransition(scale: animation, child: child);
+                },
+                duration: const Duration(milliseconds: 600),
+                child: Text(
+                  '${activitesPointsSum}',
+                  key: ValueKey<int>(activitesPointsSum),
+                ),
               ),
             ),
           ),

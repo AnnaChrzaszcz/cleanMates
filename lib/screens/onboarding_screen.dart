@@ -9,7 +9,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 class OnBoardingPage extends StatefulWidget {
   @override
   final bool isLogin;
-  OnBoardingPage({this.isLogin});
+  const OnBoardingPage({Key key, this.isLogin}) : super(key: key);
 
   _OnBoardingPageState createState() => _OnBoardingPageState();
 }

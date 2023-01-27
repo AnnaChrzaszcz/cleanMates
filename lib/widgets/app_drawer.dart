@@ -122,18 +122,19 @@ class AppDrawer extends StatelessWidget {
                         .pushReplacementNamed(RecivedGiftsScreen.routeName);
                   },
                 ),
-                Positioned(
-                  right: 80,
-                  child: CircleAvatar(
-                    child: Text(
-                      '${roomieBoughtGifts}',
-                      style: TextStyle(fontSize: 13),
+                if (roomieBoughtGifts != null && roomieBoughtGifts > 0)
+                  Positioned(
+                    right: 80,
+                    child: CircleAvatar(
+                      child: Text(
+                        '${roomieBoughtGifts}',
+                        style: TextStyle(fontSize: 13),
+                      ),
+                      radius: 12,
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
                     ),
-                    radius: 12,
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
                   ),
-                ),
               ],
             ),
           if (room != null) const Divider(),
