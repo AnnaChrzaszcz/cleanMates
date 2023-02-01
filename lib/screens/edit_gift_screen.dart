@@ -104,6 +104,7 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
   void initState() {
     _pointsEditingController = TextEditingController();
     _nameEditingController = TextEditingController();
+    _nameEditingController.addListener(() {});
     super.initState();
   }
 
@@ -158,6 +159,11 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                         onFieldSubmitted: (_) =>
                                             FocusScope.of(context)
                                                 .requestFocus(_pointsFocusNode),
+                                        onChanged: ((value) {
+                                          setState(() {
+                                            _iconSelectedIndex = 4;
+                                          });
+                                        }),
                                         onSaved: (value) {
                                           _editedGift = Gift(
                                               id: _editedGift.id,
