@@ -173,6 +173,11 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                         decoration: InputDecoration(
                                             labelText: 'Gift name'),
                                         textInputAction: TextInputAction.done,
+                                        onChanged: ((value) {
+                                          setState(() {
+                                            _iconSelectedIndex = 4;
+                                          });
+                                        }),
                                         // onFieldSubmitted: (_) => FocusScope.of(context)
                                         //     .requestFocus(_pointsFocusNode),
                                         onSaved: (value) {
