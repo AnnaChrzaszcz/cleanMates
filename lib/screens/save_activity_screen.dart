@@ -71,32 +71,35 @@ class SaveActivityScreen extends StatelessWidget {
                     appBar: AppBar(
                       title: Text('Save activity'),
                     ),
-                    body: DefaultTabController(
-                      length: 2, // length of tabs
-                      initialIndex: 0,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            Container(
-                              child: TabBar(
-                                labelColor: Theme.of(context).primaryColor,
-                                unselectedLabelColor: Colors.black,
-                                tabs: [
-                                  Tab(text: 'Save activity'),
-                                  Tab(text: 'Activities overview'),
-                                ],
+                    body: Padding(
+                      padding: EdgeInsets.all(8),
+                      child: DefaultTabController(
+                        length: 2, // length of tabs
+                        initialIndex: 0,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              Container(
+                                child: TabBar(
+                                  labelColor: Theme.of(context).primaryColor,
+                                  unselectedLabelColor: Colors.black,
+                                  tabs: [
+                                    Tab(text: 'Save activity'),
+                                    Tab(text: 'Activities overview'),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Flexible(
-                              child: TabBarView(
-                                children: <Widget>[
-                                  saveActivity(
-                                      myRoom, context, activitiesData, userId),
-                                  activitiesOverview(activitiesData, context),
-                                ],
+                              Flexible(
+                                child: TabBarView(
+                                  children: <Widget>[
+                                    saveActivity(myRoom, context,
+                                        activitiesData, userId),
+                                    activitiesOverview(activitiesData, context),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ]),
+                            ]),
+                      ),
                     ),
                   )),
             )),
@@ -205,6 +208,7 @@ class SaveActivityScreen extends StatelessWidget {
             child: Text(
               'You need to add a roomie to your room',
               style: Theme.of(context).textTheme.headline6,
+              textAlign: TextAlign.center,
             ),
           )
         : activitiesData.activities.isEmpty

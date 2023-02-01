@@ -73,7 +73,7 @@ class AppDrawer extends StatelessWidget {
                 if (room != null)
                   ListTile(
                     leading: Icon(Icons.handshake),
-                    title: Text('Gifts Reception'), //TYLKO JESLI JEST ROOM
+                    title: Text('Requested gifts'), //TYLKO JESLI JEST ROOM
                     onTap: () {
                       Navigator.of(context)
                           .pushReplacementNamed(RecivedGiftsScreen.routeName);

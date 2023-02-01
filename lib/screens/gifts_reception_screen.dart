@@ -43,7 +43,7 @@ class RecivedGiftsScreen extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Gift Reception'),
+          title: Text('Requested gifts'),
         ),
         drawer: AppDrawer(),
         body: myRoom.roomies.length == 1

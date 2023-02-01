@@ -72,7 +72,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   Widget build(BuildContext context) {
     final actions = [
       {
-        'title': 'Save Activity',
+        'title': 'Add Activity',
         'routeName': SaveActivityScreen.routeName,
         'imagePath': 'assets/images/cleaning.png',
         'color': Color.fromRGBO(236, 32, 73, 1),

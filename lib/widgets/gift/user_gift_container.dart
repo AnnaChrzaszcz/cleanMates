@@ -31,6 +31,8 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
   List<UserGift> roomieRecived;
   List<UserGift> roomieBought;
   var yourSelectedIndex = -1;
+  List<UserGift> prev_userGifts;
+  List<UserGift> prev_roomieGifts;
 
   @override
   void initState() {
@@ -49,6 +51,8 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
 
   void _receive(String userId, selectedIndex) async {
     var giftId;
+    prev_userGifts = userGifts;
+    prev_roomieGifts = roomieGifts;
 
     if (userId == widget.userId) {
       //poprawic potem
@@ -60,12 +64,6 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
     }
     await Provider.of<RoomsProvider>(context, listen: false)
         .markUserGiftAsRecived(userId, giftId);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Gift received!'),
-        duration: const Duration(seconds: 2),
-      ),
-    );
 
     setState(() {
       userGifts = widget.gifts
@@ -79,6 +77,31 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
       roomieRecived = roomieGifts.where((gift) => gift.isRealized).toList();
       roomieBought = roomieGifts.where((gift) => !gift.isRealized).toList();
     });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Gift received!'),
+        action: SnackBarAction(
+          label: 'UNDO',
+          textColor: Theme.of(context).primaryColor,
+          onPressed: () async {
+            await Provider.of<RoomsProvider>(context, listen: false)
+                .UNDOmarkUserGiftAsRecived(userId, giftId);
+            setState(() {
+              yourRecived =
+                  prev_userGifts.where((gift) => gift.isRealized).toList();
+              yourBought =
+                  prev_userGifts.where((gift) => !gift.isRealized).toList();
+              roomieRecived =
+                  prev_roomieGifts.where((gift) => gift.isRealized).toList();
+              roomieBought =
+                  prev_roomieGifts.where((gift) => !gift.isRealized).toList();
+            });
+          },
+        ),
+        duration: const Duration(seconds: 2),
+      ),
+    );
   }
 
   @override

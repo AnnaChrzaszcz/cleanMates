@@ -48,7 +48,7 @@ class _TabBarViewContainerState extends State<TabBarViewContainer> {
               ),
               backgroundColor: Theme.of(context).dividerColor,
             ),
-            title: Text('Bought gifts'),
+            title: Text('Requested gifts'),
             trailing:
                 Icon(_boughtExpanded ? Icons.expand_less : Icons.expand_more),
           ),
@@ -147,7 +147,7 @@ class _TabBarViewContainerState extends State<TabBarViewContainer> {
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          DateFormat('dd/MM hh:mm')
+                          DateFormat('dd/MM HH:mm')
                               .format(widget.yourRecived[index].boughtDate),
                         ),
                       ],

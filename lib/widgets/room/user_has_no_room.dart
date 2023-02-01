@@ -50,7 +50,7 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'You have currently no room',
+            'You currently have no room',
             style: Theme.of(context).textTheme.headline6,
           ),
           SizedBox(height: 20),
