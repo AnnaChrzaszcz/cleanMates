@@ -34,8 +34,7 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
   List<UserGift> prev_userGifts;
   List<UserGift> prev_roomieGifts;
 
-  @override
-  void initState() {
+  void _initializeData() {
     userGifts = widget.gifts
         .where((roomieGift) => roomieGift.roomieId == widget.userId)
         .toList();
@@ -46,35 +45,27 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
     yourBought = userGifts.where((gift) => !gift.isRealized).toList();
     roomieRecived = roomieGifts.where((gift) => gift.isRealized).toList();
     roomieBought = roomieGifts.where((gift) => !gift.isRealized).toList();
+  }
+
+  @override
+  void initState() {
+    _initializeData();
     super.initState();
   }
 
   void _receive(String userId, selectedIndex) async {
+    _initializeData();
     var giftId;
     prev_userGifts = userGifts;
     prev_roomieGifts = roomieGifts;
 
     if (userId == widget.userId) {
-      //poprawic potem
       giftId = yourBought[selectedIndex].id;
     } else {
       giftId = roomieBought[selectedIndex].id;
     }
     await Provider.of<RoomsProvider>(context, listen: false)
         .markUserGiftAsRecived(userId, giftId);
-
-    setState(() {
-      userGifts = widget.gifts
-          .where((roomieGift) => roomieGift.roomieId == widget.userId)
-          .toList();
-      roomieGifts = widget.gifts
-          .where((roomieGift) => roomieGift.roomieId == widget.roomieId)
-          .toList();
-      yourRecived = userGifts.where((gift) => gift.isRealized).toList();
-      yourBought = userGifts.where((gift) => !gift.isRealized).toList();
-      roomieRecived = roomieGifts.where((gift) => gift.isRealized).toList();
-      roomieBought = roomieGifts.where((gift) => !gift.isRealized).toList();
-    });
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -85,21 +76,13 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
           onPressed: () async {
             await Provider.of<RoomsProvider>(context, listen: false)
                 .UNDOmarkUserGiftAsRecived(userId, giftId);
-            setState(() {
-              yourRecived =
-                  prev_userGifts.where((gift) => gift.isRealized).toList();
-              yourBought =
-                  prev_userGifts.where((gift) => !gift.isRealized).toList();
-              roomieRecived =
-                  prev_roomieGifts.where((gift) => gift.isRealized).toList();
-              roomieBought =
-                  prev_roomieGifts.where((gift) => !gift.isRealized).toList();
-            });
+            setState(() {});
           },
         ),
         duration: const Duration(seconds: 2),
       ),
     );
+    setState(() {});
   }
 
   @override

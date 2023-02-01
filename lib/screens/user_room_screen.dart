@@ -129,7 +129,16 @@ class UserRoomScreen extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () => _leaveRoom(room, context),
-                    child: Text('Leave current room'),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.exit_to_app),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text('Leave current room'),
+                      ],
+                    ),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor),
                   ),

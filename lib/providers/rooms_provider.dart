@@ -421,8 +421,8 @@ class RoomsProvider extends ChangeNotifier {
         points: editedGift.points,
         roomieId: editedGift.roomieId,
         isRealized: false,
-        boughtDate: null,
-        realizedDate: dateNow);
+        boughtDate: editedGift.boughtDate,
+        realizedDate: null);
     userRoom.roomiesGift[giftIndex] = newGift;
     notifyListeners();
   }

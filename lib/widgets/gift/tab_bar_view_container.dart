@@ -193,8 +193,10 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        DateFormat('dd/MM HH:mm')
-                            .format(widget.yourRecived[index].boughtDate),
+                        widget.yourRecived[index].realizedDate != null
+                            ? DateFormat('dd/MM HH:mm')
+                                .format(widget.yourRecived[index].realizedDate)
+                            : '',
                       ),
                     ],
                   ),
