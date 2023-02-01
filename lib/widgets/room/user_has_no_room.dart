@@ -67,7 +67,7 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
               maxHeight: !_joinRoom ? 50 : 0,
             ),
             child: Text(
-              'You have currently no room',
+              'You currently have no room',
               style: Theme.of(context).textTheme.headline6,
             ),
           ),

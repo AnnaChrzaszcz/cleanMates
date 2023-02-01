@@ -114,7 +114,7 @@ class AppDrawer extends StatelessWidget {
                         : Colors.grey,
                   ),
 
-                  title: Text('Bought gifts', style: TextStyle()),
+                  title: Text('Requested gifts', style: TextStyle()),
 
                   //TYLKO JESLI JEST ROOM
                   onTap: () {

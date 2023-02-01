@@ -25,6 +25,7 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
   var selectedIndexes = [];
   var activitesPointsSum = 0;
   var _isLoading = false;
+  var activitiesLength = 0;
 
   void _saveActivites() async {
     setState(() {
@@ -78,7 +79,20 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
   }
 
   @override
+  void initState() {
+    activitiesLength = widget.activities.length;
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (activitiesLength < widget.activities.length) {
+      activitiesLength = widget.activities.length;
+      selectedIndexes.add(widget.activities.length - 1);
+      activitesPointsSum +=
+          widget.activities[widget.activities.length - 1].points;
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Column(

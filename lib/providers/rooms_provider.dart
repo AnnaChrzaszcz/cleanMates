@@ -399,6 +399,34 @@ class RoomsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> UNDOmarkUserGiftAsRecived(String userId, String giftId) async {
+    //POPRAWIONE
+    DateTime dateNow = DateTime.now();
+
+    await FirebaseFirestore.instance
+        .collection('rooms')
+        .doc(userRoom.id)
+        .collection('roomiesGifts')
+        .doc(giftId)
+        .update({'isRealized': false, 'realizedDate': FieldValue.delete()});
+
+    var giftIndex =
+        userRoom.roomiesGift.indexWhere((gift) => gift.id == giftId);
+
+    UserGift editedGift = userRoom.roomiesGift[giftIndex];
+
+    UserGift newGift = UserGift(
+        id: editedGift.id,
+        giftName: editedGift.giftName,
+        points: editedGift.points,
+        roomieId: editedGift.roomieId,
+        isRealized: false,
+        boughtDate: null,
+        realizedDate: dateNow);
+    userRoom.roomiesGift[giftIndex] = newGift;
+    notifyListeners();
+  }
+
   List<UserActivity> getRoomActivitiesByDate(DateTime date) {
     //POPRAWIONE
     List<UserActivity> activitiesAtDay = [];

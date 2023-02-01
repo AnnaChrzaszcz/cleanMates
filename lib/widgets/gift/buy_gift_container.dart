@@ -201,22 +201,17 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                                         radius: 18,
                                         backgroundColor: Colors.grey[200],
                                         foregroundColor: Colors.black,
-                                        child: IconButton(
-                                          icon: Icon(Icons.remove),
-                                          onPressed: () {
-                                            setState(() {
-                                              var indextoDelete =
-                                                  selectedIndexes.indexWhere(
-                                                      (ind) => ind == index);
-
-                                              if (indextoDelete != -1) {
-                                                selectedIndexes
-                                                    .removeAt(indextoDelete);
-                                                giftsointsSum -=
+                                        child: FittedBox(
+                                          child: IconButton(
+                                            icon: Icon(Icons.add),
+                                            onPressed: () {
+                                              setState(() {
+                                                selectedIndexes.add(index);
+                                                giftsointsSum +=
                                                     widget.gifts[index].points;
-                                              }
-                                            });
-                                          },
+                                              });
+                                            },
+                                          ),
                                         ),
                                       ),
                                       SizedBox(
@@ -246,17 +241,22 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                                         radius: 18,
                                         backgroundColor: Colors.grey[200],
                                         foregroundColor: Colors.black,
-                                        child: FittedBox(
-                                          child: IconButton(
-                                            icon: Icon(Icons.add),
-                                            onPressed: () {
-                                              setState(() {
-                                                selectedIndexes.add(index);
-                                                giftsointsSum +=
+                                        child: IconButton(
+                                          icon: Icon(Icons.remove),
+                                          onPressed: () {
+                                            setState(() {
+                                              var indextoDelete =
+                                                  selectedIndexes.indexWhere(
+                                                      (ind) => ind == index);
+
+                                              if (indextoDelete != -1) {
+                                                selectedIndexes
+                                                    .removeAt(indextoDelete);
+                                                giftsointsSum -=
                                                     widget.gifts[index].points;
-                                              });
-                                            },
-                                          ),
+                                              }
+                                            });
+                                          },
                                         ),
                                       ),
                                     ]),

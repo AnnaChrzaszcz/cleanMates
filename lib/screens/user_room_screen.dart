@@ -19,7 +19,7 @@ class UserRoomScreen extends StatelessWidget {
       context: ctx,
       builder: (ctx) => AlertDialog(
         title: Text('Are you sure?'),
-        content: Text('You will lost all your points'),
+        content: Text('You will loose all your points'),
         actions: [
           TextButton(
               onPressed: () {
