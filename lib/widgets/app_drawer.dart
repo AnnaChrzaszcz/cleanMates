@@ -124,7 +124,7 @@ class AppDrawer extends StatelessWidget {
                 ),
                 if (roomieBoughtGifts != null && roomieBoughtGifts > 0)
                   Positioned(
-                    right: 80,
+                    right: 65,
                     child: CircleAvatar(
                       child: Text(
                         '${roomieBoughtGifts}',
