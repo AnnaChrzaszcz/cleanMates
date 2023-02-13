@@ -64,11 +64,14 @@ class _UserProfileState extends State<UserProfile> {
         title: Text('Your profile'),
         actions: [
           IconButton(
-              onPressed: () => _saveUpdate(context),
-              icon: const Icon(Icons.save))
+              onPressed: () =>
+                  pickedImageFile != null ? _saveUpdate(context) : null,
+              icon: Icon(
+                Icons.save,
+                color: pickedImageFile != null ? Colors.white : Colors.grey,
+              ))
         ],
       ),
-      drawer: AppDrawer(),
       body: Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
