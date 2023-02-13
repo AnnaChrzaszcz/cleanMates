@@ -100,7 +100,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         'color': Color.fromRGBO(247, 219, 79, 0.7),
       },
       {
-        'title': 'Stats',
+        'title': 'Stats & History',
         'routeName': StatsScreen.routeName, //StatsScreen.routeName,
         'imagePath': 'assets/images/stats.png',
         'color': Color.fromRGBO(242, 107, 56, 0.7),
@@ -134,27 +134,32 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                     appBar: AppBar(
                       leading: GestureDetector(
                         onTap: () => _scaffoldKey.currentState?.openDrawer(),
-                        child: Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: [
-                            Positioned(
-                                left: 15,
-                                child: Icon(
-                                  Icons.menu,
-                                  size: 30,
-                                )),
-                            if (_roomieBoughtGifts > 0)
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Colors.yellow.withOpacity(0))),
+                          child: Stack(
+                            alignment: AlignmentDirectional.center,
+                            children: [
                               Positioned(
-                                top: 5,
-                                left: 30,
-                                child: CircleAvatar(
-                                  child: Text('${_roomieBoughtGifts}'),
-                                  radius: 10,
-                                  backgroundColor: Colors.red,
-                                  foregroundColor: Colors.white,
+                                  left: 15,
+                                  child: Icon(
+                                    Icons.menu,
+                                    size: 25,
+                                  )),
+                              if (_roomieBoughtGifts > 0)
+                                Positioned(
+                                  top: 5,
+                                  left: 30,
+                                  child: CircleAvatar(
+                                    child: Text('${_roomieBoughtGifts}'),
+                                    radius: 10,
+                                    backgroundColor: Colors.red,
+                                    foregroundColor: Colors.white,
+                                  ),
                                 ),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       title: DefaultTextStyle(

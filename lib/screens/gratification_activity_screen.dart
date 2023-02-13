@@ -69,39 +69,43 @@ class _GratificationActivityScreenState
       imagePadding: EdgeInsets.zero,
     );
 
-    return IntroductionScreen(
-      key: introKey,
-      globalBackgroundColor: Colors.white,
-      pages: [
-        PageViewModel(
-          title: 'Congratulations!',
-          bodyWidget: Container(
-            child: Column(
-              children: [
-                Text('${username} earned $pointsSum points!', style: bodyStyle),
-                AnimatedTextKit(
-                  animatedTexts: [
-                    ScaleAnimatedText('You earned 100 points',
-                        textStyle: TextStyle(color: Colors.white),
-                        duration: Duration(milliseconds: 1800)),
-                  ],
-                  isRepeatingAnimation: false,
-                  onFinished: () => _onIntroEnd(context),
-                )
-              ],
+    return GestureDetector(
+      onTap: () => _onIntroEnd(context),
+      child: IntroductionScreen(
+        key: introKey,
+        globalBackgroundColor: Colors.white,
+        pages: [
+          PageViewModel(
+            title: 'Congratulations!',
+            bodyWidget: Container(
+              child: Column(
+                children: [
+                  Text('${username} earned $pointsSum points!',
+                      style: bodyStyle),
+                  AnimatedTextKit(
+                    animatedTexts: [
+                      ScaleAnimatedText('You earned 100 points',
+                          textStyle: TextStyle(color: Colors.white),
+                          duration: Duration(milliseconds: 1800)),
+                    ],
+                    isRepeatingAnimation: false,
+                    onFinished: () => _onIntroEnd(context),
+                  )
+                ],
+              ),
             ),
+            image: Lottie.asset('assets/animations/lottie/confetti.json'),
+            decoration: pageDecoration,
           ),
-          image: Lottie.asset('assets/animations/lottie/confetti.json'),
-          decoration: pageDecoration,
-        ),
-      ],
-      onDone: () => _onIntroEnd(context),
-      showSkipButton: false,
-      showNextButton: false,
-      showDoneButton: false,
-      skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600)),
-      done: const Text('Skip',
-          style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+        ],
+        onDone: () => _onIntroEnd(context),
+        showSkipButton: false,
+        showNextButton: false,
+        showDoneButton: false,
+        skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600)),
+        done: const Text('Skip',
+            style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+      ),
     );
   }
 }

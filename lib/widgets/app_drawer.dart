@@ -31,16 +31,22 @@ class AppDrawer extends StatelessWidget {
           AppBar(
             actions: [
               FirebaseAuth.instance.currentUser != null
-                  ? Container(
-                      margin: EdgeInsets.only(right: 5, bottom: 10),
-                      child: Hero(
-                        tag: 'profile-pic',
-                        child: CircleAvatar(
-                          backgroundColor: Color.fromRGBO(247, 219, 79, 1),
-                          radius: 30,
+                  ? GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(UserProfile.routeName,
+                            arguments: {'user': user});
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 5, bottom: 10),
+                        child: Hero(
+                          tag: 'profile-pic',
                           child: CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                FirebaseAuth.instance.currentUser.photoURL),
+                            backgroundColor: Color.fromRGBO(247, 219, 79, 1),
+                            radius: 30,
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  FirebaseAuth.instance.currentUser.photoURL),
+                            ),
                           ),
                         ),
                       ),
@@ -138,16 +144,7 @@ class AppDrawer extends StatelessWidget {
               ],
             ),
           if (room != null) const Divider(),
-          if (room != null)
-            ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Profile'), //TYLKO JESLI JEST ROOM
-              onTap: () {
-                Navigator.of(context).pushNamed(UserProfile.routeName,
-                    arguments: {'user': user});
-              },
-            ),
-          if (room != null) const Divider(),
+
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
