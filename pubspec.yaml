@@ -57,6 +57,7 @@ dependencies:
   loading_animation_widget: ^1.2.0+4
   shimmer: ^2.0.0
   carousel_slider: ^4.2.1
+  flutter_slidable: ^2.0.0
 
 dev_dependencies:
   flutter_test:

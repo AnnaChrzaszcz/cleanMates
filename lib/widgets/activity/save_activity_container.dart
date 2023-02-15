@@ -1,6 +1,8 @@
 import 'dart:ffi';
 
 import 'package:clean_mates_app/models/userActivity.dart';
+import 'package:clean_mates_app/providers/activities_provider.dart';
+import 'package:clean_mates_app/screens/edit_activity_screen.dart';
 import 'package:clean_mates_app/screens/gratification_activity_screen.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +11,7 @@ import 'package:rive/rive.dart';
 import '../../models/activity.dart';
 import '../../providers/rooms_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class SaveActivityContainer extends StatefulWidget {
   final List<Activity> activities;
@@ -78,6 +81,31 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
     }
   }
 
+  void _deleteActivity(BuildContext context, String id) async {
+    try {
+      await Provider.of<ActivitiesProvider>(context, listen: false)
+          .deleteActivity(id);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Activity deleted!',
+            textAlign: TextAlign.center,
+          ),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Deleting failed!',
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   void initState() {
     activitiesLength = widget.activities.length;
@@ -134,57 +162,139 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                 margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 8),
                 child: ListView.builder(
                   itemCount: widget.activities.length,
-                  itemBuilder: ((context, index) => Column(
-                        children: [
-                          CheckboxListTile(
-                            title: Text(
-                              widget.activities[index].activityName,
-                              style: TextStyle(
-                                  fontWeight: selectedIndexes.contains(index)
-                                      ? FontWeight.w500
-                                      : FontWeight.normal),
-                            ),
-                            secondary: CircleAvatar(
-                              radius: selectedIndexes.contains(index) ? 23 : 22,
+                  itemBuilder: ((context, index) => Slidable(
+                        key: ValueKey(index),
+                        endActionPane: ActionPane(
+                          motion: StretchMotion(),
+                          children: [
+                            SlidableAction(
+                              // An action can be bigger than the others.
+                              onPressed: (context) {
+                                Navigator.of(context).pushNamed(
+                                    EditActivityScreen.routeName,
+                                    arguments: {
+                                      'id': widget.activities[index].id,
+                                    }).then((value) {
+                                  activitesPointsSum = 0;
+                                  selectedIndexes = [];
+                                });
+                              },
                               backgroundColor:
-                                  Theme.of(context).colorScheme.primary,
-                              child: CircleAvatar(
-                                radius: 20,
-                                foregroundColor: Colors.black,
-                                backgroundColor: Colors.white,
-                                child: Text(
-                                  '${widget.activities[index].points}',
-                                  style: TextStyle(
-                                      fontWeight:
-                                          selectedIndexes.contains(index)
-                                              ? FontWeight.bold
-                                              : FontWeight.normal),
+                                  Color.fromRGBO(47, 149, 153, 0.7),
+                              foregroundColor: Colors.white,
+                              icon: Icons.edit,
+
+                              borderRadius: BorderRadius.circular(30),
+                              label: 'Edit',
+                            ),
+                            SlidableAction(
+                              onPressed: (context) => showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('Are you sure?'),
+                                  content: const Text(
+                                      'Do you want to remove this activity?'),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('NO')),
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          setState(() {
+                                            var howManyItems = selectedIndexes
+                                                .where((ind) => ind == index)
+                                                .length;
+
+                                            if (howManyItems > 0) {
+                                              selectedIndexes.removeWhere(
+                                                  (ind) => ind == index);
+                                              activitesPointsSum -= widget
+                                                      .activities[index]
+                                                      .points *
+                                                  howManyItems;
+                                            }
+                                          });
+                                          _deleteActivity(context,
+                                              widget.activities[index].id);
+                                        },
+                                        child: const Text('YES')),
+                                  ],
                                 ),
                               ),
+                              backgroundColor: Color.fromRGBO(236, 32, 73, 1),
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                              borderRadius: BorderRadius.circular(30),
+                              label: 'Delete',
                             ),
-                            value: selectedIndexes.contains(index),
-                            onChanged: (_) {
-                              if (selectedIndexes.contains(index)) {
-                                setState(() {
-                                  selectedIndexes.remove(index);
-                                  activitesPointsSum -=
-                                      widget.activities[index].points;
-                                });
-                              } else {
-                                setState(() {
-                                  selectedIndexes.add(index);
-                                  activitesPointsSum +=
-                                      widget.activities[index].points;
-                                });
-                              }
-                            },
-                            activeColor: Theme.of(context).colorScheme.primary,
-                            tileColor: selectedIndexes.contains(index)
-                                ? Color.fromRGBO(195, 227, 227, 1)
-                                : Colors.white,
+                          ],
+                        ),
+                        child: Card(
+                          color: selectedIndexes.contains(index)
+                              ? Color.fromRGBO(195, 227, 227, 1)
+                              : Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18)),
+                          elevation: 20,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 4),
+                            child: CheckboxListTile(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18)),
+                              title: Text(
+                                widget.activities[index].activityName,
+                                style: TextStyle(
+                                    fontWeight: selectedIndexes.contains(index)
+                                        ? FontWeight.w500
+                                        : FontWeight.normal),
+                              ),
+                              secondary: CircleAvatar(
+                                radius:
+                                    selectedIndexes.contains(index) ? 23 : 22,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
+                                child: CircleAvatar(
+                                  radius: 20,
+                                  foregroundColor: Colors.black,
+                                  backgroundColor: Colors.white,
+                                  child: Text(
+                                    '${widget.activities[index].points}',
+                                    style: TextStyle(
+                                        fontWeight:
+                                            selectedIndexes.contains(index)
+                                                ? FontWeight.bold
+                                                : FontWeight.normal),
+                                  ),
+                                ),
+                              ),
+                              value: selectedIndexes.contains(index),
+                              onChanged: (_) {
+                                if (selectedIndexes.contains(index)) {
+                                  setState(() {
+                                    selectedIndexes.remove(index);
+                                    activitesPointsSum -=
+                                        widget.activities[index].points;
+                                  });
+                                } else {
+                                  setState(() {
+                                    selectedIndexes.add(index);
+                                    activitesPointsSum +=
+                                        widget.activities[index].points;
+                                  });
+                                }
+                              },
+                              activeColor:
+                                  Theme.of(context).colorScheme.primary,
+                              tileColor: selectedIndexes.contains(index)
+                                  ? Color.fromRGBO(195, 227, 227, 1)
+                                  : Colors.white,
+                            ),
                           ),
-                          Divider()
-                        ],
+                        ),
                       )),
                 ),
               ),
