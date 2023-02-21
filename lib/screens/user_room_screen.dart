@@ -18,21 +18,21 @@ class UserRoomScreen extends StatelessWidget {
     showDialog(
       context: ctx,
       builder: (ctx) => AlertDialog(
-        title: Text('Are you sure?'),
-        content: Text('You will loose all your points'),
+        title: const Text('Are you sure?'),
+        content: const Text('You will loose all your points'),
         actions: [
           TextButton(
               onPressed: () {
                 Navigator.of(ctx).pop();
               },
-              child: Text('NO')),
+              child: const Text('NO')),
           TextButton(
               onPressed: () {
                 Provider.of<RoomsProvider>(ctx, listen: false)
                     .leaveRoom(actualRoom.id);
                 Navigator.of(ctx).pop();
               },
-              child: Text('YES')),
+              child: const Text('YES')),
         ],
       ),
     );
@@ -64,17 +64,17 @@ class UserRoomScreen extends StatelessWidget {
         ? UserDashboardScreen()
         : Scaffold(
             appBar: AppBar(title: Text(room != null ? room.roomName : '')),
-            drawer: AppDrawer(), // jak to zastapic strzalka do tylu
+            drawer: AppDrawer(),
             body: Container(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 25),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 25),
               width: double.infinity,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   RichText(
                     textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: const TextStyle(
+                    text: const TextSpan(
+                      style: TextStyle(
                         fontSize: 18.0,
                         color: Colors.black,
                       ),
@@ -82,20 +82,6 @@ class UserRoomScreen extends StatelessWidget {
                         TextSpan(
                             text:
                                 'To join to a different room, first you have to '),
-                        // WidgetSpan(
-                        //     child: Container(
-                        //   padding: EdgeInsets.all(6.0),
-                        //   decoration: BoxDecoration(
-                        //       borderRadius: BorderRadius.circular(10),
-                        //       color: Color.fromRGBO(167, 34, 110, 1)),
-                        //   child: Text("leave current room",
-                        //       style: const TextStyle(
-                        //           fontWeight: FontWeight.bold,
-                        //           fontSize: 19,
-                        //           backgroundColor:
-                        //               Color.fromRGBO(167, 34, 110, 1),
-                        //           color: Colors.white)),
-                        // )),
                         TextSpan(text: 'leave current room'),
                       ],
                     ),
@@ -129,9 +115,11 @@ class UserRoomScreen extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () => _leaveRoom(room, context),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
+                      children: const [
                         Icon(Icons.exit_to_app),
                         SizedBox(
                           width: 5,
@@ -139,8 +127,6 @@ class UserRoomScreen extends StatelessWidget {
                         Text('Leave current room'),
                       ],
                     ),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor),
                   ),
                 ],
               ),

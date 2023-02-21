@@ -47,9 +47,6 @@ class ActivitiesProvider extends ChangeNotifier {
     final newActivityRef =
         await FirebaseFirestore.instance.collection('activities').doc();
 
-    // final roomRef =
-    //     await FirebaseFirestore.instance.collection('rooms').doc(idRoom).get();
-
     await newActivityRef.set({
       'activityName': activity.activityName,
       'points': activity.points,
@@ -62,7 +59,6 @@ class ActivitiesProvider extends ChangeNotifier {
         points: activity.points,
         roomId: activity.roomId);
 
-    //_activities.insert(0, newActivity);
     _activities.add(newActivity);
     notifyListeners();
   }

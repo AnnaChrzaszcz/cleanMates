@@ -1,4 +1,4 @@
-import 'dart:io'; // at beginning of file
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,9 +21,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
   Future<void> _submitAuthForm(String email, String username, String password,
       File image, bool isLogin, BuildContext ctx) async {
-    // final prefs = await SharedPreferences.getInstance();
-    // await prefs.setBool('visited', true);
-
     UserCredential userCredential;
     try {
       setState(() {
@@ -33,17 +30,14 @@ class _AuthScreenState extends State<AuthScreen> {
       if (isLogin) {
         userCredential = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
-        print('isLogin');
 
         user = userCredential.user;
-        print(user.displayName);
         await user.updateDisplayName(user.displayName);
         await user.updatePhotoURL(user.photoURL);
       } else {
         userCredential = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
-        print('register');
-        print(username);
+
         user = userCredential.user;
 
         if (image == null) {
@@ -104,7 +98,7 @@ class _AuthScreenState extends State<AuthScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: Container(
-        margin: EdgeInsets.symmetric(vertical: 15),
+        margin: const EdgeInsets.symmetric(vertical: 15),
         height: MediaQuery.of(context).size.height,
         child: CustomScrollView(
           slivers: [

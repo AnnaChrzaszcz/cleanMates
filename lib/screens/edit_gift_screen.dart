@@ -61,7 +61,6 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
       setState(() {
         _isLoading = true;
       });
-      print(_editedGift.iconCode);
       _form.currentState.save();
       if (_editedGift.id != null) {
         await Provider.of<GiftsProvider>(context, listen: false)
@@ -111,7 +110,7 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
       }
     }
     _isInit = false;
-    // TODO: implement didChangeDependencies
+
     super.didChangeDependencies();
   }
 
@@ -133,18 +132,16 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       appBar: AppBar(
         title: Text(appBarName),
-        // actions: [IconButton(onPressed: _saveForm, icon: Icon(Icons.save))],
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Container(
               padding: const EdgeInsets.only(
                   left: 15, right: 15, top: 30, bottom: 10),
-              // decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
               child: Column(
                 children: [
                   Form(
@@ -155,7 +152,7 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Container(
+                              SizedBox(
                                 width: double.infinity,
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -164,13 +161,13 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                       icons[_iconSelectedIndex],
                                       size: 40,
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 15,
                                     ),
                                     Expanded(
                                       child: TextFormField(
                                         controller: _nameEditingController,
-                                        decoration: InputDecoration(
+                                        decoration: const InputDecoration(
                                             labelText: 'Gift name'),
                                         textInputAction: TextInputAction.done,
                                         onChanged: ((value) {
@@ -178,8 +175,6 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                             _iconSelectedIndex = 4;
                                           });
                                         }),
-                                        // onFieldSubmitted: (_) => FocusScope.of(context)
-                                        //     .requestFocus(_pointsFocusNode),
                                         onSaved: (value) {
                                           _editedGift = Gift(
                                               id: _editedGift.id,
@@ -190,17 +185,18 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                                       .codePoint);
                                         },
                                         validator: (value) {
-                                          if (value.isEmpty)
+                                          if (value.isEmpty) {
                                             return 'enter a name';
-                                          else
+                                          } else {
                                             return null;
+                                          }
                                         },
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              Container(
+                              SizedBox(
                                 height: 80,
                                 child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
@@ -241,14 +237,14 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                                           : FontWeight.normal)),
                                               backgroundColor: index ==
                                                       _selectedDictionaryIndex
-                                                  ? Color.fromRGBO(
+                                                  ? const Color.fromRGBO(
                                                       242, 107, 56, 1)
-                                                  : Color.fromRGBO(
+                                                  : const Color.fromRGBO(
                                                       240, 240, 240, 1),
-                                              padding: EdgeInsets.all(15),
+                                              padding: const EdgeInsets.all(15),
                                             ),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: 5,
                                           )
                                         ],
@@ -258,21 +254,22 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                               TextFormField(
                                   controller: _pointsEditingController,
                                   decoration:
-                                      InputDecoration(labelText: 'Value'),
+                                      const InputDecoration(labelText: 'Value'),
                                   textInputAction: TextInputAction.done,
                                   onFieldSubmitted: ((_) => _saveForm()),
                                   keyboardType: TextInputType.number,
                                   focusNode: _pointsFocusNode,
                                   validator: (value) {
                                     if (value.isEmpty) return 'enter a price';
-                                    if (int.parse(value) == null)
+                                    if (int.parse(value) == null) {
                                       return 'enter a int value';
-                                    else if (int.parse(value) <= 0) {
+                                    } else if (int.parse(value) <= 0) {
                                       return 'price must be grater than 0';
                                     } else if (int.parse(value) > 1000) {
                                       return 'price can not be greater than 1000';
-                                    } else
+                                    } else {
                                       return null;
+                                    }
                                   },
                                   onSaved: (value) {
                                     _editedGift = Gift(
@@ -285,31 +282,34 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                               SliderTheme(
                                 data: SliderTheme.of(context).copyWith(
                                   trackHeight: 10.0,
-                                  trackShape: RoundedRectSliderTrackShape(),
+                                  trackShape:
+                                      const RoundedRectSliderTrackShape(),
                                   activeTrackColor:
                                       Theme.of(context).colorScheme.primary,
                                   inactiveTrackColor: Theme.of(context)
                                       .colorScheme
                                       .primary
                                       .withOpacity(0.5),
-                                  thumbShape: RoundSliderThumbShape(
+                                  thumbShape: const RoundSliderThumbShape(
                                     enabledThumbRadius: 14.0,
                                     pressedElevation: 8.0,
                                   ),
-                                  thumbColor: Color.fromRGBO(242, 107, 56, 1),
+                                  thumbColor:
+                                      const Color.fromRGBO(242, 107, 56, 1),
                                   overlayColor:
-                                      Color.fromRGBO(242, 107, 56, 0.2),
-                                  overlayShape: RoundSliderOverlayShape(
+                                      const Color.fromRGBO(242, 107, 56, 0.2),
+                                  overlayShape: const RoundSliderOverlayShape(
                                       overlayRadius: 32.0),
-                                  tickMarkShape: RoundSliderTickMarkShape(),
+                                  tickMarkShape:
+                                      const RoundSliderTickMarkShape(),
                                   activeTickMarkColor:
-                                      Color.fromRGBO(247, 219, 79, 1),
+                                      const Color.fromRGBO(247, 219, 79, 1),
                                   inactiveTickMarkColor: Colors.white,
                                   valueIndicatorShape:
-                                      PaddleSliderValueIndicatorShape(),
+                                      const PaddleSliderValueIndicatorShape(),
                                   valueIndicatorColor:
-                                      Color.fromRGBO(242, 107, 56, 1),
-                                  valueIndicatorTextStyle: TextStyle(
+                                      const Color.fromRGBO(242, 107, 56, 1),
+                                  valueIndicatorTextStyle: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 20.0,
                                   ),
@@ -345,8 +345,7 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
 
                                                     min = (dziesiatek) *
                                                         100.toDouble();
-                                                    // min = 0.0;
-                                                    // max = 100.0;
+
                                                     _value -= 100;
                                                     _pointsEditingController
                                                             .text =
@@ -356,8 +355,9 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                                   });
                                                 }
                                               : null,
-                                          icon: Icon(Icons.arrow_back_ios_new)),
-                                      Text('- 100')
+                                          icon: const Icon(
+                                              Icons.arrow_back_ios_new)),
+                                      const Text('- 100')
                                     ],
                                   ),
                                   Column(
@@ -383,54 +383,13 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                                                             .toString();
                                                   });
                                                 },
-                                          icon: Icon(Icons.arrow_forward_ios)),
-                                      Text('+ 100')
+                                          icon: const Icon(
+                                              Icons.arrow_forward_ios)),
+                                      const Text('+ 100')
                                     ],
                                   )
                                 ],
                               ),
-                              // Container(
-                              //   child: CarouselSlider.builder(
-                              //     key: _scaffoldKey,
-                              //     options: CarouselOptions(
-                              //       height: 100,
-                              //       viewportFraction: 0.4,
-                              //       initialPage: _iconSelectedIndex,
-                              //       enableInfiniteScroll: false,
-                              //       reverse: false,
-                              //       enlargeCenterPage: true,
-                              //       onPageChanged: (index, reason) {
-                              //         setState(() {
-                              //           _iconSelectedIndex = index;
-                              //           _editedGift = Gift(
-                              //             id: _editedGift.id,
-                              //             giftName: _editedGift.giftName,
-                              //             points: _editedGift.points,
-                              //             iconCode: icons[_iconSelectedIndex]
-                              //                 .codePoint,
-                              //           );
-                              //         });
-                              //         print(_editedGift.iconCode);
-                              //       },
-                              //       enlargeStrategy:
-                              //           CenterPageEnlargeStrategy.height,
-                              //       enlargeFactor: 5,
-                              //       scrollDirection: Axis.horizontal,
-                              //     ),
-                              //     itemCount: icons.length,
-                              //     itemBuilder: (BuildContext context,
-                              //             int itemIndex, int pageViewIndex) =>
-                              //         Icon(
-                              //       icons[itemIndex],
-                              //       color: itemIndex == _iconSelectedIndex
-                              //           ? Color.fromRGBO(242, 107, 56, 1)
-                              //           : Theme.of(context).colorScheme.primary,
-                              //       size: itemIndex == _iconSelectedIndex
-                              //           ? 55
-                              //           : 35,
-                              //     ),
-                              //   ),
-                              // )
                             ],
                           ),
                         ]),
@@ -438,10 +397,10 @@ class _EditGiftScreenState extends State<EditGiftScreen> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 10),
+                    margin: const EdgeInsets.symmetric(vertical: 10),
                     child: ElevatedButton(
                       onPressed: _saveForm,
-                      child: Text('Save'),
+                      child: const Text('Save'),
                     ),
                   )
                 ],

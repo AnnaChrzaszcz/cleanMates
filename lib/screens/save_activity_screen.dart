@@ -4,7 +4,6 @@ import 'package:clean_mates_app/widgets/activity/save_activity_container.dart';
 import 'package:clean_mates_app/widgets/fab/custom_add_fab.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 import '../providers/activities_provider.dart';
@@ -23,7 +22,7 @@ class SaveActivityScreen extends StatelessWidget {
       await Provider.of<ActivitiesProvider>(context, listen: false)
           .deleteActivity(id);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             'Activity deleted!',
             textAlign: TextAlign.center,
@@ -33,7 +32,7 @@ class SaveActivityScreen extends StatelessWidget {
       );
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             'Deleting failed!',
             textAlign: TextAlign.center,
@@ -64,7 +63,7 @@ class SaveActivityScreen extends StatelessWidget {
                   floatingActionButton:
                       CustomAddFab(activityScreen: true, roomId: myRoom.id),
                   appBar: AppBar(
-                    title: Text('Save activity'),
+                    title: const Text('Save activity'),
                   ),
                   body: CustomRefreshIndicator(
                     builder: MaterialIndicatorDelegate(
@@ -112,14 +111,14 @@ class SaveActivityScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.headline6,
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     TextButton(
                         onPressed: () => Navigator.of(context).pushNamed(
                             EditActivityScreen.routeName,
                             arguments: {'roomId': myRoom.id}),
-                        child: Text(
+                        child: const Text(
                           'Click the "+" below to add new activity',
                           style: TextStyle(fontSize: 18),
                           textAlign: TextAlign.center,

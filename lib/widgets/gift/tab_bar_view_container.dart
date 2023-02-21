@@ -1,8 +1,8 @@
-import 'package:clean_mates_app/models/gift.dart';
-import 'package:clean_mates_app/models/userGift.dart';
-import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
+import 'package:clean_mates_app/models/userGift.dart';
+import 'package:flutter/material.dart';
+
 import 'package:lottie/lottie.dart';
 
 class TabBarViewContainer extends StatefulWidget {
@@ -28,8 +28,8 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
 
   @override
   void initState() {
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 400));
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 400));
     _opacityAnimation = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
@@ -65,21 +65,20 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
           },
           child: ListTile(
             leading: CircleAvatar(
+              backgroundColor: Theme.of(context).dividerColor,
               child: Text(
                 widget.yourBought.length.toString(),
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
-              backgroundColor: Theme.of(context).dividerColor,
             ),
-            title: Text('Requested gifts'),
+            title: const Text('Requested gifts'),
             trailing:
                 Icon(_boughtExpanded ? Icons.expand_less : Icons.expand_more),
           ),
         ),
-
         AnimatedContainer(
-          duration: Duration(milliseconds: 300),
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+          duration: const Duration(milliseconds: 300),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
           height: _boughtExpanded
               ? min(
                   widget.yourBought.length * 30.0 + 70,
@@ -96,9 +95,12 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
                     direction: DismissDirection.endToStart,
                     background: Container(
                       color: Theme.of(context).colorScheme.primary,
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(right: 20),
+                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
+                        children: const [
                           Text(
                             'Recive',
                             style: TextStyle(color: Colors.white),
@@ -110,9 +112,6 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
                           ),
                         ],
                       ),
-                      alignment: Alignment.centerRight,
-                      padding: EdgeInsets.only(right: 20),
-                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
                     ),
                     onDismissed: (direction) {
                       widget.recive(widget.userId, index);
@@ -125,11 +124,11 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
                         children: [
                           Text(
                             widget.yourBought[index].giftName,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           index == 0
-                              ? Container(
+                              ? SizedBox(
                                   width: 100,
                                   height: 60,
                                   child: Lottie.asset(
@@ -149,8 +148,7 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
             ),
           ),
         ),
-
-        Divider(),
+        const Divider(),
         GestureDetector(
           onTap: () {
             setState(() {
@@ -158,19 +156,18 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
             });
           },
           child: ListTile(
-            title: Text('Recived gifts'),
+            title: const Text('Recived gifts'),
             leading: CircleAvatar(
-              child: Text(widget.yourRecived.length.toString(),
-                  style: TextStyle(color: Colors.white)),
               backgroundColor: Theme.of(context).dividerColor,
+              child: Text(widget.yourRecived.length.toString(),
+                  style: const TextStyle(color: Colors.white)),
             ),
             trailing:
                 Icon(_recivedExpanded ? Icons.expand_less : Icons.expand_more),
           ),
         ),
-        //if (_recivedExpanded)
         AnimatedContainer(
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
           height: _recivedExpanded
               ? min(
@@ -189,7 +186,7 @@ class _TabBarViewContainerState extends State<TabBarViewContainer>
                     children: [
                       Text(
                         widget.yourRecived[index].giftName,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Text(

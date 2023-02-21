@@ -1,8 +1,8 @@
 import 'package:clean_mates_app/models/room.dart';
 import 'package:clean_mates_app/providers/gifts_provider.dart';
-import 'package:clean_mates_app/screens/edit_activity_screen.dart';
+
 import 'package:clean_mates_app/screens/edit_gift_screen.dart';
-import 'package:clean_mates_app/widgets/app_drawer.dart';
+
 import 'package:clean_mates_app/widgets/fab/custom_add_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -23,7 +23,7 @@ class GiftsScreen extends StatelessWidget {
     try {
       await Provider.of<GiftsProvider>(context, listen: false).deleteGift(id);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             'Gift deleted!',
             textAlign: TextAlign.center,
@@ -33,7 +33,7 @@ class GiftsScreen extends StatelessWidget {
       );
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             'Deleting failed!',
             textAlign: TextAlign.center,
@@ -43,20 +43,15 @@ class GiftsScreen extends StatelessWidget {
     }
   }
 
-  void _goToNewGift(BuildContext context, Room myRoom) {
-    Navigator.of(context)
-        .pushNamed(EditGiftScreen.routeName, arguments: {'roomId': myRoom.id});
-  }
-
   @override
   Widget build(BuildContext context) {
     Room myRoom = Provider.of<RoomsProvider>(context).myRoom;
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       appBar: AppBar(
-        title: Text('Gifts overview'),
+        title: const Text('Gifts overview'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton:
@@ -65,7 +60,7 @@ class GiftsScreen extends StatelessWidget {
         future: _refreshGifts(context, myRoom.id),
         builder: ((context, snapshot) => snapshot.connectionState ==
                 ConnectionState.waiting
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(),
               )
             : CustomRefreshIndicator(
@@ -89,14 +84,14 @@ class GiftsScreen extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               Text(
                                 'You have no gifts yet',
                                 style: Theme.of(context).textTheme.headline5,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 30,
                               ),
                               Text(
@@ -118,8 +113,8 @@ class GiftsScreen extends StatelessWidget {
                           ),
                         )
                       : Container(
-                          margin:
-                              EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 8),
                           child: ListView.builder(
                             itemCount: giftsData.gifts.length,
                             itemBuilder: ((context, index) => Column(
@@ -129,7 +124,7 @@ class GiftsScreen extends StatelessWidget {
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             IconButton(
-                                              icon: Icon(Icons.edit),
+                                              icon: const Icon(Icons.edit),
                                               onPressed: () {
                                                 Navigator.of(context).pushNamed(
                                                     EditGiftScreen.routeName,
@@ -140,15 +135,15 @@ class GiftsScreen extends StatelessWidget {
                                               },
                                             ),
                                             IconButton(
-                                                icon: Icon(Icons.delete),
+                                                icon: const Icon(Icons.delete),
                                                 onPressed: () {
                                                   showDialog(
                                                     context: context,
                                                     builder: (ctx) =>
                                                         AlertDialog(
-                                                      title:
-                                                          Text('Are you sure?'),
-                                                      content: Text(
+                                                      title: const Text(
+                                                          'Are you sure?'),
+                                                      content: const Text(
                                                           'Do you want to remove this gift?'),
                                                       actions: [
                                                         TextButton(
@@ -156,7 +151,8 @@ class GiftsScreen extends StatelessWidget {
                                                               Navigator.of(ctx)
                                                                   .pop();
                                                             },
-                                                            child: Text('NO')),
+                                                            child: const Text(
+                                                                'NO')),
                                                         TextButton(
                                                             onPressed: () {
                                                               Navigator.of(ctx)
@@ -168,7 +164,8 @@ class GiftsScreen extends StatelessWidget {
                                                                           index]
                                                                       .id);
                                                             },
-                                                            child: Text('YES')),
+                                                            child: const Text(
+                                                                'YES')),
                                                       ],
                                                     ),
                                                   );
@@ -188,11 +185,11 @@ class GiftsScreen extends StatelessWidget {
                                             )),
                                         title: Text(
                                           giftsData.gifts[index].giftName,
-                                          style: TextStyle(),
+                                          style: const TextStyle(),
                                         ),
                                         subtitle: Text(
                                             '${giftsData.gifts[index].points} points')),
-                                    Divider()
+                                    const Divider()
                                   ],
                                 )),
                           ),

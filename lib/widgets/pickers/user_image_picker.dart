@@ -1,4 +1,4 @@
-import 'dart:io'; // at beginning of file
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -88,7 +88,7 @@ class _UserImagePickerState extends State<UserImagePicker>
       Expanded(
         child: TextButton.icon(
           onPressed: _pickImage,
-          icon: Icon(
+          icon: const Icon(
             Icons.image,
           ),
           label: Text(

@@ -1,10 +1,7 @@
 import 'package:clean_mates_app/providers/rooms_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/room.dart';
 import 'package:provider/provider.dart';
-import '../providers/activities_provider.dart';
 
 class CreateRoomScreen extends StatefulWidget {
   static const routeName = '/addNewRoom';
@@ -15,27 +12,24 @@ class CreateRoomScreen extends StatefulWidget {
 class _CreateRoomScreenState extends State<CreateRoomScreen> {
   final _form = GlobalKey<FormState>();
   var _isLoading = false;
-  //var _roomName = '';
-  var _initValues = {'roomName': '', 'creatorId': ''};
+
   var _isInit = true;
 
-  var _editedRoom = Room(id: null, creatorId: '', roomName: '', roomies: []);
+  var _editedRoom = Room(
+      id: null,
+      creatorId: '',
+      roomName: '',
+      roomies: [],
+      roomiesActivites: [],
+      roomiesGift: []);
 
+  @override
   void didChangeDependencies() {
     if (_isInit) {
       final id = ModalRoute.of(context).settings.arguments as String;
-      // if (id != null) {
-      //   _editedRoom = Provider.of<ActivitiesProvider>(context, listen: false)
-      //       .findById(id);
-      //   _initValues = {
-      //     'activityName': _editedActivity.activityName,
-      //     'points': _editedActivity.points.toString(),
-      //   };
-      //   print(_initValues);
-      // }
     }
     _isInit = false;
-    // TODO: implement didChangeDependencies
+
     super.didChangeDependencies();
   }
 
@@ -65,15 +59,12 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create new room'),
-        // actions: [
-        //   IconButton(onPressed: _createNewRoom, icon: Icon(Icons.save))
-        // ],
+        title: const Text('Create new room'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
         child: _isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : Column(
                 children: [
                   Expanded(
@@ -82,7 +73,8 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                       child: ListView(
                         children: [
                           TextFormField(
-                            decoration: InputDecoration(labelText: 'Room Name'),
+                            decoration:
+                                const InputDecoration(labelText: 'Room Name'),
                             textInputAction: TextInputAction.next,
                             onSaved: (value) {
                               _editedRoom = Room(
@@ -92,13 +84,13 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                                   roomies: _editedRoom.roomies);
                             },
                             validator: (value) {
-                              if (value.isEmpty)
+                              if (value.isEmpty) {
                                 return 'you have to enter a room name';
-                              else
+                              } else {
                                 return null;
+                              }
                             },
                           ),
-                          //Text('tu bedzie lista mozliwych osob do dodania?'),
                         ],
                       ),
                     ),
@@ -107,7 +99,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
                     margin: EdgeInsets.symmetric(vertical: 30),
                     child: ElevatedButton(
                       onPressed: _createNewRoom,
-                      child: Text('Save'),
+                      child: const Text('Save'),
                     ),
                   )
                 ],

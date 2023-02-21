@@ -59,7 +59,6 @@ class GiftsProvider extends ChangeNotifier {
         roomId: gift.roomId,
         iconCode: gift.iconCode);
 
-    // _gifts.insert(0, newGift);
     _gifts.add(newGift);
     notifyListeners();
   }

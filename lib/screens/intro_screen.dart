@@ -1,14 +1,10 @@
 import 'package:clean_mates_app/screens/auth_screen.dart';
 import 'package:clean_mates_app/screens/user_dashboard_screen.dart';
-import 'package:clean_mates_app/widgets/auth/auth_form.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:lottie/lottie.dart';
-import 'package:rive/rive.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 
 class IntroScreen extends StatefulWidget {
-  @override
   final bool isLogin;
   IntroScreen({this.isLogin});
 
@@ -75,7 +71,7 @@ class _OnBoardingPageState extends State<IntroScreen> {
         PageViewModel(
           body: "Like cleaning, cooking, washing dishes etc. ",
           title: "Earn points for home responsibilities",
-          image: Container(
+          image: SizedBox(
             width: 300,
             height: 300,
             child: Lottie.asset('assets/animations/lottie/intro2.json'),
@@ -86,7 +82,7 @@ class _OnBoardingPageState extends State<IntroScreen> {
           body:
               "You decide what value different tasks are and what gifts you can get",
           title: "Exchange points for gifts",
-          image: Container(
+          image: SizedBox(
             width: 300,
             height: 300,
             child: Lottie.asset('assets/animations/lottie/intro3.json'),

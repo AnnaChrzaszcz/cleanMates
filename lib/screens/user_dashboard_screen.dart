@@ -1,15 +1,12 @@
 import 'dart:math';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:clean_mates_app/models/userGift.dart';
 import 'package:clean_mates_app/screens/buy_gift_screen.dart';
 import 'package:clean_mates_app/screens/history_screen.dart';
 import 'package:clean_mates_app/screens/intro_screen.dart';
-import 'package:clean_mates_app/screens/onboarding_screen.dart';
 import 'package:clean_mates_app/screens/stats_screen.dart';
 import 'package:clean_mates_app/widgets/fab/action_button.dart';
 import 'package:clean_mates_app/widgets/fab/expandable_fab.dart';
-import 'package:clean_mates_app/widgets/room/join_room.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:rive/rive.dart';
 
@@ -41,7 +38,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   var _roomieBoughtGifts;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   AppBar appBar = AppBar(
-    title: Text('test'),
+    title: const Text('test'),
   );
 
   var _isInit = true;
@@ -85,34 +82,33 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         'title': 'Add Activity',
         'routeName': SaveActivityScreen.routeName,
         'imagePath': 'assets/images/cleaning.png',
-        'color': Color.fromRGBO(236, 32, 73, 0.7),
+        'color': const Color.fromRGBO(236, 32, 73, 0.7),
       },
       {
         'title': 'Money balance',
-        'routeName': 'a', //ExchangeToPrize.routeName,
+        'routeName': 'a',
         'imagePath': 'assets/images/money.png',
-        'color': Color.fromRGBO(167, 34, 110, 0.7),
+        'color': const Color.fromRGBO(167, 34, 110, 0.7),
       },
       {
         'title': 'Buy gift',
         'routeName': BuyGiftScreen.routeName,
         'imagePath': 'assets/images/myPrize.png',
-        'color': Color.fromRGBO(247, 219, 79, 0.7),
+        'color': const Color.fromRGBO(247, 219, 79, 0.7),
       },
       {
         'title': 'Stats & History',
-        'routeName': StatsScreen.routeName, //StatsScreen.routeName,
+        'routeName': StatsScreen.routeName,
         'imagePath': 'assets/images/stats.png',
-        'color': Color.fromRGBO(242, 107, 56, 0.7),
+        'color': const Color.fromRGBO(242, 107, 56, 0.7),
       },
     ];
 
     return FutureBuilder(
       future: _myFuture,
       builder: (context, snapshot) {
-        print(snapshot);
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(
+          return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
             ),
@@ -121,7 +117,6 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
           return Consumer<RoomsProvider>(
             builder: ((context, roomsdata, _) {
               if (roomsdata.myRoom != null) {
-                print(roomsdata.myRoom.roomName);
                 roomie = roomsdata.myRoom.roomies
                     .firstWhere((roomie) => roomie.id == user.uid);
                 _roomieBoughtGifts = roomsdata.myRoom.roomiesGift
@@ -141,7 +136,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                           child: Stack(
                             alignment: AlignmentDirectional.center,
                             children: [
-                              Positioned(
+                              const Positioned(
                                   left: 15,
                                   child: Icon(
                                     Icons.menu,
@@ -152,10 +147,10 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                                   top: 5,
                                   left: 30,
                                   child: CircleAvatar(
-                                    child: Text('${_roomieBoughtGifts}'),
                                     radius: 10,
                                     backgroundColor: Colors.red,
                                     foregroundColor: Colors.white,
+                                    child: Text('$_roomieBoughtGifts'),
                                   ),
                                 ),
                             ],
@@ -206,9 +201,9 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                     appBar: AppBar(
                       actions: [
                         Container(
-                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
                           child: IconButton(
-                            icon: Icon(Icons.question_mark),
+                            icon: const Icon(Icons.question_mark),
                             onPressed: () =>
                                 Navigator.of(context).push(PageRouteBuilder(
                               pageBuilder:
@@ -220,7 +215,6 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                           ),
                         ),
                       ],
-                      //title: Text(roomie.userName ?? ''),
                       title: DefaultTextStyle(
                         style: const TextStyle(
                           fontSize: 20.0,
@@ -242,7 +236,6 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
             }),
           );
         }
-        return Scaffold(body: Container(child: Text('')));
       },
     );
   }
@@ -265,10 +258,10 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       child: Container(
         height:
             MediaQuery.of(context).size.height - appBar.preferredSize.height,
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         width: double.infinity,
         child: SingleChildScrollView(
-          child: Container(
+          child: SizedBox(
             height: MediaQuery.of(context).size.height -
                 appBar.preferredSize.height,
             width: double.infinity,
@@ -280,13 +273,13 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                   children: [
                     Shimmer.fromColors(
                       baseColor: Theme.of(context).primaryColor,
-                      highlightColor: Color.fromRGBO(167, 34, 110, 0.4),
+                      highlightColor: const Color.fromRGBO(167, 34, 110, 0.4),
                       child: CircleAvatar(
                         radius: 106,
                         backgroundColor: Theme.of(context).primaryColor,
                       ),
                     ),
-                    CircleAvatar(
+                    const CircleAvatar(
                       radius: 100,
                       backgroundColor: Colors.white,
                     ),
@@ -304,14 +297,14 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                           child: Column(
                             children: [
                               Text(
-                                '${points.toString()}',
-                                style: TextStyle(
+                                points.toString(),
+                                style: const TextStyle(
                                     fontSize: 40,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
-                              Text(
+                              const Text(
                                 'POINTS',
                                 style:
                                     TextStyle(fontSize: 20, color: Colors.grey),
@@ -328,6 +321,12 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                 flex: 7,
                 child: GridView(
                   padding: const EdgeInsets.all(10),
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200,
+                    childAspectRatio: 3 / 3,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                  ),
                   children: actions
                       .map(
                         (action) => ActionItem(
@@ -338,12 +337,6 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                             action['color'] as Color),
                       )
                       .toList(),
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200,
-                    childAspectRatio: 3 / 3,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                  ),
                 ),
               ),
             ]),

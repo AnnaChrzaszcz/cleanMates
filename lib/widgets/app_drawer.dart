@@ -1,5 +1,3 @@
-import 'package:clean_mates_app/screens/activities_screen.dart';
-import 'package:clean_mates_app/screens/gifts_screen.dart';
 import 'package:clean_mates_app/screens/gifts_reception_screen.dart';
 import 'package:clean_mates_app/screens/user_profile_screen.dart';
 import 'package:clean_mates_app/screens/user_room_screen.dart';
@@ -37,11 +35,12 @@ class AppDrawer extends StatelessWidget {
                             arguments: {'user': user});
                       },
                       child: Container(
-                        margin: EdgeInsets.only(right: 5, bottom: 10),
+                        margin: const EdgeInsets.only(right: 5, bottom: 10),
                         child: Hero(
                           tag: 'profile-pic',
                           child: CircleAvatar(
-                            backgroundColor: Color.fromRGBO(247, 219, 79, 1),
+                            backgroundColor:
+                                const Color.fromRGBO(247, 219, 79, 1),
                             radius: 30,
                             child: CircleAvatar(
                               backgroundImage: NetworkImage(
@@ -66,7 +65,7 @@ class AppDrawer extends StatelessWidget {
                   ? Theme.of(context).primaryColor
                   : Colors.grey,
             ),
-            title: Text('Dashboard'),
+            title: const Text('Dashboard'),
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(UserDashboardScreen.routeName);
@@ -82,32 +81,13 @@ class AppDrawer extends StatelessWidget {
                     ? Theme.of(context).primaryColor
                     : Colors.grey,
               ),
-              title: Text('Room'),
+              title: const Text('Room'),
               onTap: () {
                 Navigator.of(context)
                     .pushReplacementNamed(UserRoomScreen.routeName);
               },
             ),
           if (room != null) const Divider(),
-          // if (room != null)
-          //   ListTile(
-          //     leading: Icon(Icons.clean_hands),
-          //     title: Text('Activities Overview'),
-          //     onTap: () {
-          //       //TYLKO JESLI JEST ROOM
-          //       Navigator.of(context).pushNamed(ActivitiesScreen.routeName);
-          //     },
-          //   ),
-          // if (room != null) Divider(),
-          // if (room != null)
-          //   ListTile(
-          //     leading: Icon(Icons.card_giftcard_outlined),
-          //     title: Text('Gifts Overview'), //TYLKO JESLI JEST ROOM
-          //     onTap: () {
-          //       Navigator.of(context).pushNamed(GiftsScreen.routeName);
-          //     },
-          //   ),
-          // if (room != null) const Divider(),
           if (room != null)
             Stack(
               children: [
@@ -119,10 +99,7 @@ class AppDrawer extends StatelessWidget {
                         ? Theme.of(context).primaryColor
                         : Colors.grey,
                   ),
-
-                  title: Text('Requested gifts', style: TextStyle()),
-
-                  //TYLKO JESLI JEST ROOM
+                  title: const Text('Requested gifts', style: TextStyle()),
                   onTap: () {
                     Navigator.of(context)
                         .pushReplacementNamed(RecivedGiftsScreen.routeName);
@@ -132,22 +109,21 @@ class AppDrawer extends StatelessWidget {
                   Positioned(
                     right: 65,
                     child: CircleAvatar(
-                      child: Text(
-                        '${roomieBoughtGifts}',
-                        style: TextStyle(fontSize: 13),
-                      ),
                       radius: 12,
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
+                      child: Text(
+                        '$roomieBoughtGifts',
+                        style: const TextStyle(fontSize: 13),
+                      ),
                     ),
                   ),
               ],
             ),
           if (room != null) const Divider(),
-
           ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Logout'),
+            leading: const Icon(Icons.exit_to_app),
+            title: const Text('Logout'),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushReplacementNamed('/');

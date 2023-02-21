@@ -1,5 +1,4 @@
 import 'package:clean_mates_app/models/userGift.dart';
-import 'package:clean_mates_app/screens/gifts_reception_screen.dart';
 import 'package:clean_mates_app/widgets/gift/tab_bar_view_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -69,7 +68,7 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Gift received!'),
+        content: const Text('Gift received!'),
         action: SnackBarAction(
           label: 'UNDO',
           textColor: Theme.of(context).primaryColor,
@@ -88,7 +87,7 @@ class _UserGiftContainerState extends State<UserGiftContainer> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2, // length of tabs
+      length: 2,
       initialIndex: 0,
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <
           Widget>[

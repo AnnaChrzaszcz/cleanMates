@@ -16,7 +16,6 @@ import 'package:clean_mates_app/models/userActivity.dart';
 import '../providers/rooms_provider.dart';
 
 class HistoryScreen extends StatefulWidget {
-  //tutaj zrobione responsive
   static const routeName = '/history';
 
   @override
@@ -63,7 +62,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   void dispose() {
     super.dispose();
-    // TODO: implement dispose
+
     if (myRoom != null) {
       timelineDate.dispose();
       roomActivitiesNotifier.dispose();
@@ -140,10 +139,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       child: Timeline.tileBuilder(
                                         theme: TimelineThemeData(
                                           color: const Color.fromRGBO(
-                                              242,
-                                              107,
-                                              56,
-                                              1), //Theme.of(context).dividerColor
+                                              242, 107, 56, 1),
                                           connectorTheme:
                                               const ConnectorThemeData(
                                             color:

@@ -1,13 +1,11 @@
 import 'package:clean_mates_app/screens/auth_screen.dart';
 import 'package:clean_mates_app/screens/user_dashboard_screen.dart';
-import 'package:clean_mates_app/widgets/auth/auth_form.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:rive/rive.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 class OnBoardingPage extends StatefulWidget {
-  @override
   final bool isLogin;
   const OnBoardingPage({Key key, this.isLogin}) : super(key: key);
 
@@ -68,19 +66,17 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               animatedTexts: [
                 ScaleAnimatedText('CLEAN',
                     textStyle:
-                        TextStyle(color: Color.fromRGBO(167, 34, 110, 1)),
-                    duration: Duration(milliseconds: 1000)),
-                // ScaleAnimatedText('HAVE FUN',
-                //     textStyle: TextStyle(color: Colors.white, fontSize: 40)),
+                        const TextStyle(color: Color.fromRGBO(167, 34, 110, 1)),
+                    duration: const Duration(milliseconds: 1000)),
               ],
               isRepeatingAnimation: false,
               onFinished: () => _onIntroEnd(context),
             ),
           ),
-          image: Container(
+          image: const SizedBox(
             width: 300,
             height: 300,
-            child: const RiveAnimation.asset(
+            child: RiveAnimation.asset(
               'assets/animations/roomie.riv',
             ),
           ),

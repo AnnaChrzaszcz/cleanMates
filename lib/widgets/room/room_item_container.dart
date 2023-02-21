@@ -1,10 +1,6 @@
-import 'dart:math';
-import 'package:clean_mates_app/providers/rooms_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../models/room.dart';
 import 'room_item.dart';
-import '../../repositories/room_repository.dart';
 
 class RoomItemContainer extends StatefulWidget {
   final List<Room> rooms;
@@ -26,7 +22,7 @@ class _RoomItemConState extends State<RoomItemContainer>
 
   @override
   void initState() {
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {
         toggle = 1;
       });
@@ -165,18 +161,17 @@ class _RoomItemConState extends State<RoomItemContainer>
           ElevatedButton(
             onPressed:
                 _selectedIndex < 0 ? null : () => widget.joinRoom(selectedRoom),
-            child: Text('Join'),
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith<Color>(
                 (Set<MaterialState> states) {
-                  if (states.contains(MaterialState.disabled))
+                  if (states.contains(MaterialState.disabled)) {
                     return Colors.grey;
-                  return Theme.of(context)
-                      .colorScheme
-                      .primary; // Use the component's default.
+                  }
+                  return Theme.of(context).colorScheme.primary;
                 },
               ),
             ),
+            child: const Text('Join'),
           )
         ],
       ),

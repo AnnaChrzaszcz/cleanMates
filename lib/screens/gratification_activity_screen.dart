@@ -14,8 +14,8 @@ class GratificationActivityScreen extends StatefulWidget {
 class _GratificationActivityScreenState
     extends State<GratificationActivityScreen> {
   final introKey = GlobalKey<IntroductionScreenState>();
-  var pointsSum;
-  var username;
+  int pointsSum;
+  String username;
 
   void _onIntroEnd(context) {
     Navigator.of(context).push(
@@ -28,8 +28,6 @@ class _GratificationActivityScreenState
     Map<String, dynamic> modalArgs = ModalRoute.of(context).settings.arguments;
     pointsSum = modalArgs['points'];
     username = modalArgs['username'];
-    //pointsSum = ModalRoute.of(context).settings.arguments;
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
 
@@ -80,13 +78,12 @@ class _GratificationActivityScreenState
             bodyWidget: Container(
               child: Column(
                 children: [
-                  Text('${username} earned $pointsSum points!',
-                      style: bodyStyle),
+                  Text('$username earned $pointsSum points!', style: bodyStyle),
                   AnimatedTextKit(
                     animatedTexts: [
                       ScaleAnimatedText('You earned 100 points',
-                          textStyle: TextStyle(color: Colors.white),
-                          duration: Duration(milliseconds: 1800)),
+                          textStyle: const TextStyle(color: Colors.white),
+                          duration: const Duration(milliseconds: 1800)),
                     ],
                     isRepeatingAnimation: false,
                     onFinished: () => _onIntroEnd(context),

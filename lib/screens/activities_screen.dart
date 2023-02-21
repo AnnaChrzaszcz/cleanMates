@@ -1,7 +1,6 @@
-import 'dart:math' as Math;
 import 'package:clean_mates_app/models/room.dart';
 import 'package:clean_mates_app/screens/edit_activity_screen.dart';
-import 'package:clean_mates_app/widgets/app_drawer.dart';
+
 import 'package:clean_mates_app/widgets/fab/custom_add_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -24,7 +23,7 @@ class ActivitiesScreen extends StatelessWidget {
       await Provider.of<ActivitiesProvider>(context, listen: false)
           .deleteActivity(id);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             'Activity deleted!',
             textAlign: TextAlign.center,
@@ -34,7 +33,7 @@ class ActivitiesScreen extends StatelessWidget {
       );
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             'Deleting failed!',
             textAlign: TextAlign.center,
@@ -47,12 +46,12 @@ class ActivitiesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Room myRoom = Provider.of<RoomsProvider>(context).myRoom;
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       appBar: AppBar(
-        title: Text('Activities overview'),
+        title: const Text('Activities overview'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton:
@@ -61,7 +60,7 @@ class ActivitiesScreen extends StatelessWidget {
         future: _refreshActivities(context, myRoom.id),
         builder: ((context, snapshot) => snapshot.connectionState ==
                 ConnectionState.waiting
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(),
               )
             : CustomRefreshIndicator(
@@ -86,14 +85,14 @@ class ActivitiesScreen extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               Text(
                                 'You have no activities yet',
                                 style: Theme.of(context).textTheme.headline5,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 30,
                               ),
                               Text(
@@ -115,8 +114,8 @@ class ActivitiesScreen extends StatelessWidget {
                           ),
                         )
                       : Container(
-                          margin:
-                              EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 8),
                           child: ListView.builder(
                             itemCount: activitiesData.activities.length,
                             itemBuilder: ((context, index) => Column(
@@ -142,9 +141,9 @@ class ActivitiesScreen extends StatelessWidget {
                                                 showDialog(
                                                   context: context,
                                                   builder: (ctx) => AlertDialog(
-                                                    title:
-                                                        Text('Are you sure?'),
-                                                    content: Text(
+                                                    title: const Text(
+                                                        'Are you sure?'),
+                                                    content: const Text(
                                                         'Do you want to remove this activity?'),
                                                     actions: [
                                                       TextButton(
@@ -152,7 +151,8 @@ class ActivitiesScreen extends StatelessWidget {
                                                             Navigator.of(ctx)
                                                                 .pop();
                                                           },
-                                                          child: Text('NO')),
+                                                          child:
+                                                              const Text('NO')),
                                                       TextButton(
                                                           onPressed: () {
                                                             Navigator.of(ctx)
@@ -164,7 +164,8 @@ class ActivitiesScreen extends StatelessWidget {
                                                                         index]
                                                                     .id);
                                                           },
-                                                          child: Text('YES')),
+                                                          child: const Text(
+                                                              'YES')),
                                                     ],
                                                   ),
                                                 );
@@ -182,10 +183,9 @@ class ActivitiesScreen extends StatelessWidget {
                                       title: Text(
                                         activitiesData
                                             .activities[index].activityName,
-                                        style: TextStyle(),
                                       ),
                                     ),
-                                    Divider()
+                                    const Divider()
                                   ],
                                 )),
                           ),

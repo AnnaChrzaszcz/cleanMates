@@ -5,7 +5,6 @@ class UserActivity {
   final String activityName;
   final int points;
   final String roomieId;
-  //final String roomId;
   final DateTime creationDate;
 
   UserActivity(
@@ -13,6 +12,5 @@ class UserActivity {
       @required this.activityName,
       @required this.points,
       @required this.roomieId,
-      //this.roomId,
       @required this.creationDate});
 }

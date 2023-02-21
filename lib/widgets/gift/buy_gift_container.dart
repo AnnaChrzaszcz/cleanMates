@@ -1,17 +1,9 @@
 import 'package:clean_mates_app/providers/gifts_provider.dart';
 import 'package:clean_mates_app/screens/edit_gift_screen.dart';
 import 'package:clean_mates_app/screens/gratification_gift_screen.dart';
-import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
-import 'package:rive/rive.dart';
-
-import 'user_gift_container.dart';
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-
 import '../../models/exceptions/logistic_expection.dart';
 import 'package:clean_mates_app/models/gift.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../models/activity.dart';
 import '../../providers/rooms_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -32,16 +24,16 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
   var selectedIndexes = [];
   var giftsointsSum = 0;
   var _isLoading = false;
-  var actualUserPoints;
+  int actualUserPoints;
 
   void _buyGifts() async {
     setState(() {
       _isLoading = true;
     });
     List<Gift> selectedGifts = [];
-    selectedIndexes.forEach((index) {
+    for (var index in selectedIndexes) {
       selectedGifts.add(widget.gifts[index]);
-    });
+    }
     try {
       await Provider.of<RoomsProvider>(context, listen: false).addGiftsToRoomie(
           selectedGifts, widget.userId, widget.gifts[0].roomId, giftsointsSum);
@@ -89,7 +81,7 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
     try {
       await Provider.of<GiftsProvider>(context, listen: false).deleteGift(id);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             'Gift deleted!',
             textAlign: TextAlign.center,
@@ -99,7 +91,7 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
       );
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             'Deleting failed!',
             textAlign: TextAlign.center,
@@ -134,14 +126,14 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                       },
                       duration: const Duration(milliseconds: 600),
                       child: Text(
-                        '${giftsointsSum}',
-                        style: TextStyle(fontSize: 25),
+                        '$giftsointsSum',
+                        style: const TextStyle(fontSize: 25),
                         key: ValueKey<int>(giftsointsSum),
                       ),
                     ),
                     Text(
                       ' / ${widget.yourPoitns}',
-                      style: TextStyle(fontSize: 14),
+                      style: const TextStyle(fontSize: 14),
                     )
                   ],
                 ),
@@ -156,10 +148,9 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                   itemBuilder: ((context, index) => Slidable(
                         key: ValueKey(index),
                         endActionPane: ActionPane(
-                          motion: StretchMotion(),
+                          motion: const StretchMotion(),
                           children: [
                             SlidableAction(
-                              // An action can be bigger than the others.
                               onPressed: (context) {
                                 Navigator.of(context).pushNamed(
                                     EditGiftScreen.routeName,
@@ -171,10 +162,10 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                                 });
                               },
                               backgroundColor:
-                                  Color.fromRGBO(47, 149, 153, 0.7),
+                                  const Color.fromRGBO(47, 149, 153, 0.7),
                               foregroundColor: Colors.white,
                               icon: Icons.edit,
-                              padding: EdgeInsets.all(15),
+                              padding: const EdgeInsets.all(15),
                               borderRadius: BorderRadius.circular(30),
                               label: 'Edit',
                             ),
@@ -214,7 +205,8 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                                   ],
                                 ),
                               ),
-                              backgroundColor: Color.fromRGBO(236, 32, 73, 1),
+                              backgroundColor:
+                                  const Color.fromRGBO(236, 32, 73, 1),
                               foregroundColor: Colors.white,
                               icon: Icons.delete,
                               borderRadius: BorderRadius.circular(30),
@@ -224,7 +216,7 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                         ),
                         child: Card(
                           color: selectedIndexes.contains(index)
-                              ? Color.fromRGBO(195, 227, 227, 1)
+                              ? const Color.fromRGBO(195, 227, 227, 1)
                               : Colors.white,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18)),
@@ -236,7 +228,7 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                               children: [
                                 Expanded(
                                   child: AnimatedContainer(
-                                    duration: Duration(milliseconds: 300),
+                                    duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeIn,
                                     child: CircleAvatar(
                                       radius: selectedIndexes.contains(index)
@@ -246,7 +238,8 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                                           Theme.of(context).dividerColor,
                                       foregroundColor: Colors.white,
                                       child: AnimatedContainer(
-                                        duration: Duration(milliseconds: 300),
+                                        duration:
+                                            const Duration(milliseconds: 300),
                                         curve: Curves.easeIn,
                                         child: Icon(
                                           IconData(
@@ -302,7 +295,7 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                                           foregroundColor: Colors.black,
                                           child: FittedBox(
                                             child: IconButton(
-                                              icon: Icon(Icons.add),
+                                              icon: const Icon(Icons.add),
                                               onPressed: () {
                                                 setState(() {
                                                   selectedIndexes.add(index);
@@ -313,7 +306,7 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                                             ),
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 2,
                                         ),
                                         AnimatedSwitcher(
@@ -326,14 +319,15 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                                               const Duration(milliseconds: 600),
                                           child: Text(
                                             '${selectedIndexes.where((el) => el == index).toList().length}',
-                                            style: TextStyle(fontSize: 18),
+                                            style:
+                                                const TextStyle(fontSize: 18),
                                             key: ValueKey<int>(selectedIndexes
                                                 .where((el) => el == index)
                                                 .toList()
                                                 .length),
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 2,
                                         ),
                                         CircleAvatar(
@@ -341,7 +335,7 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
                                           backgroundColor: Colors.grey[200],
                                           foregroundColor: Colors.black,
                                           child: IconButton(
-                                            icon: Icon(Icons.remove),
+                                            icon: const Icon(Icons.remove),
                                             onPressed: () {
                                               setState(() {
                                                 var indextoDelete =
@@ -372,11 +366,10 @@ class _BuyGiftsContainerState extends State<BuyGiftContainer> {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith<Color>(
                 (Set<MaterialState> states) {
-                  if (states.contains(MaterialState.disabled))
+                  if (states.contains(MaterialState.disabled)) {
                     return Colors.grey;
-                  return Theme.of(context)
-                      .colorScheme
-                      .primary; // Use the component's default.
+                  }
+                  return Theme.of(context).colorScheme.primary;
                 },
               ),
             ),

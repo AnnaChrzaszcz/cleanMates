@@ -22,19 +22,13 @@ class RecivedGiftsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var myRoom = Provider.of<RoomsProvider>(context, listen: false).myRoom;
     final userId = FirebaseAuth.instance.currentUser.uid;
-    var roomieId;
-    var roomieUsername;
-    var yourUsername;
-    List<UserGift> userGifts = [];
-    List<UserGift> roomieGifts = [];
+    String roomieId;
+    String roomieUsername;
+    String yourUsername;
 
     if (myRoom.roomies.length > 1) {
       roomieId = myRoom.roomies.firstWhere((roomie) => roomie.id != userId).id;
 
-      userGifts = Provider.of<RoomsProvider>(context, listen: false)
-          .getUserGifts(userId); //tu id usera
-      roomieGifts = Provider.of<RoomsProvider>(context, listen: false)
-          .getUserGifts(roomieId); //tu id roomie
       roomieUsername =
           myRoom.roomies.firstWhere((roomie) => roomie.id != userId).userName;
       yourUsername =
@@ -43,7 +37,7 @@ class RecivedGiftsScreen extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Requested gifts'),
+          title: const Text('Requested gifts'),
         ),
         drawer: AppDrawer(),
         body: myRoom.roomies.length == 1
@@ -56,7 +50,7 @@ class RecivedGiftsScreen extends StatelessWidget {
             : Container(
                 width: double.infinity,
                 height: MediaQuery.of(context).size.height,
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: UserGiftContainer(userId, roomieId, yourUsername,
                     roomieUsername, myRoom.roomiesGift),
               ));

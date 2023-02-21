@@ -16,7 +16,6 @@ import 'package:clean_mates_app/models/userActivity.dart';
 import '../providers/rooms_provider.dart';
 
 class StatsScreen extends StatefulWidget {
-  //tutaj zrobione responsive
   static const routeName = '/stats';
 
   @override
@@ -48,13 +47,13 @@ class _StatsScreenState extends State<StatsScreen> {
   void _refreshDailySum() {
     yourDailySum = 0;
     roomieDailySum = 0;
-    roomActivitiesNotifier.value.forEach((act) {
+    for (var act in roomActivitiesNotifier.value) {
       if (act.roomieId == userId) {
         yourDailySum += act.points;
       } else if (act.roomieId == roomieId) {
         roomieDailySum += act.points;
       }
-    });
+    }
   }
 
   @override
@@ -79,7 +78,7 @@ class _StatsScreenState extends State<StatsScreen> {
   @override
   void dispose() {
     super.dispose();
-    // TODO: implement dispose
+
     if (myRoom != null) {
       timelineDate.dispose();
       roomActivitiesNotifier.dispose();
@@ -157,10 +156,7 @@ class _StatsScreenState extends State<StatsScreen> {
                                       child: Timeline.tileBuilder(
                                         theme: TimelineThemeData(
                                           color: const Color.fromRGBO(
-                                              242,
-                                              107,
-                                              56,
-                                              1), //Theme.of(context).dividerColor
+                                              242, 107, 56, 1),
                                           connectorTheme:
                                               const ConnectorThemeData(
                                             color:
@@ -179,7 +175,7 @@ class _StatsScreenState extends State<StatsScreen> {
                                                     children: you != null
                                                         ? [
                                                             Text(
-                                                              '${you.userName}',
+                                                              you.userName,
                                                               style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
@@ -187,7 +183,7 @@ class _StatsScreenState extends State<StatsScreen> {
                                                                   fontSize: 18),
                                                             ),
                                                             Text(
-                                                                'sum: ${yourDailySum} pts',
+                                                                'sum: $yourDailySum pts',
                                                                 style: const TextStyle(
                                                                     fontWeight:
                                                                         FontWeight
@@ -196,7 +192,7 @@ class _StatsScreenState extends State<StatsScreen> {
                                                                         16))
                                                           ]
                                                         : [
-                                                            Text('you'),
+                                                            const Text('you'),
                                                           ],
                                                   )
                                                 : roomActivitiesNotifier
@@ -218,7 +214,7 @@ class _StatsScreenState extends State<StatsScreen> {
                                                     children: you != null
                                                         ? [
                                                             Text(
-                                                              '${roomie.userName}',
+                                                              roomie.userName,
                                                               style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
@@ -226,7 +222,7 @@ class _StatsScreenState extends State<StatsScreen> {
                                                                   fontSize: 18),
                                                             ),
                                                             Text(
-                                                                'sum: ${roomieDailySum} pts',
+                                                                'sum: $roomieDailySum pts',
                                                                 style: const TextStyle(
                                                                     fontWeight:
                                                                         FontWeight
@@ -235,7 +231,8 @@ class _StatsScreenState extends State<StatsScreen> {
                                                                         16))
                                                           ]
                                                         : [
-                                                            Text('roomie'),
+                                                            const Text(
+                                                                'roomie'),
                                                           ],
                                                   )
                                                 : roomActivitiesNotifier

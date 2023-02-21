@@ -5,7 +5,6 @@ import 'package:clean_mates_app/providers/activities_provider.dart';
 import 'package:clean_mates_app/screens/edit_activity_screen.dart';
 import 'package:clean_mates_app/screens/gratification_activity_screen.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import '../../models/activity.dart';
@@ -35,7 +34,7 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
       _isLoading = true;
     });
     List<UserActivity> selectedUserActivities = [];
-    selectedIndexes.forEach((index) {
+    for (var index in selectedIndexes) {
       Activity selActivity = widget.activities[index];
       UserActivity newUserActivity = UserActivity(
           id: null,
@@ -44,7 +43,7 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
           roomieId: widget.userId,
           creationDate: null);
       selectedUserActivities.add(newUserActivity);
-    });
+    }
     try {
       await Provider.of<RoomsProvider>(context, listen: false)
           .addActivitiesToRoomie(
@@ -53,23 +52,21 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
       var username = await Provider.of<RoomsProvider>(context, listen: false)
           .getUsernameFromId(widget.userId);
 
-      print(username);
-
       Navigator.of(context).pushReplacementNamed(
           GratificationActivityScreen.routeName,
           arguments: {'points': activitesPointsSum, 'username': username});
     } catch (err) {
-      await showDialog<Null>(
+      await showDialog<void>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: Text('An error occured'),
-          content: Text('Sth went wrong'),
+          title: const Text('An error occured'),
+          content: const Text('Sth went wrong'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(ctx).pop();
               },
-              child: Text('Okay'),
+              child: const Text('Okay'),
             )
           ],
         ),
@@ -86,7 +83,7 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
       await Provider.of<ActivitiesProvider>(context, listen: false)
           .deleteActivity(id);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             'Activity deleted!',
             textAlign: TextAlign.center,
@@ -96,7 +93,7 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
       );
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             'Deleting failed!',
             textAlign: TextAlign.center,
@@ -109,7 +106,7 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
   @override
   void initState() {
     activitiesLength = widget.activities.length;
-    // TODO: implement initState
+
     super.initState();
   }
 
@@ -138,7 +135,7 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                 },
                 duration: const Duration(milliseconds: 600),
                 child: Text(
-                  '${activitesPointsSum}',
+                  '$activitesPointsSum',
                   key: ValueKey<int>(activitesPointsSum),
                 ),
               ),
@@ -165,10 +162,9 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                   itemBuilder: ((context, index) => Slidable(
                         key: ValueKey(index),
                         endActionPane: ActionPane(
-                          motion: StretchMotion(),
+                          motion: const StretchMotion(),
                           children: [
                             SlidableAction(
-                              // An action can be bigger than the others.
                               onPressed: (context) {
                                 Navigator.of(context).pushNamed(
                                     EditActivityScreen.routeName,
@@ -180,10 +176,9 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                                 });
                               },
                               backgroundColor:
-                                  Color.fromRGBO(47, 149, 153, 0.7),
+                                  const Color.fromRGBO(47, 149, 153, 0.7),
                               foregroundColor: Colors.white,
                               icon: Icons.edit,
-
                               borderRadius: BorderRadius.circular(30),
                               label: 'Edit',
                             ),
@@ -224,7 +219,8 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                                   ],
                                 ),
                               ),
-                              backgroundColor: Color.fromRGBO(236, 32, 73, 1),
+                              backgroundColor:
+                                  const Color.fromRGBO(236, 32, 73, 1),
                               foregroundColor: Colors.white,
                               icon: Icons.delete,
                               borderRadius: BorderRadius.circular(30),
@@ -234,7 +230,7 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                         ),
                         child: Card(
                           color: selectedIndexes.contains(index)
-                              ? Color.fromRGBO(195, 227, 227, 1)
+                              ? const Color.fromRGBO(195, 227, 227, 1)
                               : Colors.white,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18)),
@@ -290,7 +286,7 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
                               activeColor:
                                   Theme.of(context).colorScheme.primary,
                               tileColor: selectedIndexes.contains(index)
-                                  ? Color.fromRGBO(195, 227, 227, 1)
+                                  ? const Color.fromRGBO(195, 227, 227, 1)
                                   : Colors.white,
                             ),
                           ),
@@ -301,20 +297,20 @@ class _SaveActivityContainerState extends State<SaveActivityContainer> {
             ),
           ),
           ElevatedButton(
-            onPressed:
-                selectedIndexes.length <= 0 ? null : () => _saveActivites(),
-            child: _isLoading ? CircularProgressIndicator() : Text('Save'),
+            onPressed: selectedIndexes.isEmpty ? null : () => _saveActivites(),
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith<Color>(
                 (Set<MaterialState> states) {
-                  if (states.contains(MaterialState.disabled))
+                  if (states.contains(MaterialState.disabled)) {
                     return Colors.grey;
-                  return Theme.of(context)
-                      .colorScheme
-                      .primary; // Use the component's default.
+                  }
+                  return Theme.of(context).colorScheme.primary;
                 },
               ),
             ),
+            child: _isLoading
+                ? const CircularProgressIndicator()
+                : const Text('Save'),
           )
         ],
       ),

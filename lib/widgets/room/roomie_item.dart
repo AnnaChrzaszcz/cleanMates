@@ -22,7 +22,7 @@ class RoomieItem extends StatelessWidget {
       onTap: name == user.displayName ? () => _selectUser(context) : () {},
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        margin: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
         elevation: 30,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
@@ -32,7 +32,7 @@ class RoomieItem extends StatelessWidget {
                 Expanded(
                   child: CircleAvatar(
                     radius: 45,
-                    backgroundColor: Color.fromRGBO(247, 219, 79, 1),
+                    backgroundColor: const Color.fromRGBO(247, 219, 79, 1),
                     child: CircleAvatar(
                         radius: 42, backgroundImage: NetworkImage(imageUrl)),
                   ),
@@ -59,7 +59,7 @@ class RoomieItem extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             if (name != user.displayName)
@@ -67,7 +67,7 @@ class RoomieItem extends StatelessWidget {
                   onPressed: () => Navigator.of(context).pushNamed(
                       SaveActivityScreen.routeName,
                       arguments: userId),
-                  child: Text('Save activity as ${name}'))
+                  child: Text('Save activity as $name'))
           ]),
         ),
       ),

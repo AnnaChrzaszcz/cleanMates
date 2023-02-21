@@ -13,7 +13,7 @@ class GratificationGiftScreen extends StatefulWidget {
 
 class _GratificationActivityScreenState extends State<GratificationGiftScreen> {
   final introKey = GlobalKey<IntroductionScreenState>();
-  var giftsSum;
+  int giftsSum;
 
   void _onIntroEnd(context) {
     Navigator.of(context).push(
@@ -79,8 +79,8 @@ class _GratificationActivityScreenState extends State<GratificationGiftScreen> {
                   AnimatedTextKit(
                     animatedTexts: [
                       ScaleAnimatedText('You earned 100 points',
-                          textStyle: TextStyle(color: Colors.white),
-                          duration: Duration(milliseconds: 1800)),
+                          textStyle: const TextStyle(color: Colors.white),
+                          duration: const Duration(milliseconds: 1800)),
                     ],
                     isRepeatingAnimation: false,
                     onFinished: () => _onIntroEnd(context),

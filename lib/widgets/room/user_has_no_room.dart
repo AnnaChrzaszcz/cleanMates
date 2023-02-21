@@ -1,5 +1,4 @@
 import 'package:clean_mates_app/providers/rooms_provider.dart';
-import 'package:clean_mates_app/screens/user_room_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +24,6 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Provider.of<RoomsProvider>(context, listen: false)
         .getAvailableRooms()
@@ -34,7 +32,6 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     Provider.of<RoomsProvider>(context, listen: false)
         .getAvailableRooms()
         .then((availableRooms) => rooms = availableRooms);
@@ -45,8 +42,7 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-      //decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -71,7 +67,7 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
               style: Theme.of(context).textTheme.headline6,
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             curve: Curves.easeIn,
@@ -80,7 +76,7 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
               maxHeight: !_joinRoom ? 50 : 0,
             ),
             child: ElevatedButton(
-              child: Text('Create new room'),
+              child: const Text('Create new room'),
               onPressed: () {
                 Navigator.of(context)
                     .pushNamed(CreateRoomScreen.routeName)
@@ -97,7 +93,7 @@ class _UserHasNoRoomState extends State<UserHasNoRoom> {
               minHeight: !_joinRoom ? 30 : 0,
               maxHeight: !_joinRoom ? 50 : 0,
             ),
-            child: Text(
+            child: const Text(
               'or',
               style: TextStyle(fontSize: 20),
             ),

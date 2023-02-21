@@ -10,7 +10,6 @@ class Room {
   final List<Roomie> roomies;
   final List<UserActivity> roomiesActivites;
   final List<UserGift> roomiesGift;
-  // final DateTime dateTime;
 
   Room(
       {@required this.id,
@@ -18,7 +17,5 @@ class Room {
       @required this.creatorId,
       @required this.roomies,
       @required this.roomiesActivites,
-      @required this.roomiesGift
-      // @required this.dateTime,
-      });
+      @required this.roomiesGift});
 }

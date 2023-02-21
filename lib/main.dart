@@ -8,7 +8,6 @@ import 'package:clean_mates_app/screens/gifts_screen.dart';
 import 'package:clean_mates_app/screens/gratification_activity_screen.dart';
 import 'package:clean_mates_app/screens/gratification_gift_screen.dart';
 import 'package:clean_mates_app/screens/history_screen.dart';
-import 'package:clean_mates_app/screens/intro_screen.dart';
 import 'package:clean_mates_app/screens/onboarding_screen.dart';
 import 'package:clean_mates_app/screens/gifts_reception_screen.dart';
 import 'package:clean_mates_app/screens/save_activity_screen.dart';
@@ -65,23 +64,24 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
             scaffoldBackgroundColor: Colors.white,
-            primaryColor: Color.fromRGBO(167, 34, 110, 1),
-            //primarySwatch: Colors.pink,
-            appBarTheme: AppBarTheme(color: Color.fromRGBO(167, 34, 110, 1)),
-            iconTheme: IconThemeData(color: Color.fromRGBO(47, 149, 153, 1)),
-            dividerColor: Color.fromRGBO(47, 149, 153, 1),
-            snackBarTheme: SnackBarThemeData(
+            primaryColor: const Color.fromRGBO(167, 34, 110, 1),
+            appBarTheme:
+                const AppBarTheme(color: Color.fromRGBO(167, 34, 110, 1)),
+            iconTheme:
+                const IconThemeData(color: Color.fromRGBO(47, 149, 153, 1)),
+            dividerColor: const Color.fromRGBO(47, 149, 153, 1),
+            snackBarTheme: const SnackBarThemeData(
               backgroundColor: Color.fromRGBO(247, 219, 79, 1),
-              // contentTextStyle: TextStyle(color: Color.fromRGBO(236, 32, 73, 1)),
               contentTextStyle: TextStyle(color: Colors.black),
             ),
             elevatedButtonTheme: ElevatedButtonThemeData(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.resolveWith<Color>(
                     (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.disabled))
+                      if (states.contains(MaterialState.disabled)) {
                         return Colors.grey;
-                      return Color.fromRGBO(47, 149, 153, 1);
+                      }
+                      return const Color.fromRGBO(47, 149, 153, 1);
                     },
                   ),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -91,46 +91,23 @@ class MyApp extends StatelessWidget {
             ),
             textButtonTheme: TextButtonThemeData(
                 style: ButtonStyle(
-              foregroundColor:
-                  MaterialStateProperty.all(Color.fromRGBO(47, 149, 153, 1)),
+              foregroundColor: MaterialStateProperty.all(
+                  const Color.fromRGBO(47, 149, 153, 1)),
             )),
-            accentColor: Color.fromRGBO(47, 149, 153, 1),
+            accentColor: const Color.fromRGBO(47, 149, 153, 1),
             colorScheme: ThemeData().colorScheme.copyWith(
-                  primary: Color.fromRGBO(47, 149, 153, 1),
+                  primary: const Color.fromRGBO(47, 149, 153, 1),
                 )),
         home: StreamBuilder(
           stream: FirebaseAuth.instance.userChanges(),
           builder: (context, userSnapshot) {
-            print('userSnapshot: ${userSnapshot}');
             if (userSnapshot.hasData) {
               User user = userSnapshot.data;
               if (user.displayName != null && user.photoURL != null) {
-                print('wszystko git');
                 return const OnBoardingPage(isLogin: true);
               }
-              print('has data ale zle');
             }
-            print('login screen');
             return AuthScreen();
-
-            // if (userSnapshot.connectionState == ConnectionState.active) {
-            //   if (userSnapshot.hasData) {
-            //     User user = userSnapshot.data;
-            //     if (user.displayName != null) {
-            //       print(user.displayName);
-            //       print('eloooo');
-            //
-            //     }
-            //   }
-            //   //return repeat != null ? AuthScreen() : IntroScreen();
-
-            //   //return IntroScreen();
-            // } else {
-            //   return OnBoardingPage(isLogin: false); //AuthScreen();
-            // }
-            // return OnBoardingPage(isLogin: false); //AuthScreen();
-            // //return repeat != null ? AuthScreen() : IntroScreen();
-            // //return IntroScreen();
           },
         ),
         routes: {

@@ -47,7 +47,7 @@ class RoomsProvider extends ChangeNotifier {
 
   Future<Room> getUserRoom(String userId) async {
     user = FirebaseAuth.instance.currentUser;
-    //DO POPRAWY MORDO
+
     print('jestew w rooms provider getUserRoom');
     List<Roomie> roomies = [];
     List<UserActivity> roomiesActivities = [];
@@ -58,7 +58,6 @@ class RoomsProvider extends ChangeNotifier {
 
     final userData = roomieSnapshot.data();
     if (userData.containsKey('roomId')) {
-      //W USER POPRAWIC NA PRZECHOWYWANIE ROOM ID A NIE REFERENCJI
       var roomId = userData['roomId'];
       DocumentSnapshot<Map<String, dynamic>> roomSnapshot =
           await FirebaseFirestore.instance
@@ -128,7 +127,6 @@ class RoomsProvider extends ChangeNotifier {
   }
 
   Future<Roomie> _getRoomieFromId(String userId) async {
-    //POPRAWIONE
     DocumentSnapshot<Map<String, dynamic>> roomieSnapshot =
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
     final userData = roomieSnapshot.data();
@@ -141,10 +139,8 @@ class RoomsProvider extends ChangeNotifier {
   }
 
   Future<void> joinToRoom(String roomId) async {
-    if (user == null) {
-      user = FirebaseAuth.instance.currentUser;
-    }
-    //POPRAWIONE
+    user ??= FirebaseAuth.instance.currentUser;
+
     await FirebaseFirestore.instance
         .collection('users')
         .doc(user.uid)
@@ -158,11 +154,10 @@ class RoomsProvider extends ChangeNotifier {
         .doc(user.uid)
         .set({'roomieId': user.uid});
 
-    userRoom = await getUserRoom(user.uid); // moze jakos inaczej?
+    userRoom = await getUserRoom(user.uid);
   }
 
   Future<void> leaveRoom(String roomId) async {
-    //POPRAWIONE
     await FirebaseFirestore.instance
         .collection('users')
         .doc(user.uid)
@@ -186,7 +181,6 @@ class RoomsProvider extends ChangeNotifier {
   }
 
   Future<void> _deleteRoomieActivities(String roomId, String userId) async {
-    //POPRAWIONE
     Query<Map<String, dynamic>> activities_query = FirebaseFirestore.instance
         .collection('rooms')
         .doc(roomId)
@@ -201,7 +195,6 @@ class RoomsProvider extends ChangeNotifier {
   }
 
   Future<void> _deleteRoomieGifts(String roomId, String userId) async {
-    //POPRAWIONE
     Query<Map<String, dynamic>> gifts_query = FirebaseFirestore.instance
         .collection('rooms')
         .doc(roomId)
@@ -216,7 +209,6 @@ class RoomsProvider extends ChangeNotifier {
   }
 
   Future<void> addNewRoom(Room room) async {
-    //POPRAWIONE
     final newRoomRef =
         await FirebaseFirestore.instance.collection('rooms').doc();
 
@@ -243,7 +235,6 @@ class RoomsProvider extends ChangeNotifier {
         roomiesActivites: [],
         roomiesGift: []);
 
-    //_rooms.add(newRoom);
     userRoom = newRoom;
     print('nowy pokoj utowrzony');
     print(userRoom.roomName);
@@ -251,11 +242,7 @@ class RoomsProvider extends ChangeNotifier {
   }
 
   Future<void> addActivitiesToRoomie(
-      //moze przerobic ze list<activity> jednak?
-      //POPRAWIONE
-      List<UserActivity> newActivities,
-      String userId,
-      int pointsEarned) async {
+      List<UserActivity> newActivities, String userId, int pointsEarned) async {
     final activityData = FirebaseFirestore.instance
         .collection('rooms')
         .doc(userRoom.id)
@@ -300,11 +287,8 @@ class RoomsProvider extends ChangeNotifier {
             points: pointsSum,
             imageUrl: oldRoomie.imageUrl);
         myRoom.roomies[roomieIndex] = updatedRoomie;
-        //getUserRoom(userId);
-        //notifyListeners();
-      }); // wrzucic to w try catch?
+      });
     });
-    // notifyListeners(); // czy to poczeka na ten update?
   }
 
   Future<void> addGiftsToRoomie(List<Gift> newGifts, String userId,
@@ -327,7 +311,6 @@ class RoomsProvider extends ChangeNotifier {
       throw LogisticExpection('Not enough points. You have $points points');
     } else {
       for (var userGift in newGifts) {
-        //przy kupieniu prezentu po prostu nie dodaje pola realizeddate
         await giftData.add({
           'giftName': userGift.giftName,
           'points': userGift.points,
@@ -364,14 +347,12 @@ class RoomsProvider extends ChangeNotifier {
   }
 
   List<UserGift> getUserGifts(String userId) {
-    //POPRAWIONE
     return userRoom.roomiesGift
         .where((roomieGift) => roomieGift.roomieId == userId)
         .toList();
   }
 
   Future<void> markUserGiftAsRecived(String userId, String giftId) async {
-    //POPRAWIONE
     DateTime dateNow = DateTime.now();
 
     await FirebaseFirestore.instance
@@ -400,9 +381,6 @@ class RoomsProvider extends ChangeNotifier {
   }
 
   Future<void> UNDOmarkUserGiftAsRecived(String userId, String giftId) async {
-    //POPRAWIONE
-    DateTime dateNow = DateTime.now();
-
     await FirebaseFirestore.instance
         .collection('rooms')
         .doc(userRoom.id)
@@ -428,7 +406,6 @@ class RoomsProvider extends ChangeNotifier {
   }
 
   List<UserActivity> getRoomActivitiesByDate(DateTime date) {
-    //POPRAWIONE
     List<UserActivity> activitiesAtDay = [];
 
     if (userRoom != null) {

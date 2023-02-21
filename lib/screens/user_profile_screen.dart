@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:clean_mates_app/screens/user_dashboard_screen.dart';
-import 'package:clean_mates_app/widgets/app_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,7 +28,7 @@ class _UserProfileState extends State<UserProfile> {
     final pickedImage = await picker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 1,
-    ); //maxWidth: 150
+    );
     if (pickedImage != null) {
       setState(() {
         pickedImageFile = File(pickedImage.path);
@@ -51,7 +50,7 @@ class _UserProfileState extends State<UserProfile> {
         .child('${user.uid}.jpg')
         .putFile(pickedImageFile);
 
-    final _url = await FirebaseStorage.instance
+    final url = await FirebaseStorage.instance
         .ref()
         .child('user_image')
         .child('${user.uid}.jpg')
@@ -60,9 +59,9 @@ class _UserProfileState extends State<UserProfile> {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(user.uid)
-        .update({'image_url': _url});
+        .update({'image_url': url});
 
-    await user.updatePhotoURL(_url);
+    await user.updatePhotoURL(url);
     setState(() {
       isLoading = false;
     });
@@ -79,7 +78,7 @@ class _UserProfileState extends State<UserProfile> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your profile'),
+        title: const Text('Your profile'),
         actions: [
           IconButton(
               onPressed: () =>
@@ -90,10 +89,9 @@ class _UserProfileState extends State<UserProfile> {
               ))
         ],
       ),
-      //drawer: AppDrawer(),
       body: Container(
         width: double.infinity,
-        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -114,16 +112,17 @@ class _UserProfileState extends State<UserProfile> {
                               color: Colors.white, size: 20),
                         )),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             if (!isLoading)
               TextButton(
-                child: Text('Update image', style: TextStyle(fontSize: 20)),
                 onPressed: _pickImage,
+                child:
+                    const Text('Update image', style: TextStyle(fontSize: 20)),
               ),
             if (isLoading)
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 8, vertical: 50),
-                child: LinearProgressIndicator(),
+                margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 50),
+                child: const LinearProgressIndicator(),
               )
           ],
         ),

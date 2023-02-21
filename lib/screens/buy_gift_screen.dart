@@ -2,7 +2,6 @@ import 'package:clean_mates_app/models/room.dart';
 import 'package:clean_mates_app/screens/edit_gift_screen.dart';
 import 'package:clean_mates_app/widgets/fab/custom_add_fab.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
-import 'package:lottie/lottie.dart';
 import 'package:rive/rive.dart';
 
 import '../widgets/gift/buy_gift_container.dart';
@@ -25,9 +24,9 @@ class BuyGiftScreen extends StatelessWidget {
     var myRoom = Provider.of<RoomsProvider>(context, listen: false).myRoom;
     final userId = ModalRoute.of(context).settings.arguments as String;
 
-    var yourPoints;
+    int yourPoints;
 
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     yourPoints =
         myRoom.roomies.firstWhere((roomie) => roomie.id == userId).points;
 
@@ -43,13 +42,13 @@ class BuyGiftScreen extends StatelessWidget {
               )
             : Consumer<GiftsProvider>(
                 builder: ((ctx, giftsData, _) => Scaffold(
-                    key: _scaffoldKey,
+                    key: scaffoldKey,
                     floatingActionButtonLocation:
                         FloatingActionButtonLocation.endFloat,
                     floatingActionButton:
                         CustomAddFab(activityScreen: false, roomId: myRoom.id),
                     appBar: AppBar(
-                      title: Text('Buy gifts'),
+                      title: const Text('Buy gifts'),
                     ),
                     body: CustomRefreshIndicator(
                       builder: MaterialIndicatorDelegate(

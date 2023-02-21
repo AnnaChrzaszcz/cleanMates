@@ -14,7 +14,6 @@ class UserGift {
       {@required this.id,
       @required this.giftName,
       @required this.points,
-      //@required this.gift,
       @required this.roomieId,
       @required this.isRealized,
       @required this.boughtDate,

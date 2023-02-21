@@ -11,7 +11,5 @@ class Roomie {
     @required this.userName,
     @required this.points,
     @required this.imageUrl,
-    //this.activities,
-    //this.gifts
   });
 }

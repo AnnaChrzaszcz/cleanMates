@@ -1,5 +1,4 @@
-import 'dart:io'; // at beginning of file
-import 'dart:isolate';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import '../../widgets/pickers/user_image_picker.dart';
 import 'package:password_strength_checker/password_strength_checker.dart';
@@ -40,7 +39,6 @@ class _AuthFormState extends State<AuthForm>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _animationController.dispose();
     super.dispose();
   }
@@ -52,16 +50,7 @@ class _AuthFormState extends State<AuthForm>
   void _trySubmit() {
     final isValid = _formKey.currentState.validate();
     FocusScope.of(context).unfocus();
-    if (_userImageFile == null && !_isLogin) {
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: Text(
-      //       'Please pick an image',
-      //     ),
-      //   ),
-      // );
-      // return;
-    }
+    if (_userImageFile == null && !_isLogin) {}
     if (isValid) {
       print('isValid');
       _formKey.currentState.save();
@@ -76,17 +65,17 @@ class _AuthFormState extends State<AuthForm>
     final passNotifier = ValueNotifier<PasswordStrength>(null);
 
     return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeIn,
       height: _isLogin
           ? deviceSize.height * (deviceSize.height < 680 ? 0.45 : 0.40)
           : deviceSize.height * (deviceSize.height < 680 ? 0.80 : 0.68),
       child: Card(
         elevation: 15,
-        shadowColor: Color.fromARGB(255, 255, 247, 22),
-        margin: EdgeInsets.all(8),
+        shadowColor: const Color.fromARGB(255, 255, 247, 22),
+        margin: const EdgeInsets.all(8),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Form(
             key: _formKey,
             child: Column(
@@ -110,7 +99,7 @@ class _AuthFormState extends State<AuthForm>
                     ),
                   ),
                 TextFormField(
-                  key: ValueKey('email'),
+                  key: const ValueKey('email'),
                   validator: (value) {
                     if (value.isEmpty || !value.contains('@')) {
                       return 'Please enter a valid email address.';
@@ -119,7 +108,7 @@ class _AuthFormState extends State<AuthForm>
                   },
                   cursorColor: Theme.of(context).accentColor,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Email address',
                   ),
                   onSaved: (value) {
@@ -127,13 +116,13 @@ class _AuthFormState extends State<AuthForm>
                   },
                 ),
                 if (!_isLogin)
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                 if (!_isLogin)
                   Expanded(
                     child: AnimatedContainer(
-                      duration: Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 300),
                       curve: Curves.easeIn,
                       constraints: BoxConstraints(
                         minHeight: !_isLogin ? 40 : 0,
@@ -142,7 +131,7 @@ class _AuthFormState extends State<AuthForm>
                       child: FadeTransition(
                         opacity: _opacityAnimation,
                         child: TextFormField(
-                          key: ValueKey('Username'),
+                          key: const ValueKey('Username'),
                           validator: (value) {
                             if (!_isLogin &&
                                 (value.isEmpty || value.length < 4)) {
@@ -150,7 +139,7 @@ class _AuthFormState extends State<AuthForm>
                             }
                             return null;
                           },
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Username',
                           ),
                           onSaved: (value) {
@@ -161,14 +150,14 @@ class _AuthFormState extends State<AuthForm>
                     ),
                   ),
                 TextFormField(
-                  key: ValueKey('Password'),
+                  key: const ValueKey('Password'),
                   validator: (value) {
                     if (value.isEmpty || value.length < 7) {
                       return 'Password must be at least 7 characters long';
                     }
                     return null;
                   },
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Password',
                   ),
                   obscureText: true,
@@ -183,13 +172,13 @@ class _AuthFormState extends State<AuthForm>
                   },
                 ),
                 if (!_isLogin)
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                 if (!_isLogin)
                   Expanded(
                     child: AnimatedContainer(
-                      duration: Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 300),
                       curve: Curves.easeIn,
                       constraints: BoxConstraints(
                         minHeight: !_isLogin ? 10 : 0,
@@ -209,12 +198,12 @@ class _AuthFormState extends State<AuthForm>
                 if (widget.isLoading)
                   ElevatedButton(
                     onPressed: null,
-                    child: CircularProgressIndicator(),
                     style: ButtonStyle(
                         backgroundColor:
                             MaterialStateProperty.resolveWith<Color>(
                       (states) => Colors.white,
                     )),
+                    child: const CircularProgressIndicator(),
                   ),
                 if (!widget.isLoading)
                   Column(
@@ -224,13 +213,13 @@ class _AuthFormState extends State<AuthForm>
                         onPressed: _trySubmit,
                         child: Text(
                           _isLogin ? 'Login' : 'Signup',
-                          style: TextStyle(fontSize: 15),
+                          style: const TextStyle(fontSize: 15),
                         ),
                       ),
                       TextButton(
                         style: ButtonStyle(
                           foregroundColor: MaterialStateProperty.all(
-                              Color.fromRGBO(47, 149, 153, 1)),
+                              const Color.fromRGBO(47, 149, 153, 1)),
                         ),
                         onPressed: () {
                           setState(() {
@@ -246,25 +235,6 @@ class _AuthFormState extends State<AuthForm>
                       ),
                     ],
                   ),
-
-                // if (!widget.isLoading)
-                //   TextButton(
-                //     style: ButtonStyle(
-                //       foregroundColor: MaterialStateProperty.all(
-                //           Color.fromRGBO(47, 149, 153, 1)),
-                //     ),
-                //     onPressed: () {
-                //       setState(() {
-                //         _isLogin = !_isLogin;
-                //         _isLogin
-                //             ? _animationController.reverse()
-                //             : _animationController.forward();
-                //       });
-                //     },
-                //     child: Text(_isLogin
-                //         ? 'Create new account'
-                //         : 'I already have an account'),
-                //   ),
               ],
             ),
           ),
